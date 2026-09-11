@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { supabase } from "./supabaseClient";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 
 /* =========================================================
@@ -8,16 +9,56 @@ import "./App.css";
 const songs = {
   "1960s": [
     {
-      title: "Oohalu Gusagusalade",
-      movie: "Bandipotu",
-      year: "1963",
-      youtubeId: "hlrhFTJBep8",
+      title: "ధనమేరా అన్నిటికీ",
+      englishTitle: "Dhanamera Anitiki",
+      youtubeId: "ilyE8jAgjSc",
+    },
+    {
+      title: "మధువు వదలరా",
+      englishTitle: "Mathu Vadalara",
+      youtubeId: "MocqMfD7dnI",
+    },
+    {
+      title: "ఓ దేవదా",
+      englishTitle: "O Devada",
+      youtubeId: "H32hEUNdQN0",
+    },
+    {
+      title: "కోడె కారు చిన్నవాడా",
+      englishTitle: "Kode Kaaru Chinavada",
+      youtubeId: "oED08iyW7dI",
+    },
+    {
+      title: "అమ్మ అన్నది కామనిమాట",
+      englishTitle: "Amma Annadi Kamani Mata",
+      youtubeId: "oEbF_ATX8dA",
+    },
+    {
+      title: "రావోయి చందమామ",
+      englishTitle: "Raavoyi Chandhamama",
+      youtubeId: "qoMI8OdajYY",
+    },
+    {
+      title: "ఎవరి కోసం",
+      englishTitle: "Yevari Kosam",
+      youtubeId: "tKefi4DPHyI",
+    },
+    {
+      title: "చిటపట చినుకులు",
+      englishTitle: "Chitapata Chinukulu",
+      youtubeId: "0doquHeOXjg",
     },
   ],
 
   "1970s": [],
 
-  "1980s": [],
+  "1980s": [
+    {
+      title: "ఆకాశం ఏనాటిదో",
+      englishTitle: "Aakasam Enatido",
+      youtubeId: "XriFLCOshQ0",
+    },
+  ],
 
   "1990s": [
     {
@@ -25,6 +66,56 @@ const songs = {
       movie: "Priyuraalu Pilichindi",
       year: "1990s",
       youtubeId: "aulygJVShnw",
+    },
+    {
+      title: "వెన్నెలవే వెన్నెలవే",
+      englishTitle: "Vennalave Vennalave",
+      youtubeId: "jB5QfgaU6cU",
+    },
+    {
+      title: "ఏటో వెళ్లిపోయింది మనసు",
+      englishTitle: "Yeto Vellipoyindhi Manasu",
+      youtubeId: "FvcoRTJK_J8",
+    },
+    {
+      title: "టెలిఫోన్ ధ్వనిలా",
+      englishTitle: "Telephone Dhwani La",
+      youtubeId: "wkZbXkOAx8s",
+    },
+    {
+      title: "శశివదనే",
+      englishTitle: "Sasivadhane",
+      youtubeId: "TDNVisXNqyM",
+    },
+    {
+      title: "నా చెల్లి రోజావే",
+      englishTitle: "Na Chelli Rojave",
+      youtubeId: "VumsdDIOY9A",
+    },
+    {
+      title: "ఓ చెలియా",
+      englishTitle: "O Cheliya",
+      youtubeId: "_u3QevWcPmI",
+    },
+    {
+      title: "హయిరబ్బా హయిరబ్బా",
+      englishTitle: "Hayirabba Hayirabba",
+      youtubeId: "pbfVzIRAA-o",
+    },
+    {
+      title: "జాము రాతిరి",
+      englishTitle: "Jaamu Ratiri",
+      youtubeId: "sia1ctskE-o",
+    },
+    {
+      title: "ప్రేమా ప్రేమా",
+      englishTitle: "Prema Prema",
+      youtubeId: "rJnVEC5FDOs",
+    },
+    {
+      title: "వయ్యారి భామ",
+      englishTitle: "Vayyari Bhama",
+      youtubeId: "-KH7IZjCkSk",
     },
   ],
 
@@ -53,331 +144,275 @@ const songs = {
       year: "2009",
       youtubeId: "s55Dnk5i6sk",
     },
+    {
+      title: "చంద్రుల్లో",
+      englishTitle: "Chandrullo",
+      youtubeId: "RIriENOmOpo",
+    },
+    {
+      title: "ఉప్పెనంత",
+      englishTitle: "Uppenantha",
+      youtubeId: "TIOZUdc0aL8",
+    },
+    {
+      title: "నిలువద్దం",
+      englishTitle: "Nilluvaddham",
+      youtubeId: "fdEzDqiSC3U",
+    },
+    {
+      title: "కళ్ళు మూసి యోచిస్తే",
+      englishTitle: "Kallu Moosi Yochisthey",
+      youtubeId: "-6uqH-0TiDk",
+    },
+    {
+      title: "మల్లీశ్వరివే",
+      englishTitle: "Mallieswarivey",
+      youtubeId: "5vpzUXWIzAg",
+    },
+    {
+      title: "పచ్చందనమే",
+      englishTitle: "Pachandaname",
+      youtubeId: "sxn0T94mkJw",
+    },
+    {
+      title: "స్నేహితుడా",
+      englishTitle: "Snehithuda",
+      youtubeId: "k8szK5-oPUU",
+    },
+    {
+      title: "మనోహర",
+      englishTitle: "Manohara",
+      youtubeId: "OZTI2Qgf1xE",
+    },
+    {
+      title: "కలై పోయేను",
+      englishTitle: "Kalai Poyenu",
+      youtubeId: "aTwKS1-9PRI",
+    },
+    {
+      title: "కైలవే చెడుగుడు",
+      englishTitle: "Kailove Chedugudu",
+      youtubeId: "9dQqmFje6hs",
+    },
+    {
+      title: "నీ ఇల్లు బంగారం కాను",
+      englishTitle: "Nee Illu Bangaram Kaanu",
+      youtubeId: "fPLzesuwNxg",
+    },
   ],
 
   "2010s": [
     {
-      title: "Dhivara",
-      movie: "Baahubali: The Beginning",
-      year: "2015",
-      youtubeId: "",
+      title: "ఆరడుగులుంటాడా",
+      englishTitle: "Aaraduguluntada",
+      youtubeId: "6JGGFYIcrLY",
     },
     {
-      title: "Adiga Adiga",
-      movie: "Ninnu Kori",
-      year: "2017",
-      youtubeId: "",
+      title: "మరి అంతగా",
+      englishTitle: "Mari Antaga",
+      youtubeId: "ZwGPx75hVLk",
     },
     {
-      title: "Inkem Inkem Inkem Kaavaale",
-      movie: "Geetha Govindam",
-      year: "2018",
-      youtubeId: "",
+      title: "ఇంకా చెప్పలే",
+      englishTitle: "Inka Cheppale",
+      youtubeId: "5J-8vmMVKjs",
     },
     {
-      title: "Super Machi",
-      movie: "Son Of Satyamurthy",
-      year: "2015",
-      youtubeId: "",
+      title: "జత కలిసే",
+      englishTitle: "Jatha Kalise",
+      youtubeId: "cULVDmIDIzI",
     },
     {
-      title: "Jatha Kalise",
-      movie: "Srimanthudu",
-      year: "2015",
-      youtubeId: "",
+      title: "ఇదేదో బాగుంది",
+      englishTitle: "Idedho Bagundi",
+      youtubeId: "VQ2-HPwxAZY",
     },
     {
-      title: "Idhedho Bagundhe",
-      movie: "Mirchi",
-      year: "2013",
-      youtubeId: "",
+      title: "ఇంకేం ఇంకేం",
+      englishTitle: "Inkem Inkem",
+      youtubeId: "qFYj1w69OZA",
     },
     {
-      title: "Oh Oh Oh My Friend",
-      movie: "Oh My Friend",
-      year: "2011",
-      youtubeId: "",
+      title: "ఏంటి ఏంటి",
+      englishTitle: "Yenti Yenti",
+      youtubeId: "dAUHa5K38t4",
     },
     {
-      title: "Charuseela",
-      movie: "Srimanthudu",
-      year: "2015",
-      youtubeId: "",
+      title: "ఉన్నట్టుంది గుండే",
+      englishTitle: "Unnatundi Gundey",
+      youtubeId: "-twi5MBq1TQ",
     },
     {
-      title: "Ee Hridayam",
-      movie: "Ye Maaya Chesave",
-      year: "2010",
-      youtubeId: "",
+      title: "ఎలా ఎలా నాలో",
+      englishTitle: "Ela Ela Naalo",
+      youtubeId: "jGugscZJxis",
     },
     {
-      title: "Dhooram Dhooram",
-      movie: "100% Love",
-      year: "2011",
-      youtubeId: "",
+      title: "ఉండిపోరాదే",
+      englishTitle: "Undiporadhey",
+      youtubeId: "lewVFlngGCk",
     },
     {
-      title: "Yentha Sakkagunnave",
-      movie: "Rangasthalam",
-      year: "2018",
-      youtubeId: "",
+      title: "బయటికొచ్చి చూస్తే",
+      englishTitle: "Baitikochi Chustey",
+      youtubeId: "lewVFlngGCk",
     },
     {
-      title: "Kanulanu Thaake",
-      movie: "Manam",
-      year: "2014",
-      youtubeId: "",
+      title: "హోయినా హోయినా",
+      englishTitle: "Hoyna Hoyna",
+      youtubeId: "91EzD9VgwGk",
     },
     {
-      title: "Nenu Nuvvantu",
-      movie: "Orange",
-      year: "2010",
-      youtubeId: "",
+      title: "స్పిరిట్ ఆఫ్ జెర్సీ",
+      englishTitle: "Spirit of Jersey",
+      youtubeId: "cChZEYVRvIE",
     },
     {
-      title: "Sada Nannu",
-      movie: "Mahanati",
-      year: "2018",
-      youtubeId: "",
+      title: "ఆరంభమే లే",
+      englishTitle: "Aarambhame Le",
+      youtubeId: "zl1CsDDmN6s",
     },
     {
-      title: "Chali Chaliga",
-      movie: "Mr. Perfect",
-      year: "2011",
-      youtubeId: "",
+      title: "కోపం గా కోపం గా",
+      englishTitle: "Kopam Ga Kopam Ga",
+      youtubeId: "IW9i3bJ8bkU",
     },
     {
-      title: "O Madhu",
-      movie: "Julayi",
-      year: "2012",
-      youtubeId: "",
+      title: "హలో టైటిల్ సాంగ్",
+      englishTitle: "Hello Title Song",
+      youtubeId: "803l9Wz_XFY",
     },
     {
-      title: "Maate Vinadhuga",
-      movie: "Taxiwaala",
-      year: "2018",
-      youtubeId: "",
+      title: "అనగనగా",
+      englishTitle: "Anaganaga",
+      youtubeId: "F3Td3_c96vo",
     },
     {
-      title: "Konchem Konchem",
-      movie: "Eega",
-      year: "2012",
-      youtubeId: "",
+      title: "ఊసుపోదు",
+      englishTitle: "Oosupodu",
+      youtubeId: "e4N9al7vhVQ",
     },
     {
-      title: "Vellipomaake",
-      movie: "Saahasam Swaasaga Saagipo",
-      year: "2016",
-      youtubeId: "",
+      title: "ఇంతలో ఎన్నెన్ని వింతలో",
+      englishTitle: "Inthalo Ennenni Vinthalo",
+      youtubeId: "k22zWP3p42Y",
     },
     {
-      title: "Vintunnavaa",
-      movie: "Ye Maaya Chesave",
-      year: "2010",
-      youtubeId: "",
+      title: "నాన్నకు ప్రేమతో",
+      englishTitle: "Nannaku Prematho",
+      youtubeId: "7VY191_NiHA",
     },
     {
-      title: "Meghaalu Lekunna",
-      movie: "Kumari 21F",
-      year: "2015",
-      youtubeId: "",
+      title: "నీ ఎదలో నాకు",
+      englishTitle: "Nee Yadalo Naaku",
+      youtubeId: "VffosKXVZoY",
     },
     {
-      title: "Rangamma Mangamma",
-      movie: "Rangasthalam",
-      year: "2018",
-      youtubeId: "",
+      title: "నాలోనే పొంగేను నర్మద",
+      englishTitle: "Nalone Pongenu Narmadha",
+      youtubeId: "7dhKeHT2Bdk",
     },
     {
-      title: "Evare",
-      movie: "Premam",
-      year: "2016",
-      youtubeId: "",
+      title: "రాయే రాయే",
+      englishTitle: "Raaye Raaye",
+      youtubeId: "vdGpAjvNOew",
     },
     {
-      title: "Guruvaram",
-      movie: "Dookudu",
-      year: "2011",
-      youtubeId: "",
+      title: "నీలో వలపు",
+      englishTitle: "Neelo Valapu",
+      youtubeId: "5CttV9rxhic",
     },
     {
-      title: "Ninnila",
-      movie: "Tholi Prema",
-      year: "2018",
-      youtubeId: "",
-    },
-    {
-      title: "Cinema Choopistha Mama",
-      movie: "Race Gurram",
-      year: "2014",
-      youtubeId: "",
-    },
-    {
-      title: "Anaganaganaga",
-      movie: "Aravindha Sametha",
-      year: "2018",
-      youtubeId: "",
-    },
-    {
-      title: "Madhuram",
-      movie: "Arjun Reddy",
-      year: "2017",
-      youtubeId: "",
-    },
-    {
-      title: "Vachinde",
-      movie: "Fidaa",
-      year: "2017",
-      youtubeId: "",
-    },
-    {
-      title: "Nenante Naaku",
-      movie: "Oosaravelli",
-      year: "2011",
-      youtubeId: "",
-    },
-    {
-      title: "Neeve",
-      movie: "Darling",
-      year: "2010",
-      youtubeId: "",
-    },
-    {
-      title: "Unnatundi Gundey",
-      movie: "Ninnu Kori",
-      year: "2017",
-      youtubeId: "",
-    },
-    {
-      title: "Mooga Manasulu",
-      movie: "Mahanati",
-      year: "2018",
-      youtubeId: "",
-    },
-    {
-      title: "Vachindamma",
-      movie: "Geetha Govindam",
-      year: "2018",
-      youtubeId: "",
-    },
-    {
-      title: "Top Lesi Poddi",
-      movie: "Iddarammayilatho",
-      year: "2013",
-      youtubeId: "",
-    },
-    {
-      title: "Nuvve Nuvve",
-      movie: "Kick 2",
-      year: "2015",
-      youtubeId: "",
-    },
-    {
-      title: "Dekho Dekho Gabbar Singh",
-      movie: "Gabbar Singh",
-      year: "2012",
-      youtubeId: "",
-    },
-    {
-      title: "Sir Osthara",
-      movie: "Businessman",
-      year: "2012",
-      youtubeId: "",
-    },
-    {
-      title: "Oh Priya Priya",
-      movie: "Ishq",
-      year: "2012",
-      youtubeId: "",
-    },
-    {
-      title: "Nee Jathaga",
-      movie: "Yevadu",
-      year: "2014",
-      youtubeId: "",
-    },
-    {
-      title: "Violin Song",
-      movie: "Iddarammayilatho",
-      year: "2013",
-      youtubeId: "",
-    },
-    {
-      title: "Pileche",
-      movie: "Khaleja",
-      year: "2010",
-      youtubeId: "",
-    },
-    {
-      title: "Gaali Vaaluga",
-      movie: "Agnyaathavaasi",
-      year: "2018",
-      youtubeId: "",
-    },
-    {
-      title: "Ninnu Chudagaane",
-      movie: "Attarintiki Daredi",
-      year: "2013",
-      youtubeId: "",
-    },
-    {
-      title: "Priyathama Priyathama",
-      movie: "Majili",
-      year: "2019",
-      youtubeId: "",
-    },
-    {
-      title: "Dimaak Kharaab",
-      movie: "iSmart Shankar",
-      year: "2019",
-      youtubeId: "",
-    },
-    {
-      title: "Chinni Chinni Aasalu",
-      movie: "Manam",
-      year: "2014",
-      youtubeId: "",
-    },
-    {
-      title: "Yenti Yenti",
-      movie: "Geetha Govindam",
-      year: "2018",
-      youtubeId: "",
-    },
-    {
-      title: "Pillaa Raa",
-      movie: "RX 100",
-      year: "2018",
-      youtubeId: "",
-    },
-    {
-      title: "Aagi Aagi",
-      movie: "Ee Nagaraniki Emaindi",
-      year: "2018",
-      youtubeId: "",
-    },
-    {
-      title: "Manohari",
-      movie: "Baahubali: The Beginning",
-      year: "2015",
-      youtubeId: "",
+      title: "కిలిమంజారో భల",
+      englishTitle: "Kilimanjaro Bhala",
+      youtubeId: "loKoN6p0j-0",
     },
   ],
 
-  "2020s": [],
+  "2020s": [
+    {
+      title: "నీ గుండె లోనా",
+      englishTitle: "Nee Gunde Lona",
+      youtubeId: "d3Vnu_tsYPA",
+    },
+    {
+      title: "సింగారి",
+      englishTitle: "Singari",
+      youtubeId: "Ja7Yz0MPbwI",
+    },
+    {
+      title: "యాలాలో యాలాలో",
+      englishTitle: "Yaalalo Yaalalo",
+      youtubeId: "WT-wrwlN144",
+    },
+    {
+      title: "బాగుండు పో",
+      englishTitle: "Baagundu Poo",
+      youtubeId: "L7n_b1LLVAg",
+    },
+    {
+      title: "ఊరమ్ బ్లడ్",
+      englishTitle: "Oorum Blood",
+      youtubeId: "k9_JbEaRxso",
+    },
+    {
+      title: "బూమ్ బూమ్",
+      englishTitle: "Boom Boom",
+      youtubeId: "5JoPeWHkKJg",
+    },
+  ],
 };
 
 /* =========================================================
-   HELPERS
+   OOHA LOKAM — VINTAGE RADIO
    ========================================================= */
 
-const allSongs = Object.entries(songs).flatMap(
-  ([era, songList]) =>
-    songList.map((song) => ({
-      ...song,
-      era,
-    }))
-);
+const radioStations = [
+  {
+    id: "nati",
+    name: "నాటి మధురిమ",
+    english: "NAATI MADHURIMA",
+    era: "1960s – 1980s",
+    eras: ["1960s", "1970s", "1980s"],
+    frequency: "88.1",
+  },
+  {
+    id: "raga",
+    name: "రాగాల రేయి",
+    english: "RAAGAALA REYI",
+    era: "1990s",
+    eras: ["1990s"],
+    frequency: "92.4",
+  },
+  {
+    id: "madhura",
+    name: "మధుర తరంగం",
+    english: "MADHURA TARANGAM",
+    era: "2000s",
+    eras: ["2000s"],
+    frequency: "96.8",
+  },
+  {
+    id: "swar",
+    name: "స్వర సౌరభం",
+    english: "SWARA SAURABHAM",
+    era: "2010s",
+    eras: ["2010s"],
+    frequency: "100.6",
+  },
+  {
+    id: "nethi",
+    name: "నేటి స్వరాలు",
+    english: "NETI SWARAALU",
+    era: "2020s",
+    eras: ["2020s"],
+    frequency: "104.2",
+  },
+];
+
+function getToday() {
+  return new Date().toISOString().slice(0, 10);
+}
 
 function formatTime(seconds) {
   if (!Number.isFinite(seconds) || seconds < 0) {
@@ -392,15 +427,25 @@ function formatTime(seconds) {
   ).padStart(2, "0")}`;
 }
 
-function getToday() {
-  return new Date().toISOString().slice(0, 10);
+function getStationSongs(station) {
+  return station.eras.flatMap((era) =>
+    (songs[era] || [])
+      .filter((song) => song.youtubeId)
+      .map((song) => ({
+        ...song,
+        era,
+      }))
+  );
 }
 
-/* =========================================================
-   APP
-   ========================================================= */
-
 function App() {
+  const [authMode, setAuthMode] = useState("login");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [authLoading, setAuthLoading] = useState(false);
+  const [authMessage, setAuthMessage] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   const [name, setName] = useState(
     localStorage.getItem("oohaName") || ""
   );
@@ -410,31 +455,134 @@ function App() {
   );
 
   const [page, setPage] = useState("home");
-  const [decade, setDecade] = useState("");
 
-  const [currentSong, setCurrentSong] = useState(null);
+  const [currentStationId, setCurrentStationId] =
+    useState(null);
+
+  const [currentSong, setCurrentSong] =
+    useState(null);
+
   const [playing, setPlaying] = useState(false);
-
-  const [showFullPlayer, setShowFullPlayer] =
-    useState(false);
-
-  const [showVideo, setShowVideo] = useState(false);
-
   const [duration, setDuration] = useState(0);
   const [currentTime, setCurrentTime] = useState(0);
   const [volume, setVolume] = useState(75);
+  const [showVideo, setShowVideo] = useState(false);
+
+  const [shuffle, setShuffle] = useState(false);
+
+  const shuffleHistoryRef = useRef([]);
+  const shuffleIndexRef = useRef(-1);
 
   const [streak, setStreak] = useState(
     Number(localStorage.getItem("oohaStreak") || 0)
   );
 
-  const [lastListeningDate, setLastListeningDate] =
-    useState(
-      localStorage.getItem("oohaLastListening") || ""
-    );
-
   const playerRef = useRef(null);
   const playerReady = useRef(false);
+
+  const currentStation = radioStations.find(
+    (station) => station.id === currentStationId
+  );
+
+  const stationSongs = currentStation
+    ? getStationSongs(currentStation)
+    : [];
+
+  const getShuffleSong = (playlist, song) => {
+    if (playlist.length <= 1) {
+      return playlist[0];
+    }
+
+    const currentId = song?.youtubeId;
+
+    const availableSongs = playlist.filter(
+      (item) => item.youtubeId !== currentId
+    );
+
+    return availableSongs[
+      Math.floor(Math.random() * availableSongs.length)
+    ];
+  };
+
+  /* =======================================================
+     AUTH SESSION
+     ======================================================= */
+
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data } = await supabase.auth.getSession();
+
+      if (data.session) {
+        setIsLoggedIn(true);
+      }
+    };
+
+    checkSession();
+  }, []);
+
+  /* =======================================================
+     AUTH
+     ======================================================= */
+
+  const handleAuth = async (e) => {
+    e.preventDefault();
+    setAuthMessage("");
+
+    if (!email.trim() || !password.trim()) {
+      setAuthMessage("Please enter your email and password.");
+      return;
+    }
+
+    setAuthLoading(true);
+
+    try {
+      if (authMode === "login") {
+        const { error } =
+          await supabase.auth.signInWithPassword({
+            email: email.trim(),
+            password,
+          });
+
+        if (error) {
+          setAuthMessage(error.message);
+          return;
+        }
+
+        setIsLoggedIn(true);
+      } else {
+        const { error } = await supabase.auth.signUp({
+          email: email.trim(),
+          password,
+        });
+
+        if (error) {
+          setAuthMessage(error.message);
+          return;
+        }
+
+        setAuthMessage(
+          "Account created! Check your email to verify your account."
+        );
+      }
+    } catch {
+      setAuthMessage(
+        "Something went wrong. Please try again."
+      );
+    } finally {
+      setAuthLoading(false);
+    }
+  };
+
+  const continueAsGuest = () => {
+    setIsLoggedIn(true);
+  };
+
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
+    setIsLoggedIn(false);
+    setEntered(false);
+    setPage("home");
+  };
 
   /* =======================================================
      YOUTUBE API
@@ -442,7 +590,6 @@ function App() {
 
   useEffect(() => {
     if (window.YT && window.YT.Player) return;
-
     if (document.getElementById("youtube-api")) return;
 
     const script = document.createElement("script");
@@ -469,10 +616,14 @@ function App() {
           playerRef.current.loadVideoById(
             currentSong.youtubeId
           );
+
           playerRef.current.setVolume(volume);
+          playerRef.current.playVideo();
+
           playerReady.current = true;
-          return;
         } catch {}
+
+        return;
       }
 
       playerRef.current = new window.YT.Player(
@@ -481,7 +632,7 @@ function App() {
           videoId: currentSong.youtubeId,
 
           playerVars: {
-            autoplay: 0,
+            autoplay: 1,
             controls: 0,
             rel: 0,
             modestbranding: 1,
@@ -491,11 +642,15 @@ function App() {
           events: {
             onReady: (event) => {
               playerReady.current = true;
+
               event.target.setVolume(volume);
+              event.target.playVideo();
 
               const d = event.target.getDuration();
 
-              if (d) setDuration(d);
+              if (d) {
+                setDuration(d);
+              }
             },
 
             onStateChange: (event) => {
@@ -520,7 +675,7 @@ function App() {
                 event.data ===
                 window.YT.PlayerState.ENDED
               ) {
-                setPlaying(false);
+                playNextInStation();
               }
             },
           },
@@ -536,7 +691,7 @@ function App() {
   }, [currentSong]);
 
   /* =======================================================
-     UPDATE TIME
+     PLAYER TIME
      ======================================================= */
 
   useEffect(() => {
@@ -574,23 +729,19 @@ function App() {
 
   const updateListeningStreak = () => {
     const today = getToday();
-    const previous = localStorage.getItem(
-      "oohaLastListening"
-    );
+
+    const previous =
+      localStorage.getItem("oohaLastListening");
 
     if (previous === today) return;
 
     let newStreak = 1;
 
     if (previous) {
-      const previousDate = new Date(previous);
-      const todayDate = new Date(today);
-
-      const difference =
-        Math.round(
-          (todayDate - previousDate) /
-            (1000 * 60 * 60 * 24)
-        );
+      const difference = Math.round(
+        (new Date(today) - new Date(previous)) /
+          (1000 * 60 * 60 * 24)
+      );
 
       if (difference === 1) {
         newStreak =
@@ -611,7 +762,184 @@ function App() {
     );
 
     setStreak(newStreak);
-    setLastListeningDate(today);
+  };
+
+  /* =======================================================
+     TUNE STATION
+     ======================================================= */
+
+  const tuneStation = (station) => {
+    setCurrentStationId(station.id);
+
+    shuffleHistoryRef.current = [];
+    shuffleIndexRef.current = -1;
+
+    setShowVideo(false);
+    setCurrentTime(0);
+    setDuration(0);
+
+    const playlist = getStationSongs(station);
+
+    if (playlist.length === 0) {
+      setCurrentSong(null);
+      setPlaying(false);
+
+      if (playerRef.current) {
+        try {
+          playerRef.current.stopVideo();
+        } catch {}
+      }
+
+      return;
+    }
+
+    const firstSong = shuffle
+      ? getShuffleSong(playlist, null)
+      : playlist[0];
+
+    shuffleHistoryRef.current = firstSong
+      ? [firstSong]
+      : [];
+
+    shuffleIndexRef.current = firstSong ? 0 : -1;
+
+    setCurrentSong(firstSong);
+  };
+
+  /* =======================================================
+     NEXT SONG — SAME STATION
+     ======================================================= */
+
+  const playNextInStation = () => {
+    if (!currentStation || stationSongs.length === 0) {
+      return;
+    }
+
+    if (shuffle) {
+      if (
+        shuffleIndexRef.current <
+        shuffleHistoryRef.current.length - 1
+      ) {
+        shuffleIndexRef.current += 1;
+
+        const nextSong =
+          shuffleHistoryRef.current[
+            shuffleIndexRef.current
+          ];
+
+        setCurrentTime(0);
+        setDuration(0);
+        setCurrentSong(nextSong);
+
+        return;
+      }
+
+      const nextSong = getShuffleSong(
+        stationSongs,
+        currentSong
+      );
+
+      if (!nextSong) {
+        return;
+      }
+
+      shuffleHistoryRef.current.push(nextSong);
+
+      shuffleIndexRef.current =
+        shuffleHistoryRef.current.length - 1;
+
+      setCurrentTime(0);
+      setDuration(0);
+      setCurrentSong(nextSong);
+
+      return;
+    }
+
+    let index = stationSongs.findIndex(
+      (song) =>
+        song.title === currentSong?.title &&
+        song.movie === currentSong?.movie
+    );
+
+    index = index === -1 ? 0 : index + 1;
+
+    if (index >= stationSongs.length) {
+      index = 0;
+    }
+
+    setCurrentTime(0);
+    setDuration(0);
+    setCurrentSong(stationSongs[index]);
+  };
+
+  /* =======================================================
+     PREVIOUS SONG — SAME STATION
+     ======================================================= */
+
+  const playPreviousInStation = () => {
+    if (!currentStation || stationSongs.length === 0) {
+      return;
+    }
+
+    if (shuffle) {
+      if (shuffleIndexRef.current <= 0) {
+        return;
+      }
+
+      shuffleIndexRef.current -= 1;
+
+      const previousSong =
+        shuffleHistoryRef.current[
+          shuffleIndexRef.current
+        ];
+
+      setCurrentTime(0);
+      setDuration(0);
+      setCurrentSong(previousSong);
+
+      return;
+    }
+
+    let index = stationSongs.findIndex(
+      (song) =>
+        song.title === currentSong?.title &&
+        song.movie === currentSong?.movie
+    );
+
+    index = index === -1 ? 0 : index - 1;
+
+    if (index < 0) {
+      index = stationSongs.length - 1;
+    }
+
+    setCurrentTime(0);
+    setDuration(0);
+    setCurrentSong(stationSongs[index]);
+  };
+
+  /* =======================================================
+     SHUFFLE
+     ======================================================= */
+
+  const toggleShuffle = () => {
+    setShuffle((prev) => {
+      const next = !prev;
+
+      if (next) {
+        if (currentSong) {
+          shuffleHistoryRef.current = [currentSong];
+          shuffleIndexRef.current = 0;
+        } else {
+          shuffleHistoryRef.current = [];
+          shuffleIndexRef.current = -1;
+        }
+      } else {
+        shuffleHistoryRef.current = [];
+        shuffleIndexRef.current = -1;
+      }
+
+      return next;
+    });
   };
 
   /* =======================================================
@@ -630,79 +958,6 @@ function App() {
         playerRef.current.playVideo();
       }
     } catch {}
-  };
-
-  /* =======================================================
-     OPEN SONG
-     ======================================================= */
-
-  const openSong = (song) => {
-    setCurrentSong(song);
-    setShowFullPlayer(true);
-    setShowVideo(false);
-    setCurrentTime(0);
-    setDuration(0);
-
-    if (!song.youtubeId) {
-      setPlaying(false);
-      return;
-    }
-
-    if (
-      playerRef.current &&
-      playerReady.current
-    ) {
-      try {
-        playerRef.current.loadVideoById(
-          song.youtubeId
-        );
-
-        playerRef.current.setVolume(volume);
-        playerRef.current.playVideo();
-
-        setPlaying(true);
-        updateListeningStreak();
-      } catch {}
-    }
-  };
-
-  /* =======================================================
-     PREVIOUS
-     ======================================================= */
-
-  const playPrevious = () => {
-    if (!currentSong) return;
-
-    const index = allSongs.findIndex(
-      (song) =>
-        song.title === currentSong.title &&
-        song.movie === currentSong.movie
-    );
-
-    if (index > 0) {
-      openSong(allSongs[index - 1]);
-    }
-  };
-
-  /* =======================================================
-     NEXT
-     ======================================================= */
-
-  const playNext = () => {
-    if (!currentSong) return;
-
-    const index = allSongs.findIndex(
-      (song) =>
-        song.title === currentSong.title &&
-        song.movie === currentSong.movie
-    );
-
-    if (
-      index !== -1 &&
-      index < allSongs.length - 1
-    ) {
-      openSong(allSongs[index + 1]);
-    }
   };
 
   /* =======================================================
@@ -744,10 +999,10 @@ function App() {
   };
 
   /* =======================================================
-     CLOSE PLAYER
+     POWER OFF
      ======================================================= */
 
-  const closePlayer = () => {
+  const powerOff = () => {
     if (playerRef.current) {
       try {
         playerRef.current.stopVideo();
@@ -755,15 +1010,15 @@ function App() {
     }
 
     setCurrentSong(null);
+    setCurrentStationId(null);
     setPlaying(false);
-    setShowFullPlayer(false);
-    setShowVideo(false);
     setCurrentTime(0);
     setDuration(0);
+    setShowVideo(false);
   };
 
   /* =======================================================
-     ENTER
+     ENTER ARCHIVE
      ======================================================= */
 
   const enterArchive = () => {
@@ -786,25 +1041,169 @@ function App() {
   };
 
   /* =======================================================
-     SEARCH
+     AUTH ENTRANCE
      ======================================================= */
 
-  const [search, setSearch] = useState("");
+  if (!isLoggedIn) {
+    return (
+      <main className="auth-page">
+        <div className="auth-card">
+          <div className="auth-brand">
+            <div className="auth-radio-icon">📻</div>
 
-  const searchResults = useMemo(() => {
-    const query = search.toLowerCase().trim();
+            <p className="eyebrow">
+              A TELUGU MUSIC ARCHIVE
+            </p>
 
-    if (!query) return [];
+            <h1>ఊహా లోకం</h1>
 
-    return allSongs.filter((song) => {
-      return (
-        song.title.toLowerCase().includes(query) ||
-        song.movie.toLowerCase().includes(query) ||
-        song.year.toLowerCase().includes(query) ||
-        song.era.toLowerCase().includes(query)
-      );
-    });
-  }, [search]);
+            <span>OOHA LOKAM</span>
+          </div>
+
+          <div className="auth-divider">
+            <span>✦</span>
+          </div>
+
+          <div className="auth-heading">
+            <h2>
+              {authMode === "login"
+                ? "Welcome Back"
+                : "Join Ooha Lokam"}
+            </h2>
+
+            <p>
+              {authMode === "login"
+                ? "Your memories are waiting."
+                : "Create your archive account."}
+            </p>
+          </div>
+
+          <div className="auth-tabs">
+            <button
+              className={
+                authMode === "login"
+                  ? "auth-tab active"
+                  : "auth-tab"
+              }
+              onClick={() => {
+                setAuthMode("login");
+                setAuthMessage("");
+              }}
+            >
+              LOGIN
+            </button>
+
+            <button
+              className={
+                authMode === "signup"
+                  ? "auth-tab active"
+                  : "auth-tab"
+              }
+              onClick={() => {
+                setAuthMode("signup");
+                setAuthMessage("");
+              }}
+            >
+              SIGN UP
+            </button>
+          </div>
+
+          <form
+            className="auth-form"
+            onSubmit={handleAuth}
+          >
+            <label htmlFor="email">
+              EMAIL ADDRESS
+            </label>
+
+            <input
+              id="email"
+              type="email"
+              placeholder="your@email.com"
+              value={email}
+              onChange={(e) =>
+                setEmail(e.target.value)
+              }
+              autoComplete="email"
+            />
+
+            <label htmlFor="password">
+              PASSWORD
+            </label>
+
+            <input
+              id="password"
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) =>
+                setPassword(e.target.value)
+              }
+              autoComplete={
+                authMode === "login"
+                  ? "current-password"
+                  : "new-password"
+              }
+            />
+
+            {authMode === "login" && (
+              <div className="auth-options">
+                <label className="remember-option">
+                  <input type="checkbox" />
+                  <span>Remember me</span>
+                </label>
+
+                <button
+                  type="button"
+                  className="forgot-button"
+                  onClick={() =>
+                    setAuthMessage(
+                      "Password reset will be added next."
+                    )
+                  }
+                >
+                  Forgot password?
+                </button>
+              </div>
+            )}
+
+            {authMessage && (
+              <div className="auth-message">
+                {authMessage}
+              </div>
+            )}
+
+            <button
+              type="submit"
+              className="auth-submit"
+              disabled={authLoading}
+            >
+              {authLoading
+                ? "PLEASE WAIT..."
+                : authMode === "login"
+                ? "ENTER OOHA LOKAM"
+                : "CREATE MY ACCOUNT"}
+            </button>
+          </form>
+
+          <div className="auth-or">
+            <span>OR</span>
+          </div>
+
+          <button
+            className="guest-button"
+            onClick={continueAsGuest}
+          >
+            CONTINUE AS GUEST
+          </button>
+
+          <p className="auth-footer">
+            Songs • Cinema • Memories
+          </p>
+        </div>
+      </main>
+    );
+  }
 
   /* =======================================================
      ENTRANCE
@@ -865,7 +1264,7 @@ function App() {
   }
 
   /* =======================================================
-     MAIN WEBSITE
+     MAIN APP
      ======================================================= */
 
   return (
@@ -875,14 +1274,13 @@ function App() {
         <div id="persistent-youtube-player"></div>
       </div>
 
-      {/* ===================================================
-          HOME
-         =================================================== */}
+      {/* HOME */}
 
       {page === "home" && (
         <main className="home-page">
 
           <header className="home-header">
+
             <div>
               <p className="small-title">
                 TELUGU CINEMA & MUSIC ARCHIVE
@@ -894,9 +1292,11 @@ function App() {
             <div className="user-name">
               Welcome, <strong>{name}</strong>
             </div>
+
           </header>
 
           <section className="hero">
+
             <p className="hero-label">
               WELCOME TO THE ARCHIVE
             </p>
@@ -908,32 +1308,35 @@ function App() {
             </h2>
 
             <p>
-              Travel through decades of Telugu
-              music and rediscover unforgettable
-              melodies and memories.
+              Tune into timeless Telugu melodies,
+              discover cinema memories and keep
+              your listening streak alive.
             </p>
+
           </section>
 
           <section className="archive-grid">
 
             <div className="archive-card">
-              <span>🎵</span>
 
-              <h3>MUSIC</h3>
+              <span>📻</span>
+
+              <h3>MUSIC RADIO</h3>
 
               <p>
-                60s • 70s • 80s • 90s • 2000s •
-                2010s • 2020s
+                Five stations • 1960s to today
               </p>
 
               <button
                 onClick={() => setPage("music")}
               >
-                ENTER MUSIC ARCHIVE
+                TUNE INTO RADIO
               </button>
+
             </div>
 
             <div className="archive-card">
+
               <span>🎮</span>
 
               <h3>QUIZZES</h3>
@@ -947,9 +1350,11 @@ function App() {
               >
                 PLAY QUIZ
               </button>
+
             </div>
 
             <div className="archive-card">
+
               <span>🏆</span>
 
               <h3>REWARDS</h3>
@@ -959,12 +1364,11 @@ function App() {
               </p>
 
               <button
-                onClick={() =>
-                  setPage("rewards")
-                }
+                onClick={() => setPage("rewards")}
               >
                 VIEW REWARDS
               </button>
+
             </div>
 
           </section>
@@ -981,11 +1385,11 @@ function App() {
       )}
 
       {/* ===================================================
-          MUSIC
+          VINTAGE RADIO
          =================================================== */}
 
       {page === "music" && (
-        <main className="music-page">
+        <main className="radio-page">
 
           <button
             className="back-button"
@@ -994,137 +1398,478 @@ function App() {
             ← BACK TO ఊహా లోకం
           </button>
 
-          <section className="music-header">
+          <section className="radio-heading">
+
             <p>
-              TELUGU CINEMA & MUSIC ARCHIVE
+              OOHA LOKAM BROADCAST
             </p>
 
             <h1>
-              🎵 Songs Through Time
+              📻 ఊహా లోకం రేడియో
             </h1>
 
             <span>
-              Rediscover melodies across
-              generations.
+              Tune in. Close your eyes.
+              Let the memories play.
             </span>
+
           </section>
 
-          <section className="music-search">
-            <input
-              type="text"
-              placeholder="🔍 Search songs, movies or years..."
-              value={search}
-              onChange={(e) =>
-                setSearch(e.target.value)
-              }
-            />
+          <section className="vintage-radio">
 
-            {search.trim() && (
-              <div className="search-results">
+            <div className="radio-brand">
+              <div>
+                OOHA LOKAM
+              </div>
 
-                <div className="search-heading">
-                  <span>SEARCH RESULTS</span>
+              <span>
+                TELUGU CINEMA RADIO
+              </span>
+            </div>
 
-                  <small>
-                    {searchResults.length}{" "}
-                    {searchResults.length === 1
-                      ? "song"
-                      : "songs"}
-                  </small>
+            <div className="radio-main">
+
+              {/* TUNING SIDE */}
+
+              <div className="radio-tuning">
+
+                <div className="dial-label">
+                  FM / MEMORY
                 </div>
 
-                {searchResults.length === 0 ? (
-                  <div className="no-results">
-                    <div>📻</div>
+                <div className="frequency-dial">
 
-                    <h3>
-                      No songs found
-                    </h3>
+                  <div className="frequency-numbers">
+                    <span>88</span>
+                    <span>92</span>
+                    <span>96</span>
+                    <span>100</span>
+                    <span>104</span>
+                  </div>
 
-                    <p>
-                      Try another song,
-                      movie or year.
-                    </p>
+                  <div className="dial-line">
+
+                    <div
+                      className="dial-pointer"
+                      style={{
+                        left: currentStation
+                          ? `${
+                              radioStations.indexOf(
+                                currentStation
+                              ) * 25
+                            }%`
+                          : "50%",
+                      }}
+                    />
+
                   </div>
-                ) : (
-                  <div className="song-grid">
-                    {searchResults.map(
-                      (song, index) => (
-                        <SongCard
-                          key={`${song.title}-${index}`}
-                          song={song}
-                          onPlay={openSong}
-                        />
-                      )
-                    )}
+
+                  <div className="dial-glow">
+                    {currentStation
+                      ? currentStation.frequency
+                      : "----"}
                   </div>
-                )}
+
+                </div>
+
+                <div className="station-display">
+
+                  <small>
+                    {currentStation
+                      ? "NOW TUNED"
+                      : "SELECT A STATION"}
+                  </small>
+
+                  <strong>
+                    {currentStation
+                      ? currentStation.name
+                      : "ఊహా లోకం"}
+                  </strong>
+
+                  <span>
+                    {currentStation
+                      ? currentStation.era
+                      : "TELUGU CINEMA RADIO"}
+                  </span>
+
+                </div>
+
+                <div className="radio-status">
+
+                  <span
+                    className={
+                      playing
+                        ? "status-light on"
+                        : "status-light"
+                    }
+                  />
+
+                  {playing
+                    ? "BROADCASTING"
+                    : currentStation
+                    ? "STATION READY"
+                    : "RADIO READY"}
+
+                </div>
+
+              </div>
+
+              {/* SPEAKER */}
+
+              <div className="speaker-panel">
+
+                <div className="speaker-label">
+
+                  <span>
+                    {currentSong
+                      ? "NOW PLAYING"
+                      : "OOHA LOKAM"}
+                  </span>
+
+                  <strong>
+                    {currentSong
+                      ? currentSong.title
+                      : "Tune into a station"}
+                  </strong>
+
+                  <small>
+                    {currentSong
+                      ? `${currentSong.movie || ""}${
+                          currentSong.movie &&
+                          currentSong.year
+                            ? " • "
+                            : ""
+                        }${currentSong.year || ""}`
+                      : "Five stations • endless memories"}
+                  </small>
+
+                </div>
+
+                <div className="speaker-grille">
+
+                  {Array.from({
+                    length: 11,
+                  }).map((_, index) => (
+                    <div
+                      key={index}
+                      className="speaker-line"
+                    />
+                  ))}
+
+                </div>
+
+              </div>
+
+            </div>
+
+            {/* RADIO CONTROLS */}
+
+            <div className="radio-controls">
+
+              <button
+                className="radio-knob-button"
+                onClick={playPreviousInStation}
+                disabled={!stationSongs.length}
+              >
+                <span>◀</span>
+                <small>PREV</small>
+              </button>
+
+              <button
+                className={
+                  shuffle
+                    ? "radio-shuffle-button active"
+                    : "radio-shuffle-button"
+                }
+                onClick={toggleShuffle}
+                disabled={!stationSongs.length}
+              >
+                <span>⤨</span>
+                <small>
+                  {shuffle ? "ON" : "SHUFFLE"}
+                </small>
+              </button>
+
+              <button
+                className="radio-play-button"
+                onClick={togglePlay}
+                disabled={!currentSong}
+              >
+                {playing ? "❚❚" : "▶️"}
+              </button>
+
+              <button
+                className="radio-knob-button"
+                onClick={playNextInStation}
+                disabled={!stationSongs.length}
+              >
+                <span>▶</span>
+                <small>NEXT</small>
+              </button>
+
+              <div className="radio-volume">
+
+                <span>VOL</span>
+
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={volume}
+                  onChange={changeVolume}
+                />
+
+              </div>
+
+            </div>
+
+            {/* PROGRESS */}
+
+            {currentSong && (
+              <div className="radio-progress">
+
+                <span>
+                  {formatTime(currentTime)}
+                </span>
+
+                <input
+                  type="range"
+                  min="0"
+                  max={duration || 100}
+                  step="1"
+                  value={Math.min(
+                    currentTime,
+                    duration || 100
+                  )}
+                  onChange={seekSong}
+                  disabled={!duration}
+                />
+
+                <span>
+                  {formatTime(duration)}
+                </span>
 
               </div>
             )}
-          </section>
 
-          <section className="decade-grid">
-            {Object.keys(songs).map(
-              (item) => (
-                <button
-                  key={item}
-                  className={
-                    decade === item
-                      ? "active-decade"
-                      : ""
+            {/* STATION PRESETS */}
+
+            <div className="station-section">
+
+              <div className="station-section-title">
+
+                <span>
+                  RADIO PRESETS
+                </span>
+
+                <small>
+                  SELECT YOUR ERA
+                </small>
+
+              </div>
+
+              <div className="station-presets">
+
+                {radioStations.map(
+                  (station, index) => {
+
+                    const playable =
+                      getStationSongs(
+                        station
+                      ).length > 0;
+
+                    return (
+                      <button
+                        key={station.id}
+                        className={
+                          currentStationId ===
+                          station.id
+                            ? "station-preset active"
+                            : "station-preset"
+                        }
+                        onClick={() =>
+                          tuneStation(station)
+                        }
+                      >
+
+                        <div className="preset-number">
+                          0{index + 1}
+                        </div>
+
+                        <div className="preset-info">
+
+                          <strong>
+                            {station.name}
+                          </strong>
+
+                          <span>
+                            {station.english}
+                          </span>
+
+                          <small>
+                            {station.era}
+                          </small>
+
+                        </div>
+
+                        <div className="preset-frequency">
+                          {station.frequency}
+                        </div>
+
+                        <div className="preset-light">
+
+                          {currentStationId ===
+                          station.id
+                            ? "●"
+                            : playable
+                            ? "○"
+                            : "—"}
+
+                        </div>
+
+                      </button>
+                    );
                   }
-                  onClick={() => {
-                    setDecade(item);
-                    setSearch("");
-                  }}
-                >
-                  {item}
-                </button>
-              )
+                )}
+
+              </div>
+
+            </div>
+
+            {/* CURRENT BROADCAST */}
+
+            {currentStation && (
+              <div className="broadcast-info">
+
+                <div>
+
+                  <span>
+                    CURRENT STATION
+                  </span>
+
+                  <strong>
+                    {currentStation.name}
+                  </strong>
+
+                </div>
+
+                <div>
+
+                  <span>
+                    BROADCAST ERA
+                  </span>
+
+                  <strong>
+                    {currentStation.era}
+                  </strong>
+
+                </div>
+
+                <div>
+
+                  <span>
+                    PLAYLIST
+                  </span>
+
+                  <strong>
+                    {stationSongs.length
+                      ? `${stationSongs.length} melodies`
+                      : "COMING SOON"}
+                  </strong>
+
+                </div>
+
+              </div>
             )}
-          </section>
 
-          {decade && !search.trim() && (
-            <section className="selected-decade">
+            {!currentStation && (
+              <div className="radio-welcome">
 
-              <p>YOU SELECTED</p>
+                <div>✦</div>
 
-              <h2>{decade}</h2>
+                <h2>
+                  Choose your station
+                </h2>
 
-              <span>
-                Telugu songs from the {decade}
-              </span>
+                <p>
+                  Five eras. One radio.
+                  Countless memories.
+                </p>
 
-              {songs[decade].length === 0 ? (
-                <div className="empty-library">
-                  <div>📻</div>
+              </div>
+            )}
 
-                  <h3>
-                    More melodies coming soon...
-                  </h3>
+            {currentStation &&
+              stationSongs.length === 0 && (
+                <div className="radio-welcome">
+
+                  <div>♫</div>
+
+                  <h2>
+                    More melodies coming soon
+                  </h2>
 
                   <p>
-                    We're building the
-                    Ooha Lokam music archive.
+                    This station is ready.
+                    We're waiting for its songs.
                   </p>
-                </div>
-              ) : (
-                <div className="song-grid">
-                  {songs[decade].map(
-                    (song, index) => (
-                      <SongCard
-                        key={`${song.title}-${index}`}
-                        song={song}
-                        onPlay={openSong}
-                      />
-                    )
-                  )}
+
                 </div>
               )}
 
-            </section>
-          )}
+            {/* VIDEO */}
+
+            {currentSong && (
+              <div className="radio-extra">
+
+                <button
+                  className="radio-video-button"
+                  onClick={() =>
+                    setShowVideo(!showVideo)
+                  }
+                >
+                  {showVideo
+                    ? "▲ HIDE VIDEO"
+                    : "📺 WATCH VIDEO"}
+                </button>
+
+                <button
+                  className="radio-power-button"
+                  onClick={powerOff}
+                >
+                  ⏻ POWER OFF
+                </button>
+
+              </div>
+            )}
+
+            {showVideo &&
+              currentSong?.youtubeId && (
+                <div className="radio-video">
+
+                  <iframe
+                    src={`https://www.youtube.com/embed/${currentSong.youtubeId}?rel=0`}
+                    title={currentSong.title}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                  />
+
+                </div>
+              )}
+
+            <div className="radio-bottom">
+
+              <span>
+                ◉ ANALOG MEMORY BROADCAST
+              </span>
+
+              <span>
+                SONG • CINEMA • MEMORY
+              </span>
+
+            </div>
+
+          </section>
 
         </main>
       )}
@@ -1144,52 +1889,40 @@ function App() {
           </button>
 
           <section className="rewards-header">
-            <p>OOHA LOKAM REWARDS</p>
 
-            <h1>🏆 Your Rewards</h1>
+            <p>
+              OOHA LOKAM REWARDS
+            </p>
+
+            <h1>
+              🏆 Your Rewards
+            </h1>
 
             <span>
               Keep listening. Keep discovering.
               Keep the streak alive.
             </span>
+
           </section>
 
           <section className="reward-stats">
 
             <div className="reward-stat">
               <span>🔥</span>
-
-              <strong>
-                {streak}
-              </strong>
-
-              <small>
-                DAY STREAK
-              </small>
+              <strong>{streak}</strong>
+              <small>DAY STREAK</small>
             </div>
 
             <div className="reward-stat">
-              <span>🎵</span>
-
-              <strong>
-                {allSongs.length}
-              </strong>
-
-              <small>
-                SONGS IN ARCHIVE
-              </small>
+              <span>📻</span>
+              <strong>5</strong>
+              <small>RADIO STATIONS</small>
             </div>
 
             <div className="reward-stat">
               <span>⭐</span>
-
-              <strong>
-                {streak * 10}
-              </strong>
-
-              <small>
-                POINTS
-              </small>
+              <strong>{streak * 10}</strong>
+              <small>POINTS</small>
             </div>
 
           </section>
@@ -1209,7 +1942,9 @@ function App() {
               <h2>
                 {streak === 0
                   ? "Start your journey"
-                  : `${streak} day${streak === 1 ? "" : "s"} strong!`}
+                  : `${streak} day${
+                      streak === 1 ? "" : "s"
+                    } strong!`}
               </h2>
 
               <span>
@@ -1230,15 +1965,15 @@ function App() {
                           : "streak-day"
                       }
                     >
+
                       <span>
                         {streak >= day
                           ? "✓"
                           : day}
                       </span>
 
-                      <small>
-                        DAY
-                      </small>
+                      <small>DAY</small>
+
                     </div>
                   )
                 )}
@@ -1251,106 +1986,88 @@ function App() {
 
           <section className="rewards-list">
 
-            <h2>
-              Milestones
-            </h2>
+            <h2>Milestones</h2>
 
             <div className="milestone-grid">
 
-              <div
-                className={
-                  streak >= 1
-                    ? "milestone unlocked"
-                    : "milestone"
-                }
-              >
-                <span>🌱</span>
-                <h3>First Melody</h3>
-                <p>
-                  Listen for 1 day
-                </p>
-                <strong>
-                  {streak >= 1
-                    ? "UNLOCKED"
-                    : "LOCKED"}
-                </strong>
-              </div>
+              {[
+                [
+                  "🌱",
+                  "First Melody",
+                  "Listen for 1 day",
+                  1,
+                ],
+                [
+                  "🎶",
+                  "Melody Seeker",
+                  "Reach a 3 day streak",
+                  3,
+                ],
+                [
+                  "🔥",
+                  "Week Warrior",
+                  "Reach a 7 day streak",
+                  7,
+                ],
+                [
+                  "👑",
+                  "Ooha Legend",
+                  "Reach a 30 day streak",
+                  30,
+                ],
+              ].map(
+                (item) => (
+                  <div
+                    key={item[1]}
+                    className={
+                      streak >= item[3]
+                        ? "milestone unlocked"
+                        : "milestone"
+                    }
+                  >
 
-              <div
-                className={
-                  streak >= 3
-                    ? "milestone unlocked"
-                    : "milestone"
-                }
-              >
-                <span>🎶</span>
-                <h3>Melody Seeker</h3>
-                <p>
-                  Reach a 3 day streak
-                </p>
-                <strong>
-                  {streak >= 3
-                    ? "UNLOCKED"
-                    : "LOCKED"}
-                </strong>
-              </div>
+                    <span>
+                      {item[0]}
+                    </span>
 
-              <div
-                className={
-                  streak >= 7
-                    ? "milestone unlocked"
-                    : "milestone"
-                }
-              >
-                <span>🔥</span>
-                <h3>Week Warrior</h3>
-                <p>
-                  Reach a 7 day streak
-                </p>
-                <strong>
-                  {streak >= 7
-                    ? "UNLOCKED"
-                    : "LOCKED"}
-                </strong>
-              </div>
+                    <h3>
+                      {item[1]}
+                    </h3>
 
-              <div
-                className={
-                  streak >= 30
-                    ? "milestone unlocked"
-                    : "milestone"
-                }
-              >
-                <span>👑</span>
-                <h3>Ooha Legend</h3>
-                <p>
-                  Reach a 30 day streak
-                </p>
-                <strong>
-                  {streak >= 30
-                    ? "UNLOCKED"
-                    : "LOCKED"}
-                </strong>
-              </div>
+                    <p>
+                      {item[2]}
+                    </p>
+
+                    <strong>
+                      {streak >= item[3]
+                        ? "UNLOCKED"
+                        : "LOCKED"}
+                    </strong>
+
+                  </div>
+                )
+              )}
 
             </div>
 
           </section>
 
           <section className="rewards-note">
+
             <span>✦</span>
 
             <p>
               Your progress is saved on this
               device automatically.
             </p>
+
           </section>
 
         </main>
       )}
 
       {/* ===================================================
-          QUIZ PLACEHOLDER
+          QUIZ
          =================================================== */}
 
       {page === "quiz" && (
@@ -1364,6 +2081,7 @@ function App() {
           </button>
 
           <section className="quiz-header">
+
             <p>
               OOHA LOKAM QUIZ
             </p>
@@ -1375,411 +2093,93 @@ function App() {
             <span>
               Songs • Dialogues • BGMs
             </span>
+
           </section>
 
           <div className="coming-soon-box">
+
             <div>🎬</div>
 
             <h2>
-              Quiz section is under
-              construction.
+              Quiz section is under construction.
             </h2>
 
             <p>
-              The music archive comes first.
+              The music radio comes first.
               Quiz features will be added next.
             </p>
+
           </div>
 
         </main>
       )}
 
       {/* ===================================================
-          FULL CASSETTE PLAYER
+          MINI PLAYER ON OTHER PAGES
          =================================================== */}
 
-      {currentSong &&
-        showFullPlayer && (
-          <section className="cassette-player">
+      {currentSong && page !== "music" && (
+        <section className="mini-player">
 
-            <div className="cassette-top">
-              <div>ఊహా లోకం</div>
+          <div className="mini-song-info">
 
-              <div>
-                VINTAGE MUSIC DECK
-              </div>
-
-              <button
-                className="close-x"
-                onClick={() =>
-                  setShowFullPlayer(false)
-                }
-              >
-                ✕
-              </button>
+            <div className="mini-icon">
+              📻
             </div>
 
-            <div className="cassette-body">
+            <div>
 
-              <div className="cassette-side">
-
-                <div className="cassette-label">
-
-                  <div className="cassette-title">
-                    ఊహా లోకం
-                  </div>
-
-                  <div className="cassette-song">
-                    {currentSong.title}
-                  </div>
-
-                  <div className="cassette-movie">
-                    {currentSong.movie} •{" "}
-                    {currentSong.year}
-                  </div>
-
-                  <div className="cassette-line"></div>
-
-                  <div className="cassette-reels">
-
-                    <div
-                      className={`reel ${
-                        playing ? "spin" : ""
-                      }`}
-                    >
-                      <div className="reel-center">
-                        +
-                      </div>
-                    </div>
-
-                    <div className="tape-window">
-                      <div className="tape-line"></div>
-                    </div>
-
-                    <div
-                      className={`reel ${
-                        playing ? "spin" : ""
-                      }`}
-                    >
-                      <div className="reel-center">
-                        +
-                      </div>
-                    </div>
-
-                  </div>
-
-                  <div className="cassette-label-bottom">
-                    SIDE A • OOHA LOKAM
-                  </div>
-
-                </div>
-
-              </div>
-
-              <div className="player-side">
-
-                <div className="now-playing">
-                  {playing
-                    ? "● NOW PLAYING"
-                    : "○ PAUSED"}
-                </div>
-
-                <h3>
-                  {currentSong.title}
-                </h3>
-
-                <p>
-                  {currentSong.movie} •{" "}
-                  {currentSong.year}
-                </p>
-
-                {!currentSong.youtubeId && (
-                  <div className="missing-video">
-                    YouTube link will be added
-                    for this song.
-                  </div>
-                )}
-
-                <div className="radio-display">
-
-                  <span
-                    className={
-                      playing
-                        ? "display-light playing-light"
-                        : "display-light"
-                    }
-                  ></span>
-
-                  <span>
-                    {playing
-                      ? "♪ PLAY"
-                      : "READY"}
-                  </span>
-
-                  <span>
-                    {formatTime(currentTime)}
-                  </span>
-
-                  <span>/</span>
-
-                  <span>
-                    {formatTime(duration)}
-                  </span>
-
-                </div>
-
-                <div className="duration-section">
-
-                  <div className="duration-times">
-                    <span>
-                      {formatTime(currentTime)}
-                    </span>
-
-                    <span>
-                      {formatTime(duration)}
-                    </span>
-                  </div>
-
-                  <input
-                    className="vintage-progress"
-                    type="range"
-                    min="0"
-                    max={duration || 100}
-                    step="1"
-                    value={Math.min(
-                      currentTime,
-                      duration || 100
-                    )}
-                    onChange={seekSong}
-                    disabled={!duration}
-                  />
-
-                </div>
-
-                <div className="transport-controls">
-
-                  <button
-                    onClick={playPrevious}
-                  >
-                    ◀◀
-                  </button>
-
-                  <button
-                    className="big-play"
-                    onClick={togglePlay}
-                  >
-                    {playing
-                      ? "❚❚"
-                      : "▶"}
-                  </button>
-
-                  <button
-                    onClick={playNext}
-                  >
-                    ▶▶
-                  </button>
-
-                </div>
-
-                <div className="volume-control">
-
-                  <span>🔊</span>
-
-                  <input
-                    className="vintage-volume"
-                    type="range"
-                    min="0"
-                    max="100"
-                    value={volume}
-                    onChange={changeVolume}
-                  />
-
-                  <span>
-                    {volume}
-                  </span>
-
-                </div>
-
-                <button
-                  className="watch-video-button"
-                  disabled={!currentSong.youtubeId}
-                  onClick={() =>
-                    setShowVideo(!showVideo)
-                  }
-                >
-                  {showVideo
-                    ? "▲ HIDE VIDEO"
-                    : "📺 WATCH VIDEO"}
-                </button>
-
-                {showVideo &&
-                  currentSong.youtubeId && (
-                    <div className="youtube-video">
-                      <iframe
-                        src={`https://www.youtube.com/embed/${currentSong.youtubeId}?rel=0`}
-                        title={currentSong.title}
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowFullScreen
-                      ></iframe>
-                    </div>
-                  )}
-
-                <div className="player-note">
-                  AUDIO MODE • VIDEO OPTIONAL
-                </div>
-
-              </div>
-
-            </div>
-
-            <div className="cassette-bottom">
+              <strong>
+                {currentSong.title}
+              </strong>
 
               <span>
-                SONG • CINEMA • MEMORY
-              </span>
-
-              <button
-                onClick={closePlayer}
-              >
-                STOP & CLOSE
-              </button>
-
-            </div>
-
-          </section>
-        )}
-
-      {/* ===================================================
-          MINI PLAYER
-         =================================================== */}
-
-      {currentSong &&
-        !showFullPlayer && (
-          <section className="mini-player">
-
-            <div className="mini-song-info">
-
-              <div className="mini-icon">
-                📻
-              </div>
-
-              <div>
-                <strong>
-                  {currentSong.title}
-                </strong>
-
-                <span>
-                  {currentSong.movie} •{" "}
-                  {currentSong.year}
-                </span>
-              </div>
-
-            </div>
-
-            <div className="mini-controls">
-
-              <button
-                onClick={playPrevious}
-              >
-                ◀
-              </button>
-
-              <button
-                onClick={togglePlay}
-              >
-                {playing ? "❚❚" : "▶"}
-              </button>
-
-              <button
-                onClick={playNext}
-              >
-                ▶
-              </button>
-
-            </div>
-
-            <div className="mini-duration">
-
-              <span>
-                {formatTime(currentTime)}
-              </span>
-
-              <div className="mini-progress">
-                <div
-                  style={{
-                    width: duration
-                      ? `${Math.min(
-                          100,
-                          (currentTime /
-                            duration) *
-                            100
-                        )}%`
-                      : "0%",
-                  }}
-                ></div>
-              </div>
-
-              <span>
-                {formatTime(duration)}
+                {currentStation?.name ||
+                  "OOHA LOKAM RADIO"}
               </span>
 
             </div>
+
+          </div>
+
+          <div className="mini-controls">
 
             <button
-              className="mini-open"
-              onClick={() =>
-                setShowFullPlayer(true)
-              }
+              onClick={playPreviousInStation}
             >
-              📻 DECK
+              ◀️
+            </button>
+
+            <button onClick={togglePlay}>
+              {playing ? "❚❚" : "▶️"}
             </button>
 
             <button
-              className="mini-close"
-              onClick={closePlayer}
+              onClick={playNextInStation}
             >
-              ✕
+              ▶️
             </button>
 
-          </section>
-        )}
+          </div>
+
+          <button
+            className="mini-open"
+            onClick={() => setPage("music")}
+          >
+            📻 RADIO
+          </button>
+
+          <button
+            className="mini-close"
+            onClick={powerOff}
+          >
+            ✕
+          </button>
+
+        </section>
+      )}
 
     </main>
-  );
-}
-
-/* =========================================================
-   SONG CARD
-   ========================================================= */
-
-function SongCard({ song, onPlay }) {
-  return (
-    <div className="song-card">
-
-      <div className="song-icon">
-        ♫
-      </div>
-
-      <div className="song-info">
-
-        <h3>{song.title}</h3>
-
-        <p>{song.movie}</p>
-
-        <small>
-          {song.year} • {song.era}
-        </small>
-
-      </div>
-
-      <button
-        className="play-button"
-        onClick={() => onPlay(song)}
-      >
-        ▶
-      </button>
-
-    </div>
   );
 }
 
