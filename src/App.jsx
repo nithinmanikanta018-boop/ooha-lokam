@@ -364,7 +364,11 @@ const songs = {
 };
 
 /* =========================================================
-   OOHA LOKAM — VINTAGE RADIO
+   OOHA LOKAM — MUSIC MYSTERY QUIZ
+   ========================================================= */
+
+/* =========================================================
+   OOHA LOKAM — VINTAGE RADIO HELPERS
    ========================================================= */
 
 const radioStations = [
@@ -438,6 +442,80 @@ function getStationSongs(station) {
   );
 }
 
+
+const musicQuizDifficulties = {
+  Easy: {
+    label: "WARM-UP",
+    description: "Familiar melodies. Trust your ears.",
+    maxClip: 8,
+  },
+  Medium: {
+    label: "TUNING",
+    description: "A little less obvious. Listen closely.",
+    maxClip: 16,
+  },
+  Hard: {
+    label: "DEEP CUT",
+    description: "Short clips. Listen carefully. No mercy.",
+    maxClip: 16,
+  },
+  Expert: {
+    label: "ARCHIVE HUNT",
+    description: "For people who know their Telugu melodies.",
+    maxClip: 16,
+  },
+  Impossible: {
+    label: "STATIC ZONE",
+    description: "Tiny clip. Huge ears required.",
+    maxClip: 16,
+  },
+};
+
+const getMusicQuizPool = () => {
+  const pool = [];
+
+  Object.entries(songs).forEach(([era, eraSongs]) => {
+    eraSongs
+      .filter((song) => song.youtubeId)
+      .forEach((song) => {
+        pool.push({
+          ...song,
+          era,
+        });
+      });
+  });
+
+  const seen = new Set();
+
+  return pool.filter((song) => {
+    const key = `${song.youtubeId}|${song.title}`;
+
+    if (seen.has(key)) {
+      return false;
+    }
+
+    seen.add(key);
+    return true;
+  });
+};
+
+
+function shuffleArray(array) {
+  const shuffled = [...array];
+
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+
+    [shuffled[i], shuffled[j]] = [
+      shuffled[j],
+      shuffled[i],
+    ];
+  }
+
+  return shuffled;
+}
+
+
 function App() {
   const [authMode, setAuthMode] = useState("login");
   const [email, setEmail] = useState("");
@@ -456,6 +534,30 @@ function App() {
 
   const [page, setPage] = useState("home");
 
+  /* =======================================================
+     MUSIC MYSTERY QUIZ STATE
+     ======================================================= */
+
+  const [musicQuizDifficulty, setMusicQuizDifficulty] = useState(null);
+  const [musicQuizIndex, setMusicQuizIndex] = useState(0);
+  const [musicQuizScore, setMusicQuizScore] = useState(0);
+  const [musicQuizCorrect, setMusicQuizCorrect] = useState(0);
+  const [musicQuizAttempts, setMusicQuizAttempts] = useState(0);
+  const [musicQuizClipLength, setMusicQuizClipLength] = useState(1);
+  const [musicQuizGuess, setMusicQuizGuess] = useState("");
+  const [musicQuizFeedback, setMusicQuizFeedback] = useState(null);
+  const [musicQuizPlaying, setMusicQuizPlaying] = useState(false);
+  const [musicQuizFinished, setMusicQuizFinished] = useState(false);
+  const [musicQuizRound, setMusicQuizRound] = useState([]);
+  const [musicQuizBestScore, setMusicQuizBestScore] = useState(
+    Number(localStorage.getItem("oohaMusicQuizBest") || 0)
+  );
+
+  const musicQuizFrameRef = useRef(null);
+  const musicQuizPlayerRef = useRef(null);
+  const musicQuizPlayerReady = useRef(false);
+  const musicQuizStopTimerRef = useRef(null);
+
   const [currentStationId, setCurrentStationId] =
     useState(null);
 
@@ -470,8 +572,15 @@ function App() {
 
   const [shuffle, setShuffle] = useState(false);
 
+  const [listenerCounts, setListenerCounts] = useState({});
+
   const shuffleHistoryRef = useRef([]);
   const shuffleIndexRef = useRef(-1);
+
+  const radioPresenceRef = useRef(null);
+  const presenceKeyRef = useRef(`listener-${Date.now()}-${Math.random().toString(36).slice(2)}`);
+  const liveStationIdRef = useRef(null);
+  const livePlayingRef = useRef(false);
 
   const [streak, setStreak] = useState(
     Number(localStorage.getItem("oohaStreak") || 0)
@@ -487,6 +596,193 @@ function App() {
   const stationSongs = currentStation
     ? getStationSongs(currentStation)
     : [];
+
+  useEffect(() => {
+    liveStationIdRef.current = currentStationId;
+    livePlayingRef.current = playing;
+  }, [currentStationId, playing]);
+
+  /* =======================================================
+     LIVE LISTENERS
+     ======================================================= */
+
+  useEffect(() => {
+    const channel = supabase.channel("ooha-lokam-live-listeners", {
+      config: {
+        presence: { key: presenceKeyRef.current },
+      },
+    });
+
+    radioPresenceRef.current = channel;
+
+    const updateListenerCounts = () => {
+      const presenceState = channel.presenceState();
+      const counts = {};
+
+      radioStations.forEach((station) => {
+        counts[station.id] = 0;
+      });
+
+      Object.values(presenceState).forEach((presences) => {
+        presences.forEach((presence) => {
+          if (presence.stationId) {
+            counts[presence.stationId] =
+              (counts[presence.stationId] || 0) + 1;
+          }
+        });
+      });
+
+      setListenerCounts(counts);
+    };
+
+    channel
+      .on("presence", { event: "sync" }, updateListenerCounts)
+      .on("presence", { event: "join" }, updateListenerCounts)
+      .on("presence", { event: "leave" }, updateListenerCounts)
+      .subscribe((status) => {
+        if (status === "SUBSCRIBED") {
+          updateListenerCounts();
+
+          if (liveStationIdRef.current && livePlayingRef.current) {
+            channel.track({
+              stationId: liveStationIdRef.current,
+              active: true,
+            });
+          }
+        }
+      });
+
+    return () => {
+      channel.untrack();
+      supabase.removeChannel(channel);
+      radioPresenceRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    const channel = radioPresenceRef.current;
+
+    if (!channel) {
+      return;
+    }
+
+    const updatePresence = async () => {
+      try {
+        if (currentStationId && playing && channel.state === "joined") {
+          await channel.track({
+            stationId: currentStationId,
+            active: true,
+          });
+        } else if (channel.state === "joined") {
+          await channel.untrack();
+        }
+      } catch {}
+    };
+
+    updatePresence();
+  }, [currentStationId, playing]);
+
+  const currentMusicQuizQuestion =
+    musicQuizRound[musicQuizIndex];
+
+  useEffect(() => {
+    if (page !== "quiz" || !currentMusicQuizQuestion?.youtubeId) {
+      return;
+    }
+
+    let cancelled = false;
+    let interval = null;
+
+    const createQuizPlayer = () => {
+      if (cancelled || !window.YT || !window.YT.Player) {
+        return false;
+      }
+
+      if (musicQuizPlayerRef.current) {
+        try {
+          musicQuizPlayerRef.current.loadVideoById(
+            currentMusicQuizQuestion.youtubeId
+          );
+          musicQuizPlayerRef.current.pauseVideo();
+          musicQuizPlayerRef.current.seekTo(0, true);
+          musicQuizPlayerReady.current = true;
+        } catch {}
+        return true;
+      }
+
+      musicQuizPlayerRef.current = new window.YT.Player(
+        "music-quiz-youtube-player",
+        {
+          videoId: currentMusicQuizQuestion.youtubeId,
+          playerVars: {
+            autoplay: 0,
+            controls: 0,
+            rel: 0,
+            modestbranding: 1,
+            playsinline: 1,
+          },
+          events: {
+            onReady: (event) => {
+              musicQuizPlayerReady.current = true;
+              try {
+                event.target.setVolume(volume);
+                event.target.pauseVideo();
+                event.target.seekTo(0, true);
+              } catch {}
+            },
+            onStateChange: (event) => {
+              if (!window.YT) return;
+
+              if (event.data === window.YT.PlayerState.PLAYING) {
+                setMusicQuizPlaying(true);
+              }
+
+              if (
+                event.data === window.YT.PlayerState.PAUSED ||
+                event.data === window.YT.PlayerState.ENDED
+              ) {
+                setMusicQuizPlaying(false);
+              }
+            },
+          },
+        }
+      );
+
+      return true;
+    };
+
+    if (!createQuizPlayer()) {
+      interval = setInterval(() => {
+        if (createQuizPlayer() && interval) {
+          clearInterval(interval);
+          interval = null;
+        }
+      }, 100);
+    }
+
+    return () => {
+      cancelled = true;
+      if (interval) clearInterval(interval);
+      if (musicQuizStopTimerRef.current) {
+        clearTimeout(musicQuizStopTimerRef.current);
+        musicQuizStopTimerRef.current = null;
+      }
+      if (musicQuizPlayerRef.current && musicQuizPlayerReady.current) {
+        try {
+          musicQuizPlayerRef.current.stopVideo();
+        } catch {}
+      }
+      setMusicQuizPlaying(false);
+    };
+  }, [page, currentMusicQuizQuestion]);
+
+  useEffect(() => {
+    if (musicQuizPlayerRef.current && musicQuizPlayerReady.current) {
+      try {
+        musicQuizPlayerRef.current.setVolume(volume);
+      } catch {}
+    }
+  }, [volume]);
 
   const getShuffleSong = (playlist, song) => {
     if (playlist.length <= 1) {
@@ -510,7 +806,8 @@ function App() {
 
   useEffect(() => {
     const checkSession = async () => {
-      const { data } = await supabase.auth.getSession();
+      const { data } =
+        await supabase.auth.getSession();
 
       if (data.session) {
         setIsLoggedIn(true);
@@ -529,7 +826,9 @@ function App() {
     setAuthMessage("");
 
     if (!email.trim() || !password.trim()) {
-      setAuthMessage("Please enter your email and password.");
+      setAuthMessage(
+        "Please enter your email and password."
+      );
       return;
     }
 
@@ -550,10 +849,11 @@ function App() {
 
         setIsLoggedIn(true);
       } else {
-        const { error } = await supabase.auth.signUp({
-          email: email.trim(),
-          password,
-        });
+        const { error } =
+          await supabase.auth.signUp({
+            email: email.trim(),
+            password,
+          });
 
         if (error) {
           setAuthMessage(error.message);
@@ -579,6 +879,7 @@ function App() {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
+
     setIsLoggedIn(false);
     setEntered(false);
     setPage("home");
@@ -589,13 +890,19 @@ function App() {
      ======================================================= */
 
   useEffect(() => {
-    if (window.YT && window.YT.Player) return;
-    if (document.getElementById("youtube-api")) return;
+    if (window.YT && window.YT.Player) {
+      return;
+    }
+
+    if (document.getElementById("youtube-api")) {
+      return;
+    }
 
     const script = document.createElement("script");
 
     script.id = "youtube-api";
-    script.src = "https://www.youtube.com/iframe_api";
+    script.src =
+      "https://www.youtube.com/iframe_api";
     script.async = true;
 
     document.body.appendChild(script);
@@ -606,10 +913,14 @@ function App() {
      ======================================================= */
 
   useEffect(() => {
-    if (!currentSong?.youtubeId) return;
+    if (!currentSong?.youtubeId) {
+      return;
+    }
 
     const createPlayer = () => {
-      if (!window.YT || !window.YT.Player) return;
+      if (!window.YT || !window.YT.Player) {
+        return;
+      }
 
       if (playerRef.current) {
         try {
@@ -626,67 +937,72 @@ function App() {
         return;
       }
 
-      playerRef.current = new window.YT.Player(
-        "persistent-youtube-player",
-        {
-          videoId: currentSong.youtubeId,
+      playerRef.current =
+        new window.YT.Player(
+          "persistent-youtube-player",
+          {
+            videoId: currentSong.youtubeId,
 
-          playerVars: {
-            autoplay: 1,
-            controls: 0,
-            rel: 0,
-            modestbranding: 1,
-            playsinline: 1,
-          },
-
-          events: {
-            onReady: (event) => {
-              playerReady.current = true;
-
-              event.target.setVolume(volume);
-              event.target.playVideo();
-
-              const d = event.target.getDuration();
-
-              if (d) {
-                setDuration(d);
-              }
+            playerVars: {
+              autoplay: 1,
+              controls: 0,
+              rel: 0,
+              modestbranding: 1,
+              playsinline: 1,
             },
 
-            onStateChange: (event) => {
-              if (!window.YT) return;
+            events: {
+              onReady: (event) => {
+                playerReady.current = true;
 
-              if (
-                event.data ===
-                window.YT.PlayerState.PLAYING
-              ) {
-                setPlaying(true);
-                updateListeningStreak();
-              }
+                event.target.setVolume(volume);
+                event.target.playVideo();
 
-              if (
-                event.data ===
-                window.YT.PlayerState.PAUSED
-              ) {
-                setPlaying(false);
-              }
+                const d =
+                  event.target.getDuration();
 
-              if (
-                event.data ===
-                window.YT.PlayerState.ENDED
-              ) {
-                playNextInStation();
-              }
+                if (d) {
+                  setDuration(d);
+                }
+              },
+
+              onStateChange: (event) => {
+                if (!window.YT) {
+                  return;
+                }
+
+                if (
+                  event.data ===
+                  window.YT.PlayerState.PLAYING
+                ) {
+                  setPlaying(true);
+                  updateListeningStreak();
+                }
+
+                if (
+                  event.data ===
+                  window.YT.PlayerState.PAUSED
+                ) {
+                  setPlaying(false);
+                }
+
+                if (
+                  event.data ===
+                  window.YT.PlayerState.ENDED
+                ) {
+                  playNextInStation();
+                }
+              },
             },
-          },
-        }
-      );
+          }
+        );
     };
 
     if (window.YT && window.YT.Player) {
       createPlayer();
     } else {
-      window.onYouTubeIframeAPIReady = createPlayer;
+      window.onYouTubeIframeAPIReady =
+        createPlayer;
     }
   }, [currentSong]);
 
@@ -695,7 +1011,9 @@ function App() {
      ======================================================= */
 
   useEffect(() => {
-    if (!currentSong) return;
+    if (!currentSong) {
+      return;
+    }
 
     const timer = setInterval(() => {
       if (
@@ -713,7 +1031,10 @@ function App() {
             setCurrentTime(time);
           }
 
-          if (Number.isFinite(d) && d > 0) {
+          if (
+            Number.isFinite(d) &&
+            d > 0
+          ) {
             setDuration(d);
           }
         } catch {}
@@ -731,22 +1052,29 @@ function App() {
     const today = getToday();
 
     const previous =
-      localStorage.getItem("oohaLastListening");
+      localStorage.getItem(
+        "oohaLastListening"
+      );
 
-    if (previous === today) return;
+    if (previous === today) {
+      return;
+    }
 
     let newStreak = 1;
 
     if (previous) {
       const difference = Math.round(
-        (new Date(today) - new Date(previous)) /
+        (new Date(today) -
+          new Date(previous)) /
           (1000 * 60 * 60 * 24)
       );
 
       if (difference === 1) {
         newStreak =
           Number(
-            localStorage.getItem("oohaStreak") || 0
+            localStorage.getItem(
+              "oohaStreak"
+            ) || 0
           ) + 1;
       }
     }
@@ -778,7 +1106,8 @@ function App() {
     setCurrentTime(0);
     setDuration(0);
 
-    const playlist = getStationSongs(station);
+    const playlist =
+      getStationSongs(station);
 
     if (playlist.length === 0) {
       setCurrentSong(null);
@@ -794,24 +1123,32 @@ function App() {
     }
 
     const firstSong = shuffle
-      ? getShuffleSong(playlist, null)
+      ? getShuffleSong(
+          playlist,
+          null
+        )
       : playlist[0];
 
-    shuffleHistoryRef.current = firstSong
-      ? [firstSong]
-      : [];
+    shuffleHistoryRef.current =
+      firstSong
+        ? [firstSong]
+        : [];
 
-    shuffleIndexRef.current = firstSong ? 0 : -1;
+    shuffleIndexRef.current =
+      firstSong ? 0 : -1;
 
     setCurrentSong(firstSong);
   };
 
   /* =======================================================
-     NEXT SONG — SAME STATION
+     NEXT SONG
      ======================================================= */
 
   const playNextInStation = () => {
-    if (!currentStation || stationSongs.length === 0) {
+    if (
+      !currentStation ||
+      stationSongs.length === 0
+    ) {
       return;
     }
 
@@ -834,16 +1171,19 @@ function App() {
         return;
       }
 
-      const nextSong = getShuffleSong(
-        stationSongs,
-        currentSong
-      );
+      const nextSong =
+        getShuffleSong(
+          stationSongs,
+          currentSong
+        );
 
       if (!nextSong) {
         return;
       }
 
-      shuffleHistoryRef.current.push(nextSong);
+      shuffleHistoryRef.current.push(
+        nextSong
+      );
 
       shuffleIndexRef.current =
         shuffleHistoryRef.current.length - 1;
@@ -855,13 +1195,19 @@ function App() {
       return;
     }
 
-    let index = stationSongs.findIndex(
-      (song) =>
-        song.title === currentSong?.title &&
-        song.movie === currentSong?.movie
-    );
+    let index =
+      stationSongs.findIndex(
+        (song) =>
+          song.title ===
+            currentSong?.title &&
+          song.movie ===
+            currentSong?.movie
+      );
 
-    index = index === -1 ? 0 : index + 1;
+    index =
+      index === -1
+        ? 0
+        : index + 1;
 
     if (index >= stationSongs.length) {
       index = 0;
@@ -869,20 +1215,27 @@ function App() {
 
     setCurrentTime(0);
     setDuration(0);
-    setCurrentSong(stationSongs[index]);
+    setCurrentSong(
+      stationSongs[index]
+    );
   };
 
   /* =======================================================
-     PREVIOUS SONG — SAME STATION
+     PREVIOUS SONG
      ======================================================= */
 
   const playPreviousInStation = () => {
-    if (!currentStation || stationSongs.length === 0) {
+    if (
+      !currentStation ||
+      stationSongs.length === 0
+    ) {
       return;
     }
 
     if (shuffle) {
-      if (shuffleIndexRef.current <= 0) {
+      if (
+        shuffleIndexRef.current <= 0
+      ) {
         return;
       }
 
@@ -900,21 +1253,30 @@ function App() {
       return;
     }
 
-    let index = stationSongs.findIndex(
-      (song) =>
-        song.title === currentSong?.title &&
-        song.movie === currentSong?.movie
-    );
+    let index =
+      stationSongs.findIndex(
+        (song) =>
+          song.title ===
+            currentSong?.title &&
+          song.movie ===
+            currentSong?.movie
+      );
 
-    index = index === -1 ? 0 : index - 1;
+    index =
+      index === -1
+        ? 0
+        : index - 1;
 
     if (index < 0) {
-      index = stationSongs.length - 1;
+      index =
+        stationSongs.length - 1;
     }
 
     setCurrentTime(0);
     setDuration(0);
-    setCurrentSong(stationSongs[index]);
+    setCurrentSong(
+      stationSongs[index]
+    );
   };
 
   /* =======================================================
@@ -927,7 +1289,10 @@ function App() {
 
       if (next) {
         if (currentSong) {
-          shuffleHistoryRef.current = [currentSong];
+          shuffleHistoryRef.current = [
+            currentSong,
+          ];
+
           shuffleIndexRef.current = 0;
         } else {
           shuffleHistoryRef.current = [];
@@ -947,7 +1312,10 @@ function App() {
      ======================================================= */
 
   const togglePlay = () => {
-    if (!playerRef.current || !playerReady.current) {
+    if (
+      !playerRef.current ||
+      !playerReady.current
+    ) {
       return;
     }
 
@@ -965,7 +1333,8 @@ function App() {
      ======================================================= */
 
   const seekSong = (event) => {
-    const value = Number(event.target.value);
+    const value =
+      Number(event.target.value);
 
     setCurrentTime(value);
 
@@ -974,7 +1343,10 @@ function App() {
       playerReady.current
     ) {
       try {
-        playerRef.current.seekTo(value, true);
+        playerRef.current.seekTo(
+          value,
+          true
+        );
       } catch {}
     }
   };
@@ -984,7 +1356,8 @@ function App() {
      ======================================================= */
 
   const changeVolume = (event) => {
-    const value = Number(event.target.value);
+    const value =
+      Number(event.target.value);
 
     setVolume(value);
 
@@ -993,7 +1366,9 @@ function App() {
       playerReady.current
     ) {
       try {
-        playerRef.current.setVolume(value);
+        playerRef.current.setVolume(
+          value
+        );
       } catch {}
     }
   };
@@ -1041,6 +1416,209 @@ function App() {
   };
 
   /* =======================================================
+     MUSIC MYSTERY QUIZ FUNCTIONS
+     ======================================================= */
+
+  const resetMusicQuiz = () => {
+    setMusicQuizDifficulty(null);
+    setMusicQuizIndex(0);
+    setMusicQuizScore(0);
+    setMusicQuizCorrect(0);
+    setMusicQuizAttempts(0);
+    setMusicQuizClipLength(1);
+    setMusicQuizGuess("");
+    setMusicQuizFeedback(null);
+    setMusicQuizPlaying(false);
+    setMusicQuizFinished(false);
+    setMusicQuizRound([]);
+  };
+
+  const startMusicQuiz = (difficulty) => {
+    const pool = getMusicQuizPool();
+    const shuffled = shuffleArray(pool);
+    const selected = shuffled.slice(0, Math.min(5, shuffled.length));
+
+    setMusicQuizDifficulty(difficulty);
+    setMusicQuizRound(selected);
+    setMusicQuizIndex(0);
+    setMusicQuizScore(0);
+    setMusicQuizCorrect(0);
+    setMusicQuizAttempts(0);
+    setMusicQuizClipLength(1);
+    setMusicQuizGuess("");
+    setMusicQuizFeedback(null);
+    setMusicQuizPlaying(false);
+    setMusicQuizFinished(false);
+  };
+
+  const playMusicQuizClip = () => {
+    if (!currentMusicQuizQuestion?.youtubeId) {
+      return;
+    }
+
+    const player = musicQuizPlayerRef.current;
+
+    if (!player || !musicQuizPlayerReady.current) {
+      return;
+    }
+
+    try {
+      if (musicQuizStopTimerRef.current) {
+        clearTimeout(musicQuizStopTimerRef.current);
+      }
+
+      player.seekTo(0, true);
+      player.playVideo();
+      setMusicQuizPlaying(true);
+
+      musicQuizStopTimerRef.current = setTimeout(() => {
+        try {
+          player.pauseVideo();
+          player.seekTo(0, true);
+        } catch {}
+
+        setMusicQuizPlaying(false);
+      }, musicQuizClipLength * 1000);
+    } catch {}
+  };
+
+  const stopMusicQuizClip = () => {
+    if (musicQuizStopTimerRef.current) {
+      clearTimeout(musicQuizStopTimerRef.current);
+      musicQuizStopTimerRef.current = null;
+    }
+
+    const player = musicQuizPlayerRef.current;
+
+    if (player && musicQuizPlayerReady.current) {
+      try {
+        player.pauseVideo();
+        player.seekTo(0, true);
+      } catch {}
+    }
+
+    setMusicQuizPlaying(false);
+  };
+
+  const skipMusicQuizClip = () => {
+    stopMusicQuizClip();
+
+    const nextLength = Math.min(
+      musicQuizClipLength * 2,
+      musicQuizDifficulties[musicQuizDifficulty]?.maxClip || 16
+    );
+
+    setMusicQuizClipLength(nextLength);
+    setMusicQuizPlaying(false);
+  };
+
+  const submitMusicQuizGuess = (value = musicQuizGuess) => {
+    const questionLocked =
+      musicQuizFeedback?.type === "correct" ||
+      musicQuizFeedback?.type === "wrong";
+
+    if (!currentMusicQuizQuestion || questionLocked) {
+      return;
+    }
+
+    const guess = value.trim().toLowerCase();
+
+    if (!guess) {
+      return;
+    }
+
+    const answer = String(currentMusicQuizQuestion.title).toLowerCase();
+    const englishTitle = String(
+      currentMusicQuizQuestion.englishTitle || ""
+    ).toLowerCase();
+
+    const correct =
+      guess === answer ||
+      (englishTitle && guess === englishTitle) ||
+      answer.includes(guess) ||
+      (englishTitle && englishTitle.includes(guess));
+
+    const nextAttempts = musicQuizAttempts + 1;
+    setMusicQuizAttempts(nextAttempts);
+    setMusicQuizPlaying(false);
+
+    if (correct) {
+      const pointsByClip = {
+        1: 100,
+        2: 80,
+        4: 60,
+        8: 40,
+        16: 20,
+      };
+
+      const attemptBonus = Math.max(0, 20 - (nextAttempts - 1) * 5);
+      const points = (pointsByClip[musicQuizClipLength] || 20) + attemptBonus;
+
+      setMusicQuizCorrect((previous) => previous + 1);
+      setMusicQuizScore((previous) => previous + points);
+      setMusicQuizFeedback({
+        type: "correct",
+        points,
+        message:
+          nextAttempts === 1
+            ? "Locked it before the radio could breathe."
+            : "You found the melody. Nice recovery.",
+      });
+      return;
+    }
+
+    if (nextAttempts >= 5) {
+      setMusicQuizFeedback({
+        type: "wrong",
+        message: "Five guesses. The melody wins this round.",
+      });
+      return;
+    }
+
+    setMusicQuizFeedback({
+      type: "retry",
+      message: `Not that one. ${5 - nextAttempts} guesses left.`,
+    });
+    setMusicQuizGuess("");
+  };
+
+  const nextMusicQuizQuestion = () => {
+    if (!musicQuizFeedback) {
+      return;
+    }
+
+    if (musicQuizIndex >= musicQuizRound.length - 1) {
+      const finalScore = musicQuizScore;
+
+      setMusicQuizBestScore((previous) => {
+        const nextBest = Math.max(previous, finalScore);
+        localStorage.setItem("oohaMusicQuizBest", String(nextBest));
+        return nextBest;
+      });
+
+      setMusicQuizFinished(true);
+      setMusicQuizPlaying(false);
+      return;
+    }
+
+    setMusicQuizIndex((previous) => previous + 1);
+    setMusicQuizAttempts(0);
+    setMusicQuizClipLength(1);
+    setMusicQuizGuess("");
+    setMusicQuizFeedback(null);
+    setMusicQuizPlaying(false);
+  };
+
+  const getMusicQuizTitle = () => {
+    if (musicQuizScore >= 500) return "RADIO ORACLE";
+    if (musicQuizScore >= 400) return "MELODY MASTER";
+    if (musicQuizScore >= 300) return "ARCHIVE HUNTER";
+    if (musicQuizScore >= 200) return "TUNING PRO";
+    if (musicQuizScore >= 100) return "SONG SCOUT";
+    return "STILL TUNING";
+  };
+
+  /* =======================================================
      AUTH ENTRANCE
      ======================================================= */
 
@@ -1048,8 +1626,11 @@ function App() {
     return (
       <main className="auth-page">
         <div className="auth-card">
+
           <div className="auth-brand">
-            <div className="auth-radio-icon">📻</div>
+            <div className="auth-radio-icon">
+              📻
+            </div>
 
             <p className="eyebrow">
               A TELUGU MUSIC ARCHIVE
@@ -1057,7 +1638,9 @@ function App() {
 
             <h1>ఊహా లోకం</h1>
 
-            <span>OOHA LOKAM</span>
+            <span>
+              OOHA LOKAM
+            </span>
           </div>
 
           <div className="auth-divider">
@@ -1079,6 +1662,7 @@ function App() {
           </div>
 
           <div className="auth-tabs">
+
             <button
               className={
                 authMode === "login"
@@ -1106,12 +1690,14 @@ function App() {
             >
               SIGN UP
             </button>
+
           </div>
 
           <form
             className="auth-form"
             onSubmit={handleAuth}
           >
+
             <label htmlFor="email">
               EMAIL ADDRESS
             </label>
@@ -1148,9 +1734,12 @@ function App() {
 
             {authMode === "login" && (
               <div className="auth-options">
+
                 <label className="remember-option">
                   <input type="checkbox" />
-                  <span>Remember me</span>
+                  <span>
+                    Remember me
+                  </span>
                 </label>
 
                 <button
@@ -1164,6 +1753,7 @@ function App() {
                 >
                   Forgot password?
                 </button>
+
               </div>
             )}
 
@@ -1184,6 +1774,7 @@ function App() {
                 ? "ENTER OOHA LOKAM"
                 : "CREATE MY ACCOUNT"}
             </button>
+
           </form>
 
           <div className="auth-or">
@@ -1200,6 +1791,7 @@ function App() {
           <p className="auth-footer">
             Songs • Cinema • Memories
           </p>
+
         </div>
       </main>
     );
@@ -1212,14 +1804,18 @@ function App() {
   if (!entered) {
     return (
       <main className="entrance">
+
         <div className="entrance-content">
+
           <p className="eyebrow">
             A TELUGU CINEMA & MUSIC ARCHIVE
           </p>
 
           <h1>ఊహా లోకం</h1>
 
-          <h2>OOHA LOKAM</h2>
+          <h2>
+            OOHA LOKAM
+          </h2>
 
           <div className="divider">
             <span>✦</span>
@@ -1231,6 +1827,7 @@ function App() {
           </p>
 
           <div className="name-box">
+
             <label htmlFor="name">
               ENTER YOUR NAME
             </label>
@@ -1253,12 +1850,15 @@ function App() {
             <button onClick={enterArchive}>
               ENTER THE ARCHIVE
             </button>
+
           </div>
 
           <p className="footer-text">
             Songs • Cinema • Memories
           </p>
+
         </div>
+
       </main>
     );
   }
@@ -1274,7 +1874,9 @@ function App() {
         <div id="persistent-youtube-player"></div>
       </div>
 
-      {/* HOME */}
+      {/* ===================================================
+          HOME
+         =================================================== */}
 
       {page === "home" && (
         <main className="home-page">
@@ -1286,11 +1888,27 @@ function App() {
                 TELUGU CINEMA & MUSIC ARCHIVE
               </p>
 
-              <h1>ఊహా లోకం</h1>
+              <h1>
+                ఊహా లోకం
+              </h1>
             </div>
 
-            <div className="user-name">
-              Welcome, <strong>{name}</strong>
+            <div className="header-user-area">
+
+              <div className="user-name">
+                Welcome,{" "}
+                <strong>
+                  {name}
+                </strong>
+              </div>
+
+              <button
+                className="logout-button"
+                onClick={handleLogout}
+              >
+                LOGOUT
+              </button>
+
             </div>
 
           </header>
@@ -1321,14 +1939,18 @@ function App() {
 
               <span>📻</span>
 
-              <h3>MUSIC RADIO</h3>
+              <h3>
+                MUSIC RADIO
+              </h3>
 
               <p>
                 Five stations • 1960s to today
               </p>
 
               <button
-                onClick={() => setPage("music")}
+                onClick={() =>
+                  setPage("music")
+                }
               >
                 TUNE INTO RADIO
               </button>
@@ -1337,16 +1959,21 @@ function App() {
 
             <div className="archive-card">
 
-              <span>🎮</span>
+              <span>♫</span>
 
-              <h3>QUIZZES</h3>
+              <h3>
+                MUSIC MYSTERY
+              </h3>
 
               <p>
-                Songs • Dialogues • BGMs
+                Guess songs • Chase melodies • Score points
               </p>
 
               <button
-                onClick={() => setPage("quiz")}
+                onClick={() => {
+                  resetMusicQuiz();
+                  setPage("quiz");
+                }}
               >
                 PLAY QUIZ
               </button>
@@ -1357,14 +1984,18 @@ function App() {
 
               <span>🏆</span>
 
-              <h3>REWARDS</h3>
+              <h3>
+                REWARDS
+              </h3>
 
               <p>
                 Points • Streaks • Daily Rewards
               </p>
 
               <button
-                onClick={() => setPage("rewards")}
+                onClick={() =>
+                  setPage("rewards")
+                }
               >
                 VIEW REWARDS
               </button>
@@ -1374,11 +2005,15 @@ function App() {
           </section>
 
           <footer>
-            <p>ఊహా లోకం</p>
+
+            <p>
+              ఊహా లోకం
+            </p>
 
             <span>
               Songs • Cinema • Memories
             </span>
+
           </footer>
 
         </main>
@@ -1393,7 +2028,9 @@ function App() {
 
           <button
             className="back-button"
-            onClick={() => setPage("home")}
+            onClick={() =>
+              setPage("home")
+            }
           >
             ← BACK TO ఊహా లోకం
           </button>
@@ -1418,6 +2055,7 @@ function App() {
           <section className="vintage-radio">
 
             <div className="radio-brand">
+
               <div>
                 OOHA LOKAM
               </div>
@@ -1425,11 +2063,10 @@ function App() {
               <span>
                 TELUGU CINEMA RADIO
               </span>
+
             </div>
 
             <div className="radio-main">
-
-              {/* TUNING SIDE */}
 
               <div className="radio-tuning">
 
@@ -1514,8 +2151,6 @@ function App() {
 
               </div>
 
-              {/* SPEAKER */}
-
               <div className="speaker-panel">
 
                 <div className="speaker-label">
@@ -1539,7 +2174,9 @@ function App() {
                           currentSong.year
                             ? " • "
                             : ""
-                        }${currentSong.year || ""}`
+                        }${
+                          currentSong.year || ""
+                        }`
                       : "Five stations • endless memories"}
                   </small>
 
@@ -1562,14 +2199,16 @@ function App() {
 
             </div>
 
-            {/* RADIO CONTROLS */}
-
             <div className="radio-controls">
 
               <button
                 className="radio-knob-button"
-                onClick={playPreviousInStation}
-                disabled={!stationSongs.length}
+                onClick={
+                  playPreviousInStation
+                }
+                disabled={
+                  !stationSongs.length
+                }
               >
                 <span>◀</span>
                 <small>PREV</small>
@@ -1582,11 +2221,15 @@ function App() {
                     : "radio-shuffle-button"
                 }
                 onClick={toggleShuffle}
-                disabled={!stationSongs.length}
+                disabled={
+                  !stationSongs.length
+                }
               >
                 <span>⤨</span>
                 <small>
-                  {shuffle ? "ON" : "SHUFFLE"}
+                  {shuffle
+                    ? "ON"
+                    : "SHUFFLE"}
                 </small>
               </button>
 
@@ -1595,13 +2238,19 @@ function App() {
                 onClick={togglePlay}
                 disabled={!currentSong}
               >
-                {playing ? "❚❚" : "▶️"}
+                {playing
+                  ? "❚❚"
+                  : "▶"}
               </button>
 
               <button
                 className="radio-knob-button"
-                onClick={playNextInStation}
-                disabled={!stationSongs.length}
+                onClick={
+                  playNextInStation
+                }
+                disabled={
+                  !stationSongs.length
+                }
               >
                 <span>▶</span>
                 <small>NEXT</small>
@@ -1609,7 +2258,9 @@ function App() {
 
               <div className="radio-volume">
 
-                <span>VOL</span>
+                <span>
+                  VOL
+                </span>
 
                 <input
                   type="range"
@@ -1623,19 +2274,21 @@ function App() {
 
             </div>
 
-            {/* PROGRESS */}
-
             {currentSong && (
               <div className="radio-progress">
 
                 <span>
-                  {formatTime(currentTime)}
+                  {formatTime(
+                    currentTime
+                  )}
                 </span>
 
                 <input
                   type="range"
                   min="0"
-                  max={duration || 100}
+                  max={
+                    duration || 100
+                  }
                   step="1"
                   value={Math.min(
                     currentTime,
@@ -1651,8 +2304,6 @@ function App() {
 
               </div>
             )}
-
-            {/* STATION PRESETS */}
 
             <div className="station-section">
 
@@ -1688,7 +2339,9 @@ function App() {
                             : "station-preset"
                         }
                         onClick={() =>
-                          tuneStation(station)
+                          tuneStation(
+                            station
+                          )
                         }
                       >
 
@@ -1709,6 +2362,22 @@ function App() {
                           <small>
                             {station.era}
                           </small>
+
+                           <small
+                             style={{
+                               display: "block",
+                               marginTop: "4px",
+                               color:
+                                 currentStationId === station.id && playing
+                                   ? "#ffb84d"
+                                   : "#8a6b4d",
+                               fontSize: "9px",
+                               fontWeight: "bold",
+                               letterSpacing: "0.8px",
+                             }}
+                           >
+                             ● LIVE {listenerCounts[station.id] || 0}
+                           </small>
 
                         </div>
 
@@ -1735,8 +2404,6 @@ function App() {
               </div>
 
             </div>
-
-            {/* CURRENT BROADCAST */}
 
             {currentStation && (
               <div className="broadcast-info">
@@ -1779,13 +2446,24 @@ function App() {
 
                 </div>
 
+                <div>
+                  <span>
+                    LIVE LISTENERS
+                  </span>
+                  <strong>
+                    ● {listenerCounts[currentStation.id] || 0}
+                  </strong>
+                </div>
+
               </div>
             )}
 
             {!currentStation && (
               <div className="radio-welcome">
 
-                <div>✦</div>
+                <div>
+                  ✦
+                </div>
 
                 <h2>
                   Choose your station
@@ -1803,7 +2481,9 @@ function App() {
               stationSongs.length === 0 && (
                 <div className="radio-welcome">
 
-                  <div>♫</div>
+                  <div>
+                    ♫
+                  </div>
 
                   <h2>
                     More melodies coming soon
@@ -1817,15 +2497,15 @@ function App() {
                 </div>
               )}
 
-            {/* VIDEO */}
-
             {currentSong && (
               <div className="radio-extra">
 
                 <button
                   className="radio-video-button"
                   onClick={() =>
-                    setShowVideo(!showVideo)
+                    setShowVideo(
+                      !showVideo
+                    )
                   }
                 >
                   {showVideo
@@ -1849,7 +2529,9 @@ function App() {
 
                   <iframe
                     src={`https://www.youtube.com/embed/${currentSong.youtubeId}?rel=0`}
-                    title={currentSong.title}
+                    title={
+                      currentSong.title
+                    }
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowFullScreen
                   />
@@ -1889,295 +2571,983 @@ function App() {
           </button>
 
           <section className="rewards-header">
+            <p>OOHA LOKAM HONOURS</p>
 
-            <p>
-              OOHA LOKAM REWARDS
-            </p>
-
-            <h1>
-              🏆 Your Rewards
-            </h1>
+            <h1>✦ Your Cinema Rewards ✦</h1>
 
             <span>
-              Keep listening. Keep discovering.
-              Keep the streak alive.
+              For those who listened, guessed, and somehow survived.
             </span>
-
           </section>
 
           <section className="reward-stats">
-
             <div className="reward-stat">
-              <span>🔥</span>
+              <span>STREAK</span>
               <strong>{streak}</strong>
-              <small>DAY STREAK</small>
+              <small>DAY{streak === 1 ? "" : "S"} ON AIR</small>
             </div>
 
             <div className="reward-stat">
-              <span>📻</span>
+              <span>RADIO</span>
               <strong>5</strong>
-              <small>RADIO STATIONS</small>
+              <small>STATIONS</small>
             </div>
 
             <div className="reward-stat">
-              <span>⭐</span>
+              <span>SCORE</span>
               <strong>{streak * 10}</strong>
-              <small>POINTS</small>
+              <small>ARCHIVE POINTS</small>
             </div>
-
           </section>
 
           <section className="daily-streak-card">
-
             <div className="streak-icon">
-              🔥
+              {streak >= 7 ? "✦" : "◉"}
             </div>
 
             <div className="streak-content">
-
-              <p>
-                DAILY LISTENING STREAK
-              </p>
+              <p>DAILY LISTENING STREAK</p>
 
               <h2>
                 {streak === 0
-                  ? "Start your journey"
-                  : `${streak} day${
-                      streak === 1 ? "" : "s"
-                    } strong!`}
+                  ? "The radio is waiting for you."
+                  : streak === 1
+                  ? "Day one. The archive knows you now."
+                  : streak < 7
+                  ? `${streak} days strong. Don't break the transmission.`
+                  : `${streak} days. At this point, you practically live here.`}
               </h2>
 
               <span>
-                Listen to a song every day
-                to keep your Ooha Lokam
-                streak alive.
+                Listen every day, keep the streak alive, and collect your ridiculous little honours.
               </span>
 
               <div className="streak-days">
+                {[1, 2, 3, 4, 5, 6, 7].map((day) => (
+                  <div
+                    key={day}
+                    className={
+                      streak >= day
+                        ? "streak-day completed"
+                        : "streak-day"
+                    }
+                  >
+                    <span>{streak >= day ? "✓" : day}</span>
+                    <small>DAY</small>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
 
-                {[1, 2, 3, 4, 5, 6, 7].map(
-                  (day) => (
-                    <div
-                      key={day}
-                      className={
-                        streak >= day
-                          ? "streak-day completed"
-                          : "streak-day"
-                      }
+          <section className="rewards-list">
+            <div className="rewards-section-heading">
+              <p>THE OOHA LOKAM HONOURS</p>
+              <h2>Milestones &amp; Nonsense</h2>
+              <span>
+                Some achievements are prestigious. Some are just here for the drama.
+              </span>
+            </div>
+
+            <div className="milestone-grid">
+              {[
+                [
+                  "01",
+                  "First Melody",
+                  "Listen to your first song",
+                  1,
+                  "The radio has officially met you.",
+                ],
+                [
+                  "02",
+                  "Radio Tourist",
+                  "Reach a 3 day streak",
+                  3,
+                  "You came for one song. We both know that's a lie.",
+                ],
+                [
+                  "03",
+                  "Interval Specialist",
+                  "Reach a 7 day streak",
+                  7,
+                  "Seven days without leaving the archive. Respect.",
+                ],
+                [
+                  "04",
+                  "Cinema Addict",
+                  "Reach a 14 day streak",
+                  14,
+                  "At this point, your playlist needs medical attention.",
+                ],
+                [
+                  "05",
+                  "Archive Regular",
+                  "Reach a 21 day streak",
+                  21,
+                  "The receptionist probably knows your name now.",
+                ],
+                [
+                  "06",
+                  "Cinema Nerd",
+                  "Reach a 30 day streak",
+                  30,
+                  "Congratulations. Normal people stopped asking questions weeks ago.",
+                ],
+                [
+                  "07",
+                  "Vintage Soul",
+                  "Reach a 50 day streak",
+                  50,
+                  "Your soul now has permanent radio static.",
+                ],
+                [
+                  "08",
+                  "ఊహా లోకం Legend",
+                  "Reach a 100 day streak",
+                  100,
+                  "The archive doesn't have a higher rank. You broke the scale.",
+                ],
+              ].map((item) => (
+                <div
+                  key={item[1]}
+                  className={
+                    streak >= item[3]
+                      ? "milestone unlocked"
+                      : "milestone"
+                  }
+                >
+                  <div className="milestone-top">
+                    <span>{item[0]}</span>
+                    <strong>
+                      {streak >= item[3] ? "UNLOCKED" : "LOCKED"}
+                    </strong>
+                  </div>
+
+                  <div className="milestone-seal">
+                    {streak >= item[3] ? "✦" : "○"}
+                  </div>
+
+                  <h3>{item[1]}</h3>
+                  <p>{item[2]}</p>
+
+                  <small>
+                    {streak >= item[3]
+                      ? item[4]
+                      : `Unlock at ${item[3]} day${item[3] === 1 ? "" : "s"}`}
+                  </small>
+                </div>
+              ))}
+            </div>
+          </section>
+
+          <section className="rewards-quote-card">
+            <span>“</span>
+            <p>
+              Rewards are imaginary.
+              <br />
+              The bragging rights are real.
+            </p>
+            <small>— OOHA LOKAM ARCHIVE DEPARTMENT</small>
+          </section>
+
+          <section className="rewards-note">
+            <span>✦</span>
+            <p>
+              Your progress is saved on this device automatically.
+            </p>
+          </section>
+
+        </main>
+      )}
+
+      {/* ===================================================
+          MUSIC MYSTERY QUIZ
+         =================================================== */}
+
+      {page === "quiz" && (
+        <main
+          className="music-mystery-page"
+          style={{
+            minHeight: "100vh",
+            padding: "28px 18px 90px",
+            background:
+              "radial-gradient(circle at top, rgba(255,184,77,0.10), transparent 38%), linear-gradient(180deg, #211209 0%, #120a06 100%)",
+            color: "#f4e6c7",
+          }}
+        >
+          <button
+            className="back-button"
+            onClick={() => {
+              resetMusicQuiz();
+              setPage("home");
+            }}
+          >
+            ← BACK TO ఊహా లోకం
+          </button>
+
+          {!musicQuizDifficulty && (
+            <section
+              style={{
+                maxWidth: "1050px",
+                margin: "25px auto 0",
+              }}
+            >
+              <div
+                style={{
+                  border: "2px solid #8a5b2d",
+                  background:
+                    "linear-gradient(145deg, rgba(90,48,25,0.96), rgba(43,22,12,0.98))",
+                  padding: "28px",
+                  boxShadow: "0 15px 40px rgba(0,0,0,0.45)",
+                }}
+              >
+                <p
+                  className="small-title"
+                  style={{ color: "#c69750" }}
+                >
+                  OOHA LOKAM MUSIC ARCHIVE
+                </p>
+
+                <h1
+                  style={{
+                    margin: "8px 0 4px",
+                    fontFamily: "Georgia, serif",
+                    fontSize: "clamp(32px, 6vw, 62px)",
+                    color: "#f5dfb0",
+                  }}
+                >
+                  MUSIC MYSTERY
+                </h1>
+
+                <p
+                  style={{
+                    maxWidth: "700px",
+                    color: "#c9af86",
+                    fontSize: "16px",
+                    lineHeight: 1.7,
+                  }}
+                >
+                  Tune into a mystery melody. Listen carefully and identify the song before your chances run out,
+                  trust your ears and lock your guess. Five transmissions. One score.
+                </p>
+
+                <div
+                  style={{
+                    marginTop: "25px",
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
+                    gap: "10px",
+                  }}
+                >
+                  {Object.entries(musicQuizDifficulties).map(
+                    ([difficulty, config]) => (
+                      <button
+                        key={difficulty}
+                        onClick={() => startMusicQuiz(difficulty)}
+                        style={{
+                          padding: "17px 14px",
+                          border: "1px solid #8a5b2d",
+                          background: "#281308",
+                          color: "#f4e6c7",
+                          cursor: "pointer",
+                          textAlign: "left",
+                          transition: "transform 0.2s ease, border-color 0.2s ease",
+                        }}
+                      >
+                        <strong
+                          style={{
+                            display: "block",
+                            color: "#ffb84d",
+                            letterSpacing: "1px",
+                            fontSize: "13px",
+                          }}
+                        >
+                          {difficulty.toUpperCase()}
+                        </strong>
+                        <span
+                          style={{
+                            display: "block",
+                            marginTop: "7px",
+                            color: "#d8c29d",
+                            fontSize: "11px",
+                            lineHeight: 1.4,
+                          }}
+                        >
+                          {config.description}
+                        </span>
+                      </button>
+                    )
+                  )}
+                </div>
+
+                <div
+                  style={{
+                    marginTop: "24px",
+                    display: "flex",
+                    flexWrap: "wrap",
+                    gap: "16px",
+                    color: "#a88d69",
+                    fontSize: "12px",
+                    letterSpacing: "0.5px",
+                  }}
+                >
+                  <span>5 TRANSMISSIONS</span>
+                  <span>5 GUESSES MAX</span>
+                  <span>1s → 2s → 4s → 8s → 16s</span>
+                  <span>BEST: {musicQuizBestScore}</span>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {musicQuizDifficulty &&
+            !musicQuizFinished &&
+            currentMusicQuizQuestion && (
+              <section
+                style={{
+                  maxWidth: "950px",
+                  margin: "22px auto 0",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "end",
+                    gap: "15px",
+                    flexWrap: "wrap",
+                    marginBottom: "14px",
+                  }}
+                >
+                  <div>
+                    <p
+                      className="small-title"
+                      style={{ color: "#b8893c" }}
                     >
+                      {musicQuizDifficulties[musicQuizDifficulty].label}
+                    </p>
+                    <h2
+                      style={{
+                        margin: "4px 0",
+                        fontFamily: "Georgia, serif",
+                        fontSize: "clamp(28px, 5vw, 46px)",
+                        color: "#f4e6c7",
+                      }}
+                    >
+                      TRANSMISSION {String(musicQuizIndex + 1).padStart(2, "0")}
+                    </h2>
+                  </div>
 
-                      <span>
-                        {streak >= day
-                          ? "✓"
-                          : day}
-                      </span>
+                  <div
+                    style={{
+                      textAlign: "right",
+                      color: "#b99d78",
+                      fontSize: "12px",
+                    }}
+                  >
+                    <div>DIFFICULTY: {musicQuizDifficulty.toUpperCase()}</div>
+                    <div>POINTS: {musicQuizScore}</div>
+                  </div>
+                </div>
 
-                      <small>DAY</small>
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "5px",
+                    marginBottom: "18px",
+                  }}
+                >
+                  {musicQuizRound.map((_, index) => (
+                    <div
+                      key={index}
+                      style={{
+                        flex: 1,
+                        height: "7px",
+                        background:
+                          index < musicQuizIndex
+                            ? "#b8893c"
+                            : index === musicQuizIndex
+                            ? "#ffb84d"
+                            : "#382417",
+                      }}
+                    />
+                  ))}
+                </div>
 
+                <div
+                  style={{
+                    border: "2px solid #68402a",
+                    background: "#160d08",
+                    padding: "18px",
+                    boxShadow: "0 18px 40px rgba(0,0,0,0.35)",
+                  }}
+                >
+                  <div
+                    style={{
+                      minHeight: "250px",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      textAlign: "center",
+                      border: "1px solid #3c2819",
+                      background:
+                        "radial-gradient(circle, rgba(255,184,77,0.08), transparent 52%), #211209",
+                      position: "relative",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontSize: "70px",
+                        color: musicQuizPlaying ? "#ffb84d" : "#765b3f",
+                        textShadow: musicQuizPlaying
+                          ? "0 0 24px rgba(255,184,77,0.55)"
+                          : "none",
+                        transition: "all 0.2s ease",
+                      }}
+                    >
+                      {musicQuizPlaying ? "◖)))" : "♫"}
                     </div>
-                  )
+
+                    <strong
+                      style={{
+                        marginTop: "8px",
+                        letterSpacing: "2px",
+                        color: "#d8c29d",
+                        fontSize: "12px",
+                      }}
+                    >
+                      {musicQuizPlaying ? "ON AIR" : "MYSTERY MELODY"}
+                    </strong>
+
+                    <span
+                      style={{
+                        marginTop: "8px",
+                        color: "#8f7558",
+                        fontSize: "11px",
+                      }}
+                    >
+                      Clip window: {musicQuizClipLength}s
+                    </span>
+
+                    <div
+                      id="music-quiz-youtube-player"
+                      ref={musicQuizFrameRef}
+                      style={{
+                        position: "absolute",
+                        width: "1px",
+                        height: "1px",
+                        opacity: 0,
+                        pointerEvents: "none",
+                      }}
+                    />
+                  </div>
+
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      gap: "18px",
+                      padding: "22px 0 18px",
+                      flexWrap: "wrap",
+                    }}
+                  >
+                    <button
+                      onClick={
+                        musicQuizPlaying
+                          ? stopMusicQuizClip
+                          : playMusicQuizClip
+                      }
+                      style={{
+                        width: "82px",
+                        height: "82px",
+                        borderRadius: "50%",
+                        border: "3px solid #d49a45",
+                        background: "#6f431f",
+                        color: "#ffe5ac",
+                        fontSize: "30px",
+                        cursor: "pointer",
+                        boxShadow: "0 0 24px rgba(255,184,77,0.18)",
+                      }}
+                    >
+                      {musicQuizPlaying ? "Ⅱ" : "▶"}
+                    </button>
+
+                    <div
+                      style={{
+                        minWidth: "150px",
+                        textAlign: "center",
+                      }}
+                    >
+                      <strong
+                        style={{
+                          display: "block",
+                          color: "#ffb84d",
+                          fontSize: "25px",
+                        }}
+                      >
+                        {musicQuizClipLength}s
+                      </strong>
+                      <small
+                        style={{
+                          color: "#967b5c",
+                          letterSpacing: "1px",
+                        }}
+                      >
+                        AUDIO WINDOW
+                      </small>
+                    </div>
+
+                    <button
+                      onClick={skipMusicQuizClip}
+                      disabled={
+                        musicQuizClipLength >=
+                        musicQuizDifficulties[musicQuizDifficulty].maxClip
+                      }
+                      style={{
+                        padding: "13px 18px",
+                        border: "1px solid #8a5b2d",
+                        background: "#241208",
+                        color: "#d9bd8c",
+                        cursor: "pointer",
+                        opacity:
+                          musicQuizClipLength >=
+                          musicQuizDifficulties[musicQuizDifficulty].maxClip
+                            ? 0.45
+                            : 1,
+                      }}
+                    >
+                      UNLOCK MORE →
+                    </button>
+                  </div>
+
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "repeat(5, 1fr)",
+                      gap: "5px",
+                      marginBottom: "20px",
+                    }}
+                  >
+                    {[1, 2, 4, 8, 16].map((second) => (
+                      <div
+                        key={second}
+                        style={{
+                          height: "5px",
+                          background:
+                            second <= musicQuizClipLength
+                              ? "#b8893c"
+                              : "#302015",
+                        }}
+                      />
+                    ))}
+                  </div>
+
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      marginBottom: "8px",
+                      color: "#9a7a56",
+                      fontSize: "11px",
+                      letterSpacing: "1px",
+                    }}
+                  >
+                    <span>GUESSES</span>
+                    <strong style={{ color: "#ffb84d" }}>
+                      {musicQuizAttempts} / 5
+                    </strong>
+                  </div>
+
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "9px",
+                      flexWrap: "wrap",
+                    }}
+                  >
+                    <input
+                      value={musicQuizGuess}
+                      onChange={(event) =>
+                        setMusicQuizGuess(event.target.value)
+                      }
+                      onKeyDown={(event) => {
+                        if (event.key === "Enter") {
+                          submitMusicQuizGuess();
+                        }
+                      }}
+                      placeholder="Type your melody guess..."
+                      disabled={
+                        musicQuizFeedback?.type === "correct" ||
+                        musicQuizFeedback?.type === "wrong"
+                      }
+                      style={{
+                        flex: "1 1 300px",
+                        padding: "16px",
+                        border: "1px solid #5a3a25",
+                        background: "#100905",
+                        color: "#f4e6c7",
+                        outline: "none",
+                        fontFamily: "Georgia, serif",
+                        fontSize: "15px",
+                      }}
+                    />
+
+                    <button
+                      onClick={() => submitMusicQuizGuess()}
+                      disabled={
+                        musicQuizFeedback?.type === "correct" ||
+                        musicQuizFeedback?.type === "wrong"
+                      }
+                      style={{
+                        padding: "14px 22px",
+                        border: "2px solid #b8893c",
+                        background: "#5a3019",
+                        color: "#ffe5ac",
+                        fontWeight: "bold",
+                        letterSpacing: "1px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      LOCK GUESS
+                    </button>
+                  </div>
+
+                  {musicQuizFeedback && (
+                    <div
+                      style={{
+                        marginTop: "18px",
+                        padding: "17px",
+                        border:
+                          musicQuizFeedback.type === "correct"
+                            ? "1px solid #a97832"
+                            : "1px solid #6b4930",
+                        background: "#1d1109",
+                      }}
+                    >
+                      <strong
+                        style={{
+                          display: "block",
+                          color:
+                            musicQuizFeedback.type === "correct"
+                              ? "#ffb84d"
+                              : "#d5a56b",
+                          fontSize: "15px",
+                        }}
+                      >
+                        {musicQuizFeedback.type === "correct"
+                          ? "✓ SIGNAL FOUND"
+                          : musicQuizFeedback.type === "retry"
+                          ? "◌ SIGNAL UNCLEAR"
+                          : "✕ TRANSMISSION LOST"}
+                      </strong>
+
+                      <p
+                        style={{
+                          margin: "7px 0 0",
+                          color: "#c7ae88",
+                          lineHeight: 1.5,
+                        }}
+                      >
+                        {musicQuizFeedback.message}
+                      </p>
+
+                      {musicQuizFeedback.type === "correct" && (
+                        <strong
+                          style={{
+                            display: "block",
+                            marginTop: "8px",
+                            color: "#ffcf7a",
+                          }}
+                        >
+                          +{musicQuizFeedback.points} POINTS
+                        </strong>
+                      )}
+
+                      {(musicQuizFeedback.type === "wrong" ||
+                        musicQuizFeedback.type === "correct") && (
+                        <p
+                          style={{
+                            margin: "10px 0 0",
+                            color: "#ead7b0",
+                          }}
+                        >
+                          SONG: {currentMusicQuizQuestion.title}
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {musicQuizFeedback && (
+                  <button
+                    onClick={nextMusicQuizQuestion}
+                    style={{
+                      width: "100%",
+                      marginTop: "14px",
+                      padding: "15px",
+                      border: "2px solid #8a5b2d",
+                      background: "#2d180b",
+                      color: "#f5dfb0",
+                      cursor: "pointer",
+                      fontWeight: "bold",
+                      letterSpacing: "1px",
+                    }}
+                  >
+                    {musicQuizIndex >= musicQuizRound.length - 1
+                      ? "SEE YOUR TRANSMISSION REPORT →"
+                      : "NEXT MYSTERY →"}
+                  </button>
                 )}
+
+                <button
+                  onClick={() => resetMusicQuiz()}
+                  style={{
+                    display: "block",
+                    margin: "14px auto 0",
+                    border: 0,
+                    background: "transparent",
+                    color: "#8d7355",
+                    cursor: "pointer",
+                    fontSize: "11px",
+                    letterSpacing: "1px",
+                  }}
+                >
+                  CHANGE DIFFICULTY
+                </button>
+              </section>
+            )}
+
+          {musicQuizDifficulty && musicQuizFinished && (
+            <section
+              style={{
+                maxWidth: "850px",
+                margin: "40px auto 0",
+                textAlign: "center",
+              }}
+            >
+              <p className="small-title" style={{ color: "#b8893c" }}>
+                TRANSMISSION COMPLETE
+              </p>
+
+              <h2
+                style={{
+                  margin: "7px 0",
+                  fontFamily: "Georgia, serif",
+                  fontSize: "clamp(35px, 7vw, 65px)",
+                  color: "#f4e6c7",
+                }}
+              >
+                {getMusicQuizTitle()}
+              </h2>
+
+              <div
+                style={{
+                  border: "2px solid #8a5b2d",
+                  background: "#1b0f08",
+                  padding: "30px 20px",
+                  marginTop: "22px",
+                }}
+              >
+                <span
+                  style={{
+                    display: "block",
+                    color: "#9c805f",
+                    letterSpacing: "2px",
+                    fontSize: "11px",
+                  }}
+                >
+                  FINAL SCORE
+                </span>
+
+                <strong
+                  style={{
+                    display: "block",
+                    margin: "5px 0",
+                    fontSize: "70px",
+                    color: "#ffb84d",
+                    fontFamily: "Georgia, serif",
+                  }}
+                >
+                  {musicQuizScore}
+                </strong>
+
+                <div
+                  style={{
+                    display: "grid",
+                    gridTemplateColumns: "repeat(3, 1fr)",
+                    gap: "10px",
+                    marginTop: "18px",
+                  }}
+                >
+                  <div>
+                    <strong style={{ display: "block", fontSize: "24px" }}>
+                      {musicQuizCorrect}
+                    </strong>
+                    <small style={{ color: "#8f7558" }}>FOUND</small>
+                  </div>
+                  <div>
+                    <strong style={{ display: "block", fontSize: "24px" }}>
+                      {musicQuizRound.length - musicQuizCorrect}
+                    </strong>
+                    <small style={{ color: "#8f7558" }}>MISSED</small>
+                  </div>
+                  <div>
+                    <strong style={{ display: "block", fontSize: "24px" }}>
+                      {musicQuizBestScore}
+                    </strong>
+                    <small style={{ color: "#8f7558" }}>BEST</small>
+                  </div>
+                </div>
+
+                <p
+                  style={{
+                    margin: "25px auto 0",
+                    maxWidth: "560px",
+                    color: "#c2a982",
+                    lineHeight: 1.7,
+                  }}
+                >
+                  Five melodies entered the archive. You caught {musicQuizCorrect}.
+                  The radio department has filed your performance under
+                  “{getMusicQuizTitle()}”.
+                </p>
+              </div>
+
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: "10px",
+                  flexWrap: "wrap",
+                  marginTop: "18px",
+                }}
+              >
+                <button
+                  onClick={() => startMusicQuiz(musicQuizDifficulty)}
+                  style={{
+                    padding: "14px 20px",
+                    border: "2px solid #b8893c",
+                    background: "#5a3019",
+                    color: "#ffe5ac",
+                    cursor: "pointer",
+                    fontWeight: "bold",
+                  }}
+                >
+                  PLAY AGAIN
+                </button>
+
+                <button
+                  onClick={() => resetMusicQuiz()}
+                  style={{
+                    padding: "14px 20px",
+                    border: "1px solid #68402a",
+                    background: "#211209",
+                    color: "#cbb18a",
+                    cursor: "pointer",
+                  }}
+                >
+                  CHANGE DIFFICULTY
+                </button>
+
+                <button
+                  onClick={() => {
+                    resetMusicQuiz();
+                    setPage("home");
+                  }}
+                  style={{
+                    padding: "14px 20px",
+                    border: "1px solid #68402a",
+                    background: "#211209",
+                    color: "#cbb18a",
+                    cursor: "pointer",
+                  }}
+                >
+                  BACK TO ARCHIVE
+                </button>
+              </div>
+            </section>
+          )}
+        </main>
+      )}
+
+      {/* ===================================================
+          MINI PLAYER
+         =================================================== */}
+
+      {currentSong &&
+        page !== "music" && (
+          <section className="mini-player">
+
+            <div className="mini-song-info">
+
+              <div className="mini-icon">
+                📻
+              </div>
+
+              <div>
+
+                <strong>
+                  {currentSong.title}
+                </strong>
+
+                <span>
+                  {currentStation?.name ||
+                    "OOHA LOKAM RADIO"}
+                </span>
 
               </div>
 
             </div>
 
-          </section>
+            <div className="mini-controls">
 
-          <section className="rewards-list">
+              <button
+                onClick={
+                  playPreviousInStation
+                }
+              >
+                ◀
+              </button>
 
-            <h2>Milestones</h2>
+              <button
+                onClick={togglePlay}
+              >
+                {playing
+                  ? "❚❚"
+                  : "▶"}
+              </button>
 
-            <div className="milestone-grid">
-
-              {[
-                [
-                  "🌱",
-                  "First Melody",
-                  "Listen for 1 day",
-                  1,
-                ],
-                [
-                  "🎶",
-                  "Melody Seeker",
-                  "Reach a 3 day streak",
-                  3,
-                ],
-                [
-                  "🔥",
-                  "Week Warrior",
-                  "Reach a 7 day streak",
-                  7,
-                ],
-                [
-                  "👑",
-                  "Ooha Legend",
-                  "Reach a 30 day streak",
-                  30,
-                ],
-              ].map(
-                (item) => (
-                  <div
-                    key={item[1]}
-                    className={
-                      streak >= item[3]
-                        ? "milestone unlocked"
-                        : "milestone"
-                    }
-                  >
-
-                    <span>
-                      {item[0]}
-                    </span>
-
-                    <h3>
-                      {item[1]}
-                    </h3>
-
-                    <p>
-                      {item[2]}
-                    </p>
-
-                    <strong>
-                      {streak >= item[3]
-                        ? "UNLOCKED"
-                        : "LOCKED"}
-                    </strong>
-
-                  </div>
-                )
-              )}
+              <button
+                onClick={
+                  playNextInStation
+                }
+              >
+                ▶
+              </button>
 
             </div>
-
-          </section>
-
-          <section className="rewards-note">
-
-            <span>✦</span>
-
-            <p>
-              Your progress is saved on this
-              device automatically.
-            </p>
-
-          </section>
-
-        </main>
-      )}
-
-      {/* ===================================================
-          QUIZ
-         =================================================== */}
-
-      {page === "quiz" && (
-        <main className="quiz-page">
-
-          <button
-            className="back-button"
-            onClick={() => setPage("home")}
-          >
-            ← BACK TO ఊహా లోకం
-          </button>
-
-          <section className="quiz-header">
-
-            <p>
-              OOHA LOKAM QUIZ
-            </p>
-
-            <h1>
-              🎮 Coming Soon
-            </h1>
-
-            <span>
-              Songs • Dialogues • BGMs
-            </span>
-
-          </section>
-
-          <div className="coming-soon-box">
-
-            <div>🎬</div>
-
-            <h2>
-              Quiz section is under construction.
-            </h2>
-
-            <p>
-              The music radio comes first.
-              Quiz features will be added next.
-            </p>
-
-          </div>
-
-        </main>
-      )}
-
-      {/* ===================================================
-          MINI PLAYER ON OTHER PAGES
-         =================================================== */}
-
-      {currentSong && page !== "music" && (
-        <section className="mini-player">
-
-          <div className="mini-song-info">
-
-            <div className="mini-icon">
-              📻
-            </div>
-
-            <div>
-
-              <strong>
-                {currentSong.title}
-              </strong>
-
-              <span>
-                {currentStation?.name ||
-                  "OOHA LOKAM RADIO"}
-              </span>
-
-            </div>
-
-          </div>
-
-          <div className="mini-controls">
 
             <button
-              onClick={playPreviousInStation}
+              className="mini-open"
+              onClick={() =>
+                setPage("music")
+              }
             >
-              ◀️
-            </button>
-
-            <button onClick={togglePlay}>
-              {playing ? "❚❚" : "▶️"}
+              📻 RADIO
             </button>
 
             <button
-              onClick={playNextInStation}
+              className="mini-close"
+              onClick={powerOff}
             >
-              ▶️
+              ✕
             </button>
 
-          </div>
-
-          <button
-            className="mini-open"
-            onClick={() => setPage("music")}
-          >
-            📻 RADIO
-          </button>
-
-          <button
-            className="mini-close"
-            onClick={powerOff}
-          >
-            ✕
-          </button>
-
-        </section>
-      )}
+          </section>
+        )}
 
     </main>
   );
