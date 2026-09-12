@@ -2782,3 +2782,596 @@ input[type="range"] {
     font-size: 38px;
   }
 }
+/* =========================================================
+   OOHA LOKAM — MOBILE VINTAGE RADIO REFINEMENT
+   Desktop styling above is intentionally preserved.
+   ========================================================= */
+
+:root {
+  --font-display: "Noto Serif Telugu", Georgia, "Times New Roman", serif;
+  --font-ui: "Noto Sans", Arial, sans-serif;
+  --font-mono: "Courier New", monospace;
+}
+
+body {
+  font-family: var(--font-display);
+}
+
+.small-title,
+.eyebrow,
+.hero-label,
+.name-box label,
+.archive-card h3,
+.archive-card button,
+.user-name,
+.logout-button,
+.back-button,
+.radio-brand div,
+.radio-brand span,
+.dial-label,
+.station-display small,
+.station-display span,
+.radio-status,
+.radio-volume,
+.station-section-title,
+.preset-info span,
+.preset-info small,
+.station-section-title small,
+.broadcast-info span,
+.radio-extra button,
+.radio-bottom,
+.reward-stat small,
+.rewards-header p,
+.streak-content p,
+.milestone strong,
+.auth-form label,
+.auth-submit,
+.guest-button,
+.auth-footer {
+  font-family: var(--font-ui);
+}
+
+.frequency-numbers,
+.dial-glow,
+.radio-progress,
+.preset-number,
+.preset-frequency {
+  font-family: var(--font-mono);
+}
+
+@media (max-width: 600px) {
+  /* ---------- Global mobile typography ---------- */
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  body {
+    font-size: 15px;
+  }
+
+  .app,
+  .entrance {
+    width: 100%;
+    overflow-x: hidden;
+  }
+
+  /* ---------- Header / home ---------- */
+  .home-page {
+    padding: 18px 14px 55px;
+  }
+
+  .home-header h1 {
+    font-size: 25px;
+  }
+
+  .small-title,
+  .eyebrow,
+  .hero-label {
+    font-size: 8px;
+    letter-spacing: 2px;
+  }
+
+  .hero {
+    margin: 45px auto 45px;
+  }
+
+  .hero h2 {
+    font-size: clamp(34px, 11vw, 46px);
+  }
+
+  .hero p:last-child {
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  .archive-card {
+    padding: 26px 20px;
+  }
+
+  /* ---------- RADIO PAGE ---------- */
+  .radio-page {
+    padding: 14px 10px 70px;
+  }
+
+  .radio-heading {
+    margin: 14px auto 22px;
+  }
+
+  .radio-heading p {
+    font-size: 8px;
+    letter-spacing: 2px;
+    margin-bottom: 9px;
+  }
+
+  .radio-heading h1 {
+    font-size: clamp(29px, 9vw, 42px);
+    line-height: 1.05;
+  }
+
+  .radio-heading span {
+    margin-top: 8px;
+    font-size: 12px;
+  }
+
+  /* Make the cabinet feel like a small physical tabletop radio. */
+  .vintage-radio {
+    width: 100%;
+    max-width: 430px;
+    padding: 9px;
+    border-width: 2px;
+    border-radius: 10px;
+    box-shadow:
+      0 18px 35px rgba(48, 24, 8, 0.42),
+      inset 0 0 0 2px #a96e3b,
+      inset 0 0 18px rgba(0, 0, 0, 0.45);
+  }
+
+  .vintage-radio::before {
+    inset: 6px;
+    border-radius: 7px;
+  }
+
+  .radio-brand {
+    padding: 6px 0 12px;
+  }
+
+  .radio-brand div {
+    font-size: 11px;
+    letter-spacing: 3px;
+  }
+
+  .radio-brand span {
+    margin-top: 3px;
+    font-size: 6px;
+    letter-spacing: 2px;
+  }
+
+  .radio-main {
+    display: grid;
+    grid-template-columns: 1fr;
+    min-height: 0;
+    border-width: 1px;
+    border-radius: 5px;
+  }
+
+  .radio-tuning {
+    padding: 14px 11px 12px;
+    border-right: 0;
+    border-bottom: 1px solid #1b0a04;
+  }
+
+  .dial-label {
+    margin-bottom: 8px;
+    font-size: 7px;
+    letter-spacing: 2px;
+  }
+
+  .frequency-dial {
+    padding: 13px 11px;
+    border-width: 1px;
+  }
+
+  .frequency-numbers {
+    font-size: 9px;
+  }
+
+  .dial-line {
+    margin: 15px 0;
+  }
+
+  .dial-line::before {
+    inset: -6px 0;
+    background:
+      repeating-linear-gradient(
+        90deg,
+        transparent 0,
+        transparent 13px,
+        rgba(224, 187, 107, 0.65) 14px,
+        transparent 15px
+      );
+  }
+
+  .dial-pointer {
+    top: -11px;
+    width: 2px;
+    height: 24px;
+  }
+
+  .dial-glow {
+    font-size: 19px;
+    letter-spacing: 2px;
+  }
+
+  .station-display {
+    margin-top: 13px;
+    padding: 13px 10px;
+  }
+
+  .station-display small {
+    font-size: 6px;
+    letter-spacing: 2px;
+  }
+
+  .station-display strong {
+    margin: 6px 0;
+    font-size: clamp(20px, 7vw, 27px) !important;
+  }
+
+  .station-display span {
+    font-size: 8px;
+  }
+
+  .radio-status {
+    margin-top: 10px;
+    font-size: 6px;
+    letter-spacing: 1.5px;
+  }
+
+  .status-light {
+    width: 6px;
+    height: 6px;
+  }
+
+  /* Compact speaker: no giant empty block on phones. */
+  .speaker-panel {
+    min-height: 175px !important;
+    padding: 13px 11px 14px;
+  }
+
+  .speaker-label {
+    margin-bottom: 9px;
+  }
+
+  .speaker-label span {
+    font-size: 6px;
+    letter-spacing: 2px;
+  }
+
+  .speaker-label strong {
+    margin: 4px 0;
+    font-size: 15px;
+  }
+
+  .speaker-label small {
+    font-size: 7px;
+  }
+
+  .speaker-grille {
+    min-height: 95px;
+    gap: 5px;
+    padding: 13px 11px;
+    border-width: 5px;
+  }
+
+  .speaker-line {
+    height: 2px;
+  }
+
+  /* Compact physical-looking control strip. */
+  .radio-controls {
+    gap: 7px;
+    padding: 12px 8px;
+  }
+
+  .radio-knob-button {
+    width: 44px;
+    height: 44px;
+    border-width: 2px;
+    gap: 2px;
+  }
+
+  .radio-knob-button span {
+    font-size: 11px;
+  }
+
+  .radio-knob-button small {
+    font-size: 5px;
+  }
+
+  .radio-play-button {
+    width: 60px;
+    height: 60px;
+    border-width: 3px;
+    font-size: 20px;
+  }
+
+  .radio-volume {
+    width: 100%;
+    gap: 7px;
+    margin-left: 0;
+    font-size: 6px;
+    letter-spacing: 1px;
+  }
+
+  .radio-volume input {
+    width: min(120px, 42vw);
+  }
+
+  .radio-progress {
+    grid-template-columns: 34px 1fr 34px;
+    gap: 6px;
+    padding: 9px 9px;
+    font-size: 7px;
+  }
+
+  /* Two columns feel much more like radio presets than a long phone list. */
+  .station-section {
+    padding-top: 18px;
+  }
+
+  .station-section-title {
+    font-size: 8px;
+    letter-spacing: 1.5px;
+  }
+
+  .station-presets {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 6px;
+  }
+
+  .station-preset {
+    min-height: 94px;
+    padding: 10px 9px;
+  }
+
+  .preset-number {
+    font-size: 8px;
+  }
+
+  .preset-info strong {
+    font-size: 13px;
+  }
+
+  .preset-info span {
+    margin-top: 3px;
+    font-size: 6px;
+  }
+
+  .preset-info small {
+    margin-top: 3px;
+    font-size: 6px;
+  }
+
+  .preset-frequency {
+    font-size: 9px;
+  }
+
+  .preset-light {
+    top: 8px;
+    right: 8px;
+    font-size: 7px;
+  }
+
+  .broadcast-info {
+    margin-top: 16px;
+  }
+
+  .broadcast-info > div {
+    padding: 12px 10px;
+  }
+
+  .broadcast-info span {
+    font-size: 6px;
+    letter-spacing: 1.5px;
+  }
+
+  .broadcast-info strong {
+    margin-top: 5px;
+    font-size: 11px;
+  }
+
+  .radio-welcome {
+    margin-top: 16px;
+    padding: 23px 14px;
+  }
+
+  .radio-welcome > div {
+    font-size: 24px;
+  }
+
+  .radio-welcome h2 {
+    font-size: 19px;
+  }
+
+  .radio-welcome p {
+    font-size: 12px;
+  }
+
+  .radio-extra {
+    gap: 6px;
+    padding-top: 13px;
+  }
+
+  .radio-video-button,
+  .radio-power-button {
+    padding: 8px 10px;
+    font-size: 7px;
+  }
+
+  .radio-bottom {
+    margin-top: 18px;
+    padding-top: 10px;
+    font-size: 6px;
+  }
+
+  /* ---------- Rewards ---------- */
+  .rewards-page {
+    padding: 22px 14px 65px;
+  }
+
+  .rewards-header {
+    margin: 28px auto 30px;
+  }
+
+  .rewards-header h1 {
+    font-size: clamp(32px, 10vw, 50px);
+  }
+
+  .reward-stat {
+    padding: 18px;
+  }
+
+  .daily-streak-card {
+    padding: 21px 17px;
+    gap: 13px;
+  }
+
+  .streak-icon {
+    font-size: 34px;
+  }
+
+  .streak-content h2 {
+    font-size: 23px;
+  }
+
+  .streak-days {
+    gap: 5px;
+  }
+
+  .streak-day {
+    min-width: 42px;
+    width: 42px;
+    height: 48px;
+  }
+
+  /* ---------- Music Mystery ---------- */
+  .music-mystery-page {
+    padding: 15px 10px 80px !important;
+  }
+
+  .music-mystery-page > .back-button {
+    margin-bottom: 13px;
+  }
+
+  .music-mystery-page .small-title {
+    font-size: 7px;
+    letter-spacing: 1.7px;
+  }
+
+  .music-mystery-page h1 {
+    font-size: clamp(29px, 9vw, 43px) !important;
+    line-height: 1.05;
+  }
+
+  .music-mystery-page h2 {
+    font-size: clamp(23px, 7vw, 34px) !important;
+  }
+
+  /* The mystery screen is deliberately shorter on mobile. */
+  .music-mystery-page [style*="min-height: 250px"],
+  .music-mystery-page [style*="minHeight: 250px"] {
+    min-height: 165px !important;
+  }
+
+  .music-mystery-page [style*="font-size: 70px"],
+  .music-mystery-page [style*="fontSize: 70px"] {
+    font-size: 48px !important;
+  }
+
+  .music-mystery-page button[style*="width: 82px"],
+  .music-mystery-page button[style*="width: 82"] {
+    width: 62px !important;
+    height: 62px !important;
+    font-size: 22px !important;
+  }
+
+  .music-mystery-page input[placeholder="Type your melody guess..."] {
+    min-width: 0 !important;
+    flex-basis: 100% !important;
+    padding: 13px !important;
+    font-size: 14px !important;
+  }
+
+  .music-mystery-page input[placeholder="Type your melody guess..."] + button {
+    width: 100% !important;
+    padding: 12px 16px !important;
+  }
+
+  /* ---------- Mini player ---------- */
+  .mini-player {
+    left: 6px;
+    right: 6px;
+    bottom: 6px;
+    gap: 6px;
+    padding: 7px;
+  }
+
+  .mini-icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .mini-song-info strong {
+    font-size: 11px;
+  }
+
+  .mini-song-info span {
+    font-size: 7px;
+  }
+
+  .mini-controls {
+    flex-shrink: 0;
+  }
+
+  .mini-controls button {
+    padding: 6px 7px;
+    font-size: 8px;
+  }
+}
+
+@media (max-width: 380px) {
+  .radio-page {
+    padding-left: 7px;
+    padding-right: 7px;
+  }
+
+  .vintage-radio {
+    padding: 7px;
+  }
+
+  .radio-knob-button {
+    width: 40px;
+    height: 40px;
+  }
+
+  .radio-play-button {
+    width: 55px;
+    height: 55px;
+  }
+
+  .station-presets {
+    gap: 5px;
+  }
+
+  .station-preset {
+    min-height: 88px;
+    padding: 9px 8px;
+  }
+
+  .preset-info strong {
+    font-size: 12px;
+  }
+}
