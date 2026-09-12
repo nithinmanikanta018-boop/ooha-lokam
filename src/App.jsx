@@ -689,12 +689,14 @@ function shuffleArray(array) {
 
 
 function App() {
-  const [authMode, setAuthMode] = useState("login");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [authLoading, setAuthLoading] = useState(false);
-  const [authMessage, setAuthMessage] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [authChecking, setAuthChecking] = useState(true);
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [otp, setOtp] = useState("");
+  const [otpSent, setOtpSent] = useState(false);
+  const [otpLoading, setOtpLoading] = useState(false);
+  const [otpError, setOtpError] = useState("");
+  const [otpMessage, setOtpMessage] = useState("");
 
   const [name, setName] = useState(
     localStorage.getItem("oohaName") || ""
@@ -705,6 +707,111 @@ function App() {
   );
 
   const [page, setPage] = useState("home");
+
+  useEffect(() => {
+    let mounted = true;
+
+    supabase.auth.getSession().then(({ data }) => {
+      if (!mounted) return;
+      setIsLoggedIn(Boolean(data.session));
+      setAuthChecking(false);
+    });
+
+    const { data: authListener } = supabase.auth.onAuthStateChange(
+      (_event, session) => {
+        setIsLoggedIn(Boolean(session));
+        setAuthChecking(false);
+      }
+    );
+
+    return () => {
+      mounted = false;
+      authListener?.subscription?.unsubscribe();
+    };
+  }, []);
+
+  const formatPhoneNumber = (value) => {
+    const trimmed = value.trim();
+
+    if (trimmed.startsWith("+")) {
+      return "+" + trimmed.slice(1).replace(/\D/g, "");
+    }
+
+    const digits = trimmed.replace(/\D/g, "");
+
+    if (digits.length === 10) {
+      return `+91${digits}`;
+    }
+
+    return `+${digits}`;
+  };
+
+  const sendPhoneOtp = async () => {
+    setOtpError("");
+    setOtpMessage("");
+
+    const formattedPhone = formatPhoneNumber(phoneNumber);
+
+    if (!/^\+\d{8,15}$/.test(formattedPhone)) {
+      setOtpError("Enter a valid phone number.");
+      return;
+    }
+
+    setOtpLoading(true);
+
+    const { error } = await supabase.auth.signInWithOtp({
+      phone: formattedPhone,
+    });
+
+    setOtpLoading(false);
+
+    if (error) {
+      setOtpError(error.message || "Could not send OTP. Please try again.");
+      return;
+    }
+
+    setPhoneNumber(formattedPhone);
+    setOtpSent(true);
+    setOtpMessage("OTP sent. Check your phone.");
+  };
+
+  const verifyPhoneOtp = async () => {
+    setOtpError("");
+    setOtpMessage("");
+
+    if (!/^\d{6}$/.test(otp.trim())) {
+      setOtpError("Enter the 6-digit OTP.");
+      return;
+    }
+
+    setOtpLoading(true);
+
+    const { data, error } = await supabase.auth.verifyOtp({
+      phone: phoneNumber,
+      token: otp.trim(),
+      type: "sms",
+    });
+
+    setOtpLoading(false);
+
+    if (error) {
+      setOtpError(error.message || "Invalid OTP. Please try again.");
+      return;
+    }
+
+    if (data.session) {
+      setIsLoggedIn(true);
+      setOtp("");
+      setOtpMessage("");
+    }
+  };
+
+  const changePhoneNumber = () => {
+    setOtpSent(false);
+    setOtp("");
+    setOtpError("");
+    setOtpMessage("");
+  };
 
   /* =======================================================
      MUSIC MYSTERY QUIZ STATE
@@ -970,91 +1077,6 @@ function App() {
     return availableSongs[
       Math.floor(Math.random() * availableSongs.length)
     ];
-  };
-
-  /* =======================================================
-     AUTH SESSION
-     ======================================================= */
-
-  useEffect(() => {
-    const checkSession = async () => {
-      const { data } =
-        await supabase.auth.getSession();
-
-      if (data.session) {
-        setIsLoggedIn(true);
-      }
-    };
-
-    checkSession();
-  }, []);
-
-  /* =======================================================
-     AUTH
-     ======================================================= */
-
-  const handleAuth = async (e) => {
-    e.preventDefault();
-    setAuthMessage("");
-
-    if (!email.trim() || !password.trim()) {
-      setAuthMessage(
-        "Please enter your email and password."
-      );
-      return;
-    }
-
-    setAuthLoading(true);
-
-    try {
-      if (authMode === "login") {
-        const { error } =
-          await supabase.auth.signInWithPassword({
-            email: email.trim(),
-            password,
-          });
-
-        if (error) {
-          setAuthMessage(error.message);
-          return;
-        }
-
-        setIsLoggedIn(true);
-      } else {
-        const { error } =
-          await supabase.auth.signUp({
-            email: email.trim(),
-            password,
-          });
-
-        if (error) {
-          setAuthMessage(error.message);
-          return;
-        }
-
-        setAuthMessage(
-          "Account created! Check your email to verify your account."
-        );
-      }
-    } catch {
-      setAuthMessage(
-        "Something went wrong. Please try again."
-      );
-    } finally {
-      setAuthLoading(false);
-    }
-  };
-
-  const continueAsGuest = () => {
-    setIsLoggedIn(true);
-  };
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-
-    setIsLoggedIn(false);
-    setEntered(false);
-    setPage("home");
   };
 
   /* =======================================================
@@ -1803,179 +1825,95 @@ function App() {
   };
 
   /* =======================================================
-     AUTH ENTRANCE
+     PHONE OTP LOGIN
      ======================================================= */
+
+  if (authChecking) {
+    return (
+      <main className="entrance">
+        <div className="entrance-content">
+          <p className="eyebrow">A TELUGU CINEMA & MUSIC ARCHIVE</p>
+          <h1>ఊహా లోకం</h1>
+          <h2>OOHA LOKAM</h2>
+          <div className="divider"><span>✦</span></div>
+          <p className="tagline">Preparing your archive...</p>
+        </div>
+      </main>
+    );
+  }
 
   if (!isLoggedIn) {
     return (
-      <main className="auth-page">
-        <div className="auth-card">
+      <main className="entrance">
+        <div className="entrance-content">
+          <p className="eyebrow">A TELUGU CINEMA & MUSIC ARCHIVE</p>
+          <h1>ఊహా లోకం</h1>
+          <h2>OOHA LOKAM</h2>
+          <div className="divider"><span>✦</span></div>
+          <p className="tagline">
+            Enter with your phone number.
+            <br />
+            We will send you a one-time code.
+          </p>
 
-          <div className="auth-brand">
-            <div className="auth-radio-icon">
-              📻
-            </div>
+          <div className="name-box">
+            <label htmlFor="phone-number">PHONE NUMBER</label>
 
-            <p className="eyebrow">
-              A TELUGU MUSIC ARCHIVE
-            </p>
+            {!otpSent ? (
+              <>
+                <input
+                  id="phone-number"
+                  type="tel"
+                  inputMode="tel"
+                  autoComplete="tel"
+                  placeholder="+91 98765 43210"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") sendPhoneOtp();
+                  }}
+                />
 
-            <h1>ఊహా లోకం</h1>
+                <button onClick={sendPhoneOtp} disabled={otpLoading}>
+                  {otpLoading ? "SENDING OTP..." : "SEND OTP"}
+                </button>
+              </>
+            ) : (
+              <>
+                <input
+                  id="phone-otp"
+                  type="text"
+                  inputMode="numeric"
+                  autoComplete="one-time-code"
+                  maxLength={6}
+                  placeholder="Enter 6-digit OTP"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") verifyPhoneOtp();
+                  }}
+                />
 
-            <span>
-              OOHA LOKAM
-            </span>
-          </div>
-
-          <div className="auth-divider">
-            <span>✦</span>
-          </div>
-
-          <div className="auth-heading">
-            <h2>
-              {authMode === "login"
-                ? "Welcome Back"
-                : "Join Ooha Lokam"}
-            </h2>
-
-            <p>
-              {authMode === "login"
-                ? "Your memories are waiting."
-                : "Create your archive account."}
-            </p>
-          </div>
-
-          <div className="auth-tabs">
-
-            <button
-              className={
-                authMode === "login"
-                  ? "auth-tab active"
-                  : "auth-tab"
-              }
-              onClick={() => {
-                setAuthMode("login");
-                setAuthMessage("");
-              }}
-            >
-              LOGIN
-            </button>
-
-            <button
-              className={
-                authMode === "signup"
-                  ? "auth-tab active"
-                  : "auth-tab"
-              }
-              onClick={() => {
-                setAuthMode("signup");
-                setAuthMessage("");
-              }}
-            >
-              SIGN UP
-            </button>
-
-          </div>
-
-          <form
-            className="auth-form"
-            onSubmit={handleAuth}
-          >
-
-            <label htmlFor="email">
-              EMAIL ADDRESS
-            </label>
-
-            <input
-              id="email"
-              type="email"
-              placeholder="your@email.com"
-              value={email}
-              onChange={(e) =>
-                setEmail(e.target.value)
-              }
-              autoComplete="email"
-            />
-
-            <label htmlFor="password">
-              PASSWORD
-            </label>
-
-            <input
-              id="password"
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) =>
-                setPassword(e.target.value)
-              }
-              autoComplete={
-                authMode === "login"
-                  ? "current-password"
-                  : "new-password"
-              }
-            />
-
-            {authMode === "login" && (
-              <div className="auth-options">
-
-                <label className="remember-option">
-                  <input type="checkbox" />
-                  <span>
-                    Remember me
-                  </span>
-                </label>
+                <button onClick={verifyPhoneOtp} disabled={otpLoading}>
+                  {otpLoading ? "VERIFYING..." : "VERIFY OTP"}
+                </button>
 
                 <button
                   type="button"
-                  className="forgot-button"
-                  onClick={() =>
-                    setAuthMessage(
-                      "Password reset will be added next."
-                    )
-                  }
+                  className="secondary-action"
+                  onClick={changePhoneNumber}
+                  disabled={otpLoading}
                 >
-                  Forgot password?
+                  CHANGE NUMBER
                 </button>
-
-              </div>
+              </>
             )}
 
-            {authMessage && (
-              <div className="auth-message">
-                {authMessage}
-              </div>
-            )}
-
-            <button
-              type="submit"
-              className="auth-submit"
-              disabled={authLoading}
-            >
-              {authLoading
-                ? "PLEASE WAIT..."
-                : authMode === "login"
-                ? "ENTER OOHA LOKAM"
-                : "CREATE MY ACCOUNT"}
-            </button>
-
-          </form>
-
-          <div className="auth-or">
-            <span>OR</span>
+            {otpMessage && <p className="auth-message">{otpMessage}</p>}
+            {otpError && <p className="auth-error">{otpError}</p>}
           </div>
 
-          <button
-            className="guest-button"
-            onClick={continueAsGuest}
-          >
-            CONTINUE AS GUEST
-          </button>
-
-          <p className="auth-footer">
-            Songs • Cinema • Memories
-          </p>
-
+          <p className="footer-text">Songs • Cinema • Memories</p>
         </div>
       </main>
     );
@@ -2086,12 +2024,6 @@ function App() {
                 </strong>
               </div>
 
-              <button
-                className="logout-button"
-                onClick={handleLogout}
-              >
-                LOGOUT
-              </button>
 
             </div>
 

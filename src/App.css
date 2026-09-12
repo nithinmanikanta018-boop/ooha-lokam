@@ -3375,3 +3375,40 @@ body {
     font-size: 12px;
   }
 }
+
+/* =========================================================
+   PHONE OTP AUTH
+   ========================================================= */
+.auth-message {
+  margin: 12px 0 0;
+  color: var(--brass-dark);
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.auth-error {
+  margin: 12px 0 0;
+  color: #8f2f25;
+  font-size: 13px;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.name-box button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.name-box .secondary-action {
+  margin-top: 8px;
+  color: var(--wood-dark);
+  background: transparent;
+  border: 1px solid var(--brass-dark);
+  box-shadow: none;
+}
+
+.name-box .secondary-action:hover {
+  color: var(--paper-light);
+  background: var(--wood-dark);
+}
