@@ -117,6 +117,16 @@ const songs = {
       englishTitle: "Vayyari Bhama",
       youtubeId: "-KH7IZjCkSk",
     },
+    {
+      title: "అందమైన ప్రేమ రాణి",
+      englishTitle: "Andhamaina Prema Rani",
+      youtubeId: "-I8WpNNboaw",
+    },
+    {
+      title: "Pedavi Daatani",
+      englishTitle: "Pedavi Daatani",
+      youtubeId: "rDaT9ykpFU0",
+    },
   ],
 
   "2000s": [
@@ -198,6 +208,56 @@ const songs = {
       title: "నీ ఇల్లు బంగారం కాను",
       englishTitle: "Nee Illu Bangaram Kaanu",
       youtubeId: "fPLzesuwNxg",
+    },
+    {
+      title: "చమ్కా చమ్కా",
+      englishTitle: "Chamka Chamka",
+      youtubeId: "_wAjBV5hFtc",
+    },
+    {
+      title: "నిదుర పోతున్నా",
+      englishTitle: "Nidura Pothuna",
+      youtubeId: "kbc_zhP6tzk",
+    },
+    {
+      title: "యమహో యమా",
+      englishTitle: "Yamaho Yama",
+      youtubeId: "-GG11neCs_8",
+    },
+    {
+      title: "పలికే గోరింక",
+      englishTitle: "Palike Gorinka",
+      youtubeId: "U0EyR7y-EJM",
+    },
+    {
+      title: "కనులు తెరిచిన",
+      englishTitle: "Kanulu Terichina",
+      youtubeId: "gOf9Zpt8XYg",
+    },
+    {
+      title: "చినుకు తడికి",
+      englishTitle: "Chinuku Thadiki",
+      youtubeId: "x7vsIXmzjcY",
+    },
+    {
+      title: "నీ కొప్పులో నా మల్లె తోట",
+      englishTitle: "Nee Koppulo Na Malle Thota",
+      youtubeId: "SfCx1az2PMM",
+    },
+    {
+      title: "జూన్ పోతే",
+      englishTitle: "June Pothe",
+      youtubeId: "umbSwoQ94PM",
+    },
+    {
+      title: "తెల్ల తెల్లని చీర",
+      englishTitle: "Tella Tellani Cheera",
+      youtubeId: "9p73PtEzqHo",
+    },
+    {
+      title: "కంది చేను కాడ",
+      englishTitle: "Kandhi Chenu Kada",
+      youtubeId: "Pg3oIk420eo",
     },
   ],
 
@@ -327,14 +387,54 @@ const songs = {
       englishTitle: "Kilimanjaro Bhala",
       youtubeId: "loKoN6p0j-0",
     },
+    {
+      title: "ఓ సయనోరా",
+      englishTitle: "Oo Sayanora",
+      youtubeId: "q5sxzHWvkqk",
+    },
+    {
+      title: "ఏ మాయ చేసావే",
+      englishTitle: "Yee Maaya Chesave",
+      youtubeId: "zV6d16yukFY",
+    },
+    {
+      title: "అరెరే వానా",
+      englishTitle: "Arere Vaanaa",
+      youtubeId: "twA4pHMJrFs",
+    },
+    {
+      title: "మందార పూవల్లె",
+      englishTitle: "Mandaara Poovalle",
+      youtubeId: "cmXLAb-6oeM",
+    },
+    {
+      title: "పిలిచే",
+      englishTitle: "Pileche",
+      youtubeId: "CZWSdjqHzZc",
+    },
+    {
+      title: "కథకాదే",
+      englishTitle: "Kathakaadhey",
+      youtubeId: "2k7xkic1aNI",
+    },
+    {
+      title: "గిచి గిచి",
+      englishTitle: "Gichi Gichi",
+      youtubeId: "umbSwoQ94PM",
+    },
+    {
+      title: "సోనా సోనా",
+      englishTitle: "Sona Sona",
+      youtubeId: "z3amrmblYDg",
+    },
+    {
+      title: "గెలుపు తలపులే",
+      englishTitle: "Gelupu Thalapule",
+      youtubeId: "snrYw_nDvCI",
+    },
   ],
 
   "2020s": [
-    {
-      title: "నీ గుండె లోనా",
-      englishTitle: "Nee Gunde Lona",
-      youtubeId: "d3Vnu_tsYPA",
-    },
     {
       title: "సింగారి",
       englishTitle: "Singari",
@@ -359,6 +459,51 @@ const songs = {
       title: "బూమ్ బూమ్",
       englishTitle: "Boom Boom",
       youtubeId: "5JoPeWHkKJg",
+    },
+    {
+      title: "నీ గుండెలోనా",
+      englishTitle: "Nee gundelona",
+      youtubeId: "d3Vnu_tsYPA",
+    },
+    {
+      title: "యేష నాగుల",
+      englishTitle: "Yesha nagula",
+      youtubeId: "JqFzhcWo3EU",
+    },
+    {
+      title: "నేనో బటర్‌ఫ్లై",
+      englishTitle: "Neno butterfly",
+      youtubeId: "9dV6Hl2u3vM",
+    },
+    {
+      title: "మల్లెపూల పల్లకి",
+      englishTitle: "Mallepoola pallaki",
+      youtubeId: "QnQnz9G2LNw",
+    },
+    {
+      title: "ఓ రెండు ప్రేమ మేఘాలిలా",
+      englishTitle: "Oo rendu prema meghalila",
+      youtubeId: "7BGTwvgxYtU",
+    },
+    {
+      title: "ప్రేమలో",
+      englishTitle: "Premalo",
+      youtubeId: "IOopJ-PDpac",
+    },
+    {
+      title: "నా మది",
+      englishTitle: "Naa madhi",
+      youtubeId: "NwMaEv8qpOk",
+    },
+    {
+      title: "శ్రీమతి గారు",
+      englishTitle: "Srimathi garu",
+      youtubeId: "sTfl_FCMX4g",
+    },
+    {
+      title: "మీసాల పిల్ల",
+      englishTitle: "Meesala pilla",
+      youtubeId: "A4anPJkdVTY",
     },
   ],
 };
@@ -451,39 +596,66 @@ const musicQuizDifficulties = {
   },
   Medium: {
     label: "TUNING",
-    description: "A little less obvious. Listen closely.",
+    description: "Recognisable, but the radio will make you work for it.",
     maxClip: 16,
   },
   Hard: {
     label: "DEEP CUT",
-    description: "Short clips. Listen carefully. No mercy.",
-    maxClip: 16,
-  },
-  Expert: {
-    label: "ARCHIVE HUNT",
-    description: "For people who know their Telugu melodies.",
-    maxClip: 16,
-  },
-  Impossible: {
-    label: "STATIC ZONE",
-    description: "Tiny clip. Huge ears required.",
+    description: "For serious Telugu music lovers. Every second matters.",
     maxClip: 16,
   },
 };
 
-const getMusicQuizPool = () => {
-  const pool = [];
+/* =========================================================
+   MUSIC MYSTERY — UPDATE THIS LIST EVERY 2 DAYS
 
-  Object.entries(songs).forEach(([era, eraSongs]) => {
-    eraSongs
-      .filter((song) => song.youtubeId)
-      .forEach((song) => {
-        pool.push({
-          ...song,
-          era,
-        });
-      });
-  });
+   The quiz randomly picks up to 5 songs from the selected
+   difficulty. The radio archive is separate from this list.
+   ========================================================= */
+const weeklyMusicQuizSongs = {
+  Easy: [
+    { title: "Nee gundelona", youtubeId: "d3Vnu_tsYPA" },
+    { title: "Yesha nagula", youtubeId: "JqFzhcWo3EU" },
+    { title: "Neno butterfly", youtubeId: "9dV6Hl2u3vM" },
+    { title: "Mallepoola pallaki", youtubeId: "QnQnz9G2LNw" },
+    { title: "Oo sayanora", youtubeId: "q5sxzHWvkqk" },
+    { title: "Oo rendu prema meghalila", youtubeId: "7BGTwvgxYtU" },
+    { title: "Pileche", youtubeId: "CZWSdjqHzZc" },
+    { title: "Premalo", youtubeId: "IOopJ-PDpac" },
+    { title: "Naa madhi", youtubeId: "NwMaEv8qpOk" },
+    { title: "Andhamaina prema rani", youtubeId: "-I8WpNNboaw" },
+  ],
+  Medium: [
+    { title: "Yee Maaya Chesave", youtubeId: "zV6d16yukFY" },
+    { title: "Arere Vaanaa", youtubeId: "twA4pHMJrFs" },
+    { title: "Chamka Chamka", youtubeId: "_wAjBV5hFtc" },
+    { title: "Mandaara Poovalle", youtubeId: "cmXLAb-6oeM" },
+    { title: "Pedavi Daatani", youtubeId: "rDaT9ykpFU0" },
+    { title: "Nidura Pothuna", youtubeId: "kbc_zhP6tzk" },
+    { title: "Yamaho Yama", youtubeId: "-GG11neCs_8" },
+    { title: "Srimathi Garu", youtubeId: "sTfl_FCMX4g" },
+    { title: "Meesala Pilla", youtubeId: "A4anPJkdVTY" },
+    { title: "Kathakaadhey", youtubeId: "2k7xkic1aNI" },
+  ],
+  Hard: [
+    { title: "Palike Gorinka", youtubeId: "U0EyR7y-EJM" },
+    { title: "Kanulu Terichina", youtubeId: "gOf9Zpt8XYg" },
+    { title: "Chinuku Thadiki", youtubeId: "x7vsIXmzjcY" },
+    { title: "Nee Koppulo Na Malle Thota", youtubeId: "SfCx1az2PMM" },
+    { title: "Gelupu Thalapule", youtubeId: "snrYw_nDvCI" },
+    { title: "Gichi Gichi", youtubeId: "umbSwoQ94PM" },
+    // Same YouTube ID was supplied for both Gichi Gichi and June Pothe.
+    { title: "June Pothe", youtubeId: "umbSwoQ94PM" },
+    { title: "Tella Tellani Cheera", youtubeId: "9p73PtEzqHo" },
+    { title: "Sona Sona", youtubeId: "z3amrmblYDg" },
+    { title: "Kandhi Chenu Kada", youtubeId: "Pg3oIk420eo" },
+  ],
+};
+
+const getMusicQuizPool = (difficulty) => {
+  const pool = (weeklyMusicQuizSongs[difficulty] || []).map((song) => ({
+    ...song,
+  }));
 
   const seen = new Set();
 
@@ -1434,7 +1606,12 @@ function App() {
   };
 
   const startMusicQuiz = (difficulty) => {
-    const pool = getMusicQuizPool();
+    const pool = getMusicQuizPool(difficulty);
+
+    if (pool.length === 0) {
+      return;
+    }
+
     const shuffled = shuffleArray(pool);
     const selected = shuffled.slice(0, Math.min(5, shuffled.length));
 
@@ -1521,22 +1698,29 @@ function App() {
       return;
     }
 
-    const guess = value.trim().toLowerCase();
+    const normalizeGuess = (text) =>
+      String(text || "")
+        .toLowerCase()
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^a-z0-9]+/g, " ")
+        .trim()
+        .replace(/\s+/g, " ");
+
+    const guess = normalizeGuess(value);
 
     if (!guess) {
       return;
     }
 
-    const answer = String(currentMusicQuizQuestion.title).toLowerCase();
-    const englishTitle = String(
+    const answer = normalizeGuess(currentMusicQuizQuestion.title);
+    const englishTitle = normalizeGuess(
       currentMusicQuizQuestion.englishTitle || ""
-    ).toLowerCase();
+    );
 
     const correct =
       guess === answer ||
-      (englishTitle && guess === englishTitle) ||
-      answer.includes(guess) ||
-      (englishTitle && englishTitle.includes(guess));
+      (englishTitle && guess === englishTitle);
 
     const nextAttempts = musicQuizAttempts + 1;
     setMusicQuizAttempts(nextAttempts);
@@ -2840,16 +3024,22 @@ function App() {
                   }}
                 >
                   {Object.entries(musicQuizDifficulties).map(
-                    ([difficulty, config]) => (
+                    ([difficulty, config]) => {
+                      const availableSongs =
+                        getMusicQuizPool(difficulty).length > 0;
+
+                      return (
                       <button
                         key={difficulty}
                         onClick={() => startMusicQuiz(difficulty)}
+                        disabled={!availableSongs}
                         style={{
                           padding: "17px 14px",
                           border: "1px solid #8a5b2d",
-                          background: "#281308",
-                          color: "#f4e6c7",
-                          cursor: "pointer",
+                          background: availableSongs ? "#281308" : "#1d0d06",
+                          color: availableSongs ? "#f4e6c7" : "#765b3f",
+                          cursor: availableSongs ? "pointer" : "not-allowed",
+                          opacity: availableSongs ? 1 : 0.65,
                           textAlign: "left",
                           transition: "transform 0.2s ease, border-color 0.2s ease",
                         }}
@@ -2876,7 +3066,8 @@ function App() {
                           {config.description}
                         </span>
                       </button>
-                    )
+                      );
+                    }
                   )}
                 </div>
 
@@ -3060,6 +3251,10 @@ function App() {
                           ? stopMusicQuizClip
                           : playMusicQuizClip
                       }
+                      disabled={
+                        musicQuizFeedback?.type === "correct" ||
+                        musicQuizFeedback?.type === "wrong"
+                      }
                       style={{
                         width: "82px",
                         height: "82px",
@@ -3103,6 +3298,7 @@ function App() {
                     <button
                       onClick={skipMusicQuizClip}
                       disabled={
+                        Boolean(musicQuizFeedback) ||
                         musicQuizClipLength >=
                         musicQuizDifficulties[musicQuizDifficulty].maxClip
                       }
@@ -3410,7 +3606,7 @@ function App() {
                     lineHeight: 1.7,
                   }}
                 >
-                  Five melodies entered the archive. You caught {musicQuizCorrect}.
+                  {musicQuizRound.length} melodies entered the archive. You caught {musicQuizCorrect}.
                   The radio department has filed your performance under
                   “{getMusicQuizTitle()}”.
                 </p>
