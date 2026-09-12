@@ -7,24 +7,18 @@
   --wood: #5a3019;
   --wood-light: #8a552f;
   --wood-highlight: #b77a45;
-
   --cream: #f4e6c7;
   --paper: #ead7b0;
   --paper-light: #fff4d8;
-
   --brass: #b8893c;
   --brass-light: #e0bb6b;
   --brass-dark: #76531f;
-
   --brown: #321b10;
   --brown-light: #68402a;
-
   --amber: #ffb84d;
   --amber-light: #ffd27a;
-
   --text: #302016;
   --muted: #795f48;
-
   --shadow: rgba(32, 15, 6, 0.35);
 }
 
@@ -298,36 +292,6 @@ button:disabled {
   display: flex;
   align-items: center;
   gap: 14px;
-}
-
-.logout-button {
-  padding: 9px 16px;
-  color: #f5dfb0;
-  background:
-    linear-gradient(
-      180deg,
-      #4a2512,
-      #281108
-    );
-  border: 2px solid #8a5b2d;
-  border-radius: 4px;
-  font-family: Georgia, serif;
-  font-size: 11px;
-  font-weight: bold;
-  letter-spacing: 1px;
-  box-shadow:
-    0 3px 6px rgba(0, 0, 0, 0.35),
-    inset 0 1px 1px rgba(255, 220, 150, 0.15);
-  transition: all 0.2s ease;
-}
-
-.logout-button:hover {
-  color: #fff1c9;
-  border-color: #c69750;
-  transform: translateY(-1px);
-  box-shadow:
-    0 0 10px rgba(255, 184, 77, 0.25),
-    0 4px 8px rgba(0, 0, 0, 0.4);
 }
 
 .hero {
@@ -1490,8 +1454,8 @@ input[type="range"] {
     inset 0 0 0 4px rgba(255, 255, 255, 0.12);
   transition:
     transform 0.2s ease,
-    box-shadow 0.2s ease,
-    background 0.2s ease;
+    background 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .quiz-category-grid button:hover {
@@ -2163,282 +2127,6 @@ input[type="range"] {
 }
 
 /* =========================================================
-   LOGIN / SIGN UP
-   ========================================================= */
-
-.auth-page {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 32px 18px;
-  background:
-    radial-gradient(
-      circle at top,
-      rgba(255, 196, 92, 0.12),
-      transparent 35%
-    ),
-    linear-gradient(
-      135deg,
-      #2b160c,
-      #5a3019 55%,
-      #321b10
-    );
-  color: var(--cream);
-}
-
-.auth-card {
-  width: min(100%, 460px);
-  padding: 38px 34px 30px;
-  border: 2px solid var(--brass);
-  border-radius: 18px;
-  background:
-    linear-gradient(
-      rgba(90, 48, 25, 0.96),
-      rgba(43, 22, 12, 0.98)
-    );
-  box-shadow:
-    0 24px 60px rgba(0, 0, 0, 0.45),
-    inset 0 0 0 1px rgba(224, 187, 107, 0.25);
-}
-
-.auth-brand {
-  text-align: center;
-}
-
-.auth-radio-icon {
-  font-size: 42px;
-  margin-bottom: 8px;
-}
-
-.auth-brand .eyebrow {
-  margin: 0 0 8px;
-  font-size: 11px;
-  letter-spacing: 2px;
-  color: var(--brass-light);
-}
-
-.auth-brand h1 {
-  margin: 0;
-  font-size: clamp(38px, 10vw, 54px);
-  color: var(--cream);
-  font-weight: 800;
-}
-
-.auth-brand span {
-  display: block;
-  margin-top: 5px;
-  letter-spacing: 4px;
-  font-size: 12px;
-  color: var(--brass-light);
-}
-
-.auth-divider {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 26px 0;
-  color: var(--brass-light);
-}
-
-.auth-divider::before,
-.auth-divider::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: var(--brass-dark);
-}
-
-.auth-divider span {
-  font-size: 13px;
-}
-
-.auth-heading {
-  text-align: center;
-}
-
-.auth-heading h2 {
-  margin: 0;
-  font-size: 27px;
-  color: var(--cream);
-}
-
-.auth-heading p {
-  margin: 7px 0 22px;
-  color: #d6bd95;
-  font-size: 14px;
-}
-
-.auth-tabs {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  margin-bottom: 22px;
-  border-bottom: 1px solid var(--brass-dark);
-}
-
-.auth-tab {
-  border: 0;
-  background: transparent;
-  color: #bda17a;
-  padding: 12px;
-  cursor: pointer;
-  font-weight: 800;
-  letter-spacing: 1.5px;
-}
-
-.auth-tab.active {
-  color: var(--brass-light);
-  border-bottom: 3px solid var(--brass-light);
-}
-
-.auth-form {
-  display: flex;
-  flex-direction: column;
-}
-
-.auth-form label {
-  margin-bottom: 7px;
-  color: var(--brass-light);
-  font-size: 11px;
-  font-weight: 800;
-  letter-spacing: 1.2px;
-}
-
-.auth-form input[type="email"],
-.auth-form input[type="password"] {
-  width: 100%;
-  padding: 13px 14px;
-  margin-bottom: 16px;
-  border: 1px solid var(--brass-dark);
-  border-radius: 8px;
-  outline: none;
-  background: rgba(255, 244, 216, 0.08);
-  color: var(--cream);
-  font-size: 15px;
-}
-
-.auth-form input[type="email"]:focus,
-.auth-form input[type="password"]:focus {
-  border-color: var(--brass-light);
-  box-shadow:
-    0 0 0 2px rgba(224, 187, 107, 0.12);
-}
-
-.auth-form input::placeholder {
-  color: #a88d6b;
-}
-
-.auth-options {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin: -3px 0 18px;
-}
-
-.remember-option {
-  display: flex !important;
-  align-items: center;
-  gap: 7px;
-  margin: 0 !important;
-  color: #cdb58f !important;
-  font-size: 12px !important;
-  letter-spacing: 0 !important;
-}
-
-.remember-option input {
-  accent-color: var(--brass-light);
-}
-
-.forgot-button {
-  border: 0;
-  background: transparent;
-  color: var(--brass-light);
-  cursor: pointer;
-  font-size: 12px;
-}
-
-.auth-message {
-  margin-bottom: 15px;
-  padding: 10px 12px;
-  border: 1px solid var(--brass-dark);
-  border-radius: 7px;
-  background: rgba(255, 184, 77, 0.08);
-  color: #f1d39c;
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-.auth-submit {
-  width: 100%;
-  padding: 14px;
-  border: 1px solid var(--brass-light);
-  border-radius: 8px;
-  background:
-    linear-gradient(
-      135deg,
-      var(--brass),
-      #8f682c
-    );
-  color: #2b160c;
-  cursor: pointer;
-  font-weight: 900;
-  letter-spacing: 1px;
-}
-
-.auth-submit:hover {
-  filter: brightness(1.08);
-}
-
-.auth-submit:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.auth-or {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin: 22px 0;
-  color: #a88d6b;
-  font-size: 11px;
-  letter-spacing: 1px;
-}
-
-.auth-or::before,
-.auth-or::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: var(--brass-dark);
-}
-
-.guest-button {
-  width: 100%;
-  padding: 13px;
-  border: 1px solid var(--brass-dark);
-  border-radius: 8px;
-  background: transparent;
-  color: var(--cream);
-  cursor: pointer;
-  font-weight: 800;
-  letter-spacing: 1px;
-}
-
-.guest-button:hover {
-  border-color: var(--brass-light);
-  background: rgba(255, 244, 216, 0.06);
-}
-
-.auth-footer {
-  margin: 24px 0 0;
-  text-align: center;
-  color: #94785a;
-  font-size: 12px;
-  letter-spacing: 1px;
-}
-
-/* =========================================================
    RESPONSIVE — TABLET
    ========================================================= */
 
@@ -2535,11 +2223,6 @@ input[type="range"] {
   .header-user-area {
     width: 100%;
     justify-content: space-between;
-  }
-
-  .logout-button {
-    padding: 7px 12px;
-    font-size: 9px;
   }
 
   .hero {
@@ -2720,23 +2403,6 @@ input[type="range"] {
   .mini-open {
     display: none;
   }
-
-  .auth-page {
-    padding: 18px 12px;
-  }
-
-  .auth-card {
-    padding: 30px 22px 24px;
-  }
-
-  .auth-brand h1 {
-    font-size: 40px;
-  }
-
-  .auth-options {
-    flex-direction: column;
-    align-items: flex-start;
-  }
 }
 
 /* =========================================================
@@ -2782,8 +2448,10 @@ input[type="range"] {
     font-size: 38px;
   }
 }
+
 /* =========================================================
    OOHA LOKAM — MOBILE VINTAGE RADIO REFINEMENT
+
    Desktop styling above is intentionally preserved.
    ========================================================= */
 
@@ -2804,7 +2472,6 @@ body {
 .archive-card h3,
 .archive-card button,
 .user-name,
-.logout-button,
 .back-button,
 .radio-brand div,
 .radio-brand span,
@@ -2823,11 +2490,7 @@ body {
 .reward-stat small,
 .rewards-header p,
 .streak-content p,
-.milestone strong,
-.auth-form label,
-.auth-submit,
-.guest-button,
-.auth-footer {
+.milestone strong {
   font-family: var(--font-ui);
 }
 
@@ -2840,7 +2503,9 @@ body {
 }
 
 @media (max-width: 600px) {
+
   /* ---------- Global mobile typography ---------- */
+
   html,
   body {
     width: 100%;
@@ -2859,6 +2524,7 @@ body {
   }
 
   /* ---------- Header / home ---------- */
+
   .home-page {
     padding: 18px 14px 55px;
   }
@@ -2892,6 +2558,7 @@ body {
   }
 
   /* ---------- RADIO PAGE ---------- */
+
   .radio-page {
     padding: 14px 10px 70px;
   }
@@ -2917,6 +2584,7 @@ body {
   }
 
   /* Make the cabinet feel like a small physical tabletop radio. */
+
   .vintage-radio {
     width: 100%;
     max-width: 430px;
@@ -3036,6 +2704,7 @@ body {
   }
 
   /* Compact speaker: no giant empty block on phones. */
+
   .speaker-panel {
     min-height: 175px !important;
     padding: 13px 11px 14px;
@@ -3071,6 +2740,7 @@ body {
   }
 
   /* Compact physical-looking control strip. */
+
   .radio-controls {
     gap: 7px;
     padding: 12px 8px;
@@ -3118,6 +2788,7 @@ body {
   }
 
   /* Two columns feel much more like radio presets than a long phone list. */
+
   .station-section {
     padding-top: 18px;
   }
@@ -3218,6 +2889,7 @@ body {
   }
 
   /* ---------- Rewards ---------- */
+
   .rewards-page {
     padding: 22px 14px 65px;
   }
@@ -3258,6 +2930,7 @@ body {
   }
 
   /* ---------- Music Mystery ---------- */
+
   .music-mystery-page {
     padding: 15px 10px 80px !important;
   }
@@ -3281,6 +2954,7 @@ body {
   }
 
   /* The mystery screen is deliberately shorter on mobile. */
+
   .music-mystery-page [style*="min-height: 250px"],
   .music-mystery-page [style*="minHeight: 250px"] {
     min-height: 165px !important;
@@ -3311,6 +2985,7 @@ body {
   }
 
   /* ---------- Mini player ---------- */
+
   .mini-player {
     left: 6px;
     right: 6px;
@@ -3374,41 +3049,4 @@ body {
   .preset-info strong {
     font-size: 12px;
   }
-}
-
-/* =========================================================
-   PHONE OTP AUTH
-   ========================================================= */
-.auth-message {
-  margin: 12px 0 0;
-  color: var(--brass-dark);
-  font-size: 13px;
-  line-height: 1.5;
-  text-align: center;
-}
-
-.auth-error {
-  margin: 12px 0 0;
-  color: #8f2f25;
-  font-size: 13px;
-  line-height: 1.5;
-  text-align: center;
-}
-
-.name-box button:disabled {
-  opacity: 0.65;
-  cursor: not-allowed;
-}
-
-.name-box .secondary-action {
-  margin-top: 8px;
-  color: var(--wood-dark);
-  background: transparent;
-  border: 1px solid var(--brass-dark);
-  box-shadow: none;
-}
-
-.name-box .secondary-action:hover {
-  color: var(--paper-light);
-  background: var(--wood-dark);
 }

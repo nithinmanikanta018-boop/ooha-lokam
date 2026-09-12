@@ -69,7 +69,7 @@ const songs = {
     },
     {
       title: "వెన్నెలవే వెన్నెలవే",
-      englishTitle: "Vennalave Vennalave",
+      englishTitle: "Vennalave Vennelave",
       youtubeId: "jB5QfgaU6cU",
     },
     {
@@ -509,10 +509,6 @@ const songs = {
 };
 
 /* =========================================================
-   OOHA LOKAM — MUSIC MYSTERY QUIZ
-   ========================================================= */
-
-/* =========================================================
    OOHA LOKAM — VINTAGE RADIO HELPERS
    ========================================================= */
 
@@ -571,9 +567,10 @@ function formatTime(seconds) {
   const mins = Math.floor(seconds / 60);
   const secs = Math.floor(seconds % 60);
 
-  return `${String(mins).padStart(2, "0")}:${String(
-    secs
-  ).padStart(2, "0")}`;
+  return `${String(mins).padStart(2, "0")}:${String(secs).padStart(
+    2,
+    "0"
+  )}`;
 }
 
 function getStationSongs(station) {
@@ -587,7 +584,6 @@ function getStationSongs(station) {
   );
 }
 
-
 const musicQuizDifficulties = {
   Easy: {
     label: "WARM-UP",
@@ -596,12 +592,14 @@ const musicQuizDifficulties = {
   },
   Medium: {
     label: "TUNING",
-    description: "Recognisable, but the radio will make you work for it.",
+    description:
+      "Recognisable, but the radio will make you work for it.",
     maxClip: 16,
   },
   Hard: {
     label: "DEEP CUT",
-    description: "For serious Telugu music lovers. Every second matters.",
+    description:
+      "For serious Telugu music lovers. Every second matters.",
     maxClip: 16,
   },
 };
@@ -612,50 +610,118 @@ const musicQuizDifficulties = {
    The quiz randomly picks up to 5 songs from the selected
    difficulty. The radio archive is separate from this list.
    ========================================================= */
+
 const weeklyMusicQuizSongs = {
   Easy: [
     { title: "Nee gundelona", youtubeId: "d3Vnu_tsYPA" },
     { title: "Yesha nagula", youtubeId: "JqFzhcWo3EU" },
     { title: "Neno butterfly", youtubeId: "9dV6Hl2u3vM" },
-    { title: "Mallepoola pallaki", youtubeId: "QnQnz9G2LNw" },
+    { title: "Mallepoola pallakki", youtubeId: "QnQnz9G2LNw" },
     { title: "Oo sayanora", youtubeId: "q5sxzHWvkqk" },
     { title: "Oo rendu prema meghalila", youtubeId: "7BGTwvgxYtU" },
     { title: "Pileche", youtubeId: "CZWSdjqHzZc" },
     { title: "Premalo", youtubeId: "IOopJ-PDpac" },
     { title: "Naa madhi", youtubeId: "NwMaEv8qpOk" },
-    { title: "Andhamaina prema rani", youtubeId: "-I8WpNNboaw" },
+    {
+      title: "Andhamaina prema rani",
+      youtubeId: "-I8WpNNboaw",
+    },
   ],
+
   Medium: [
-    { title: "Yee Maaya Chesave", youtubeId: "zV6d16yukFY" },
-    { title: "Arere Vaanaa", youtubeId: "twA4pHMJrFs" },
-    { title: "Chamka Chamka", youtubeId: "_wAjBV5hFtc" },
-    { title: "Mandaara Poovalle", youtubeId: "cmXLAb-6oeM" },
-    { title: "Pedavi Daatani", youtubeId: "rDaT9ykpFU0" },
-    { title: "Nidura Pothuna", youtubeId: "kbc_zhP6tzk" },
-    { title: "Yamaho Yama", youtubeId: "-GG11neCs_8" },
-    { title: "Srimathi Garu", youtubeId: "sTfl_FCMX4g" },
-    { title: "Meesala Pilla", youtubeId: "A4anPJkdVTY" },
-    { title: "Kathakaadhey", youtubeId: "2k7xkic1aNI" },
+    {
+      title: "Yee Maaya Chesave",
+      youtubeId: "zV6d16yukFY",
+    },
+    {
+      title: "Arere Vaanaa",
+      youtubeId: "twA4pHMJrFs",
+    },
+    {
+      title: "Chamka Chamka",
+      youtubeId: "_wAjBV5hFtc",
+    },
+    {
+      title: "Mandaara Poovalle",
+      youtubeId: "cmXLAb-6oeM",
+    },
+    {
+      title: "Pedavi Daatani",
+      youtubeId: "rDaT9ykpFU0",
+    },
+    {
+      title: "Nidura Pothuna",
+      youtubeId: "kbc_zhP6tzk",
+    },
+    {
+      title: "Yamaho Yama",
+      youtubeId: "-GG11neCs_8",
+    },
+    {
+      title: "Srimathi Garu",
+      youtubeId: "sTfl_FCMX4g",
+    },
+    {
+      title: "Meesala Pilla",
+      youtubeId: "A4anPJkdVTY",
+    },
+    {
+      title: "Kathakaadhey",
+      youtubeId: "2k7xkic1aNI",
+    },
   ],
+
   Hard: [
-    { title: "Palike Gorinka", youtubeId: "U0EyR7y-EJM" },
-    { title: "Kanulu Terichina", youtubeId: "gOf9Zpt8XYg" },
-    { title: "Chinuku Thadiki", youtubeId: "x7vsIXmzjcY" },
-    { title: "Nee Koppulo Na Malle Thota", youtubeId: "SfCx1az2PMM" },
-    { title: "Gelupu Thalapule", youtubeId: "snrYw_nDvCI" },
-    { title: "Gichi Gichi", youtubeId: "umbSwoQ94PM" },
+    {
+      title: "Palike Gorinka",
+      youtubeId: "U0EyR7y-EJM",
+    },
+    {
+      title: "Kanulu Terichina",
+      youtubeId: "gOf9Zpt8XYg",
+    },
+    {
+      title: "Chinuku Thadiki",
+      youtubeId: "x7vsIXmzjcY",
+    },
+    {
+      title: "Nee Koppulo Na Malle Thota",
+      youtubeId: "SfCx1az2PMM",
+    },
+    {
+      title: "Gelupu Thalapule",
+      youtubeId: "snrYw_nDvCI",
+    },
+    {
+      title: "Gichi Gichi",
+      youtubeId: "umbSwoQ94PM",
+    },
     // Same YouTube ID was supplied for both Gichi Gichi and June Pothe.
-    { title: "June Pothe", youtubeId: "umbSwoQ94PM" },
-    { title: "Tella Tellani Cheera", youtubeId: "9p73PtEzqHo" },
-    { title: "Sona Sona", youtubeId: "z3amrmblYDg" },
-    { title: "Kandhi Chenu Kada", youtubeId: "Pg3oIk420eo" },
+    {
+      title: "June Pothe",
+      youtubeId: "umbSwoQ94PM",
+    },
+    {
+      title: "Tella Tellani Cheera",
+      youtubeId: "9p73PtEzqHo",
+    },
+    {
+      title: "Sona Sona",
+      youtubeId: "z3amrmblYDg",
+    },
+    {
+      title: "Kandhi Chenu Kada",
+      youtubeId: "Pg3oIk420eo",
+    },
   ],
 };
 
 const getMusicQuizPool = (difficulty) => {
-  const pool = (weeklyMusicQuizSongs[difficulty] || []).map((song) => ({
-    ...song,
-  }));
+  const pool = (weeklyMusicQuizSongs[difficulty] || []).map(
+    (song) => ({
+      ...song,
+    })
+  );
 
   const seen = new Set();
 
@@ -670,7 +736,6 @@ const getMusicQuizPool = (difficulty) => {
     return true;
   });
 };
-
 
 function shuffleArray(array) {
   const shuffled = [...array];
@@ -687,17 +752,7 @@ function shuffleArray(array) {
   return shuffled;
 }
 
-
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [authChecking, setAuthChecking] = useState(true);
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [otp, setOtp] = useState("");
-  const [otpSent, setOtpSent] = useState(false);
-  const [otpLoading, setOtpLoading] = useState(false);
-  const [otpError, setOtpError] = useState("");
-  const [otpMessage, setOtpMessage] = useState("");
-
   const [name, setName] = useState(
     localStorage.getItem("oohaName") || ""
   );
@@ -708,129 +763,32 @@ function App() {
 
   const [page, setPage] = useState("home");
 
-  useEffect(() => {
-    let mounted = true;
-
-    supabase.auth.getSession().then(({ data }) => {
-      if (!mounted) return;
-      setIsLoggedIn(Boolean(data.session));
-      setAuthChecking(false);
-    });
-
-    const { data: authListener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        setIsLoggedIn(Boolean(session));
-        setAuthChecking(false);
-      }
-    );
-
-    return () => {
-      mounted = false;
-      authListener?.subscription?.unsubscribe();
-    };
-  }, []);
-
-  const formatPhoneNumber = (value) => {
-    const trimmed = value.trim();
-
-    if (trimmed.startsWith("+")) {
-      return "+" + trimmed.slice(1).replace(/\D/g, "");
-    }
-
-    const digits = trimmed.replace(/\D/g, "");
-
-    if (digits.length === 10) {
-      return `+91${digits}`;
-    }
-
-    return `+${digits}`;
-  };
-
-  const sendPhoneOtp = async () => {
-    setOtpError("");
-    setOtpMessage("");
-
-    const formattedPhone = formatPhoneNumber(phoneNumber);
-
-    if (!/^\+\d{8,15}$/.test(formattedPhone)) {
-      setOtpError("Enter a valid phone number.");
-      return;
-    }
-
-    setOtpLoading(true);
-
-    const { error } = await supabase.auth.signInWithOtp({
-      phone: formattedPhone,
-    });
-
-    setOtpLoading(false);
-
-    if (error) {
-      setOtpError(error.message || "Could not send OTP. Please try again.");
-      return;
-    }
-
-    setPhoneNumber(formattedPhone);
-    setOtpSent(true);
-    setOtpMessage("OTP sent. Check your phone.");
-  };
-
-  const verifyPhoneOtp = async () => {
-    setOtpError("");
-    setOtpMessage("");
-
-    if (!/^\d{6}$/.test(otp.trim())) {
-      setOtpError("Enter the 6-digit OTP.");
-      return;
-    }
-
-    setOtpLoading(true);
-
-    const { data, error } = await supabase.auth.verifyOtp({
-      phone: phoneNumber,
-      token: otp.trim(),
-      type: "sms",
-    });
-
-    setOtpLoading(false);
-
-    if (error) {
-      setOtpError(error.message || "Invalid OTP. Please try again.");
-      return;
-    }
-
-    if (data.session) {
-      setIsLoggedIn(true);
-      setOtp("");
-      setOtpMessage("");
-    }
-  };
-
-  const changePhoneNumber = () => {
-    setOtpSent(false);
-    setOtp("");
-    setOtpError("");
-    setOtpMessage("");
-  };
-
   /* =======================================================
      MUSIC MYSTERY QUIZ STATE
      ======================================================= */
 
-  const [musicQuizDifficulty, setMusicQuizDifficulty] = useState(null);
+  const [musicQuizDifficulty, setMusicQuizDifficulty] =
+    useState(null);
   const [musicQuizIndex, setMusicQuizIndex] = useState(0);
   const [musicQuizScore, setMusicQuizScore] = useState(0);
   const [musicQuizCorrect, setMusicQuizCorrect] = useState(0);
   const [musicQuizAttempts, setMusicQuizAttempts] = useState(0);
-  const [musicQuizClipLength, setMusicQuizClipLength] = useState(1);
+  const [musicQuizClipLength, setMusicQuizClipLength] =
+    useState(1);
   const [musicQuizGuess, setMusicQuizGuess] = useState("");
-  const [musicQuizFeedback, setMusicQuizFeedback] = useState(null);
-  const [musicQuizPlaying, setMusicQuizPlaying] = useState(false);
-  const [musicQuizFinished, setMusicQuizFinished] = useState(false);
+  const [musicQuizFeedback, setMusicQuizFeedback] =
+    useState(null);
+  const [musicQuizPlaying, setMusicQuizPlaying] =
+    useState(false);
+  const [musicQuizFinished, setMusicQuizFinished] =
+    useState(false);
   const [musicQuizRound, setMusicQuizRound] = useState([]);
-  const [musicQuizBestScore, setMusicQuizBestScore] = useState(
-    Number(localStorage.getItem("oohaMusicQuizBest") || 0)
-  );
+  const [musicQuizBestScore, setMusicQuizBestScore] =
+    useState(
+      Number(
+        localStorage.getItem("oohaMusicQuizBest") || 0
+      )
+    );
 
   const musicQuizFrameRef = useRef(null);
   const musicQuizPlayerRef = useRef(null);
@@ -857,7 +815,11 @@ function App() {
   const shuffleIndexRef = useRef(-1);
 
   const radioPresenceRef = useRef(null);
-  const presenceKeyRef = useRef(`listener-${Date.now()}-${Math.random().toString(36).slice(2)}`);
+  const presenceKeyRef = useRef(
+    `listener-${Date.now()}-${Math.random()
+      .toString(36)
+      .slice(2)}`
+  );
   const liveStationIdRef = useRef(null);
   const livePlayingRef = useRef(false);
 
@@ -886,11 +848,16 @@ function App() {
      ======================================================= */
 
   useEffect(() => {
-    const channel = supabase.channel("ooha-lokam-live-listeners", {
-      config: {
-        presence: { key: presenceKeyRef.current },
-      },
-    });
+    const channel = supabase.channel(
+      "ooha-lokam-live-listeners",
+      {
+        config: {
+          presence: {
+            key: presenceKeyRef.current,
+          },
+        },
+      }
+    );
 
     radioPresenceRef.current = channel;
 
@@ -902,27 +869,44 @@ function App() {
         counts[station.id] = 0;
       });
 
-      Object.values(presenceState).forEach((presences) => {
-        presences.forEach((presence) => {
-          if (presence.stationId) {
-            counts[presence.stationId] =
-              (counts[presence.stationId] || 0) + 1;
-          }
-        });
-      });
+      Object.values(presenceState).forEach(
+        (presences) => {
+          presences.forEach((presence) => {
+            if (presence.stationId) {
+              counts[presence.stationId] =
+                (counts[presence.stationId] || 0) + 1;
+            }
+          });
+        }
+      );
 
       setListenerCounts(counts);
     };
 
     channel
-      .on("presence", { event: "sync" }, updateListenerCounts)
-      .on("presence", { event: "join" }, updateListenerCounts)
-      .on("presence", { event: "leave" }, updateListenerCounts)
+      .on(
+        "presence",
+        { event: "sync" },
+        updateListenerCounts
+      )
+      .on(
+        "presence",
+        { event: "join" },
+        updateListenerCounts
+      )
+      .on(
+        "presence",
+        { event: "leave" },
+        updateListenerCounts
+      )
       .subscribe((status) => {
         if (status === "SUBSCRIBED") {
           updateListenerCounts();
 
-          if (liveStationIdRef.current && livePlayingRef.current) {
+          if (
+            liveStationIdRef.current &&
+            livePlayingRef.current
+          ) {
             channel.track({
               stationId: liveStationIdRef.current,
               active: true,
@@ -947,7 +931,11 @@ function App() {
 
     const updatePresence = async () => {
       try {
-        if (currentStationId && playing && channel.state === "joined") {
+        if (
+          currentStationId &&
+          playing &&
+          channel.state === "joined"
+        ) {
           await channel.track({
             stationId: currentStationId,
             active: true,
@@ -965,7 +953,10 @@ function App() {
     musicQuizRound[musicQuizIndex];
 
   useEffect(() => {
-    if (page !== "quiz" || !currentMusicQuizQuestion?.youtubeId) {
+    if (
+      page !== "quiz" ||
+      !currentMusicQuizQuestion?.youtubeId
+    ) {
       return;
     }
 
@@ -973,7 +964,11 @@ function App() {
     let interval = null;
 
     const createQuizPlayer = () => {
-      if (cancelled || !window.YT || !window.YT.Player) {
+      if (
+        cancelled ||
+        !window.YT ||
+        !window.YT.Player
+      ) {
         return false;
       }
 
@@ -986,53 +981,66 @@ function App() {
           musicQuizPlayerRef.current.seekTo(0, true);
           musicQuizPlayerReady.current = true;
         } catch {}
+
         return true;
       }
 
-      musicQuizPlayerRef.current = new window.YT.Player(
-        "music-quiz-youtube-player",
-        {
-          videoId: currentMusicQuizQuestion.youtubeId,
-          playerVars: {
-            autoplay: 0,
-            controls: 0,
-            rel: 0,
-            modestbranding: 1,
-            playsinline: 1,
-          },
-          events: {
-            onReady: (event) => {
-              musicQuizPlayerReady.current = true;
-              try {
-                event.target.setVolume(volume);
-                event.target.pauseVideo();
-                event.target.seekTo(0, true);
-              } catch {}
+      musicQuizPlayerRef.current =
+        new window.YT.Player(
+          "music-quiz-youtube-player",
+          {
+            videoId:
+              currentMusicQuizQuestion.youtubeId,
+            playerVars: {
+              autoplay: 0,
+              controls: 0,
+              rel: 0,
+              modestbranding: 1,
+              playsinline: 1,
             },
-            onStateChange: (event) => {
-              if (!window.YT) return;
+            events: {
+              onReady: (event) => {
+                musicQuizPlayerReady.current = true;
 
-              if (event.data === window.YT.PlayerState.PLAYING) {
-                setMusicQuizPlaying(true);
-              }
+                try {
+                  event.target.setVolume(volume);
+                  event.target.pauseVideo();
+                  event.target.seekTo(0, true);
+                } catch {}
+              },
 
-              if (
-                event.data === window.YT.PlayerState.PAUSED ||
-                event.data === window.YT.PlayerState.ENDED
-              ) {
-                setMusicQuizPlaying(false);
-              }
+              onStateChange: (event) => {
+                if (!window.YT) return;
+
+                if (
+                  event.data ===
+                  window.YT.PlayerState.PLAYING
+                ) {
+                  setMusicQuizPlaying(true);
+                }
+
+                if (
+                  event.data ===
+                    window.YT.PlayerState.PAUSED ||
+                  event.data ===
+                    window.YT.PlayerState.ENDED
+                ) {
+                  setMusicQuizPlaying(false);
+                }
+              },
             },
-          },
-        }
-      );
+          }
+        );
 
       return true;
     };
 
     if (!createQuizPlayer()) {
       interval = setInterval(() => {
-        if (createQuizPlayer() && interval) {
+        if (
+          createQuizPlayer() &&
+          interval
+        ) {
           clearInterval(interval);
           interval = null;
         }
@@ -1041,22 +1049,36 @@ function App() {
 
     return () => {
       cancelled = true;
-      if (interval) clearInterval(interval);
+
+      if (interval) {
+        clearInterval(interval);
+      }
+
       if (musicQuizStopTimerRef.current) {
-        clearTimeout(musicQuizStopTimerRef.current);
+        clearTimeout(
+          musicQuizStopTimerRef.current
+        );
         musicQuizStopTimerRef.current = null;
       }
-      if (musicQuizPlayerRef.current && musicQuizPlayerReady.current) {
+
+      if (
+        musicQuizPlayerRef.current &&
+        musicQuizPlayerReady.current
+      ) {
         try {
           musicQuizPlayerRef.current.stopVideo();
         } catch {}
       }
+
       setMusicQuizPlaying(false);
     };
   }, [page, currentMusicQuizQuestion]);
 
   useEffect(() => {
-    if (musicQuizPlayerRef.current && musicQuizPlayerReady.current) {
+    if (
+      musicQuizPlayerRef.current &&
+      musicQuizPlayerReady.current
+    ) {
       try {
         musicQuizPlayerRef.current.setVolume(volume);
       } catch {}
@@ -1075,7 +1097,9 @@ function App() {
     );
 
     return availableSongs[
-      Math.floor(Math.random() * availableSongs.length)
+      Math.floor(
+        Math.random() * availableSongs.length
+      )
     ];
   };
 
@@ -1088,7 +1112,9 @@ function App() {
       return;
     }
 
-    if (document.getElementById("youtube-api")) {
+    if (
+      document.getElementById("youtube-api")
+    ) {
       return;
     }
 
@@ -1192,7 +1218,10 @@ function App() {
         );
     };
 
-    if (window.YT && window.YT.Player) {
+    if (
+      window.YT &&
+      window.YT.Player
+    ) {
       createPlayer();
     } else {
       window.onYouTubeIframeAPIReady =
@@ -1628,14 +1657,21 @@ function App() {
   };
 
   const startMusicQuiz = (difficulty) => {
-    const pool = getMusicQuizPool(difficulty);
+    const pool =
+      getMusicQuizPool(difficulty);
 
     if (pool.length === 0) {
       return;
     }
 
-    const shuffled = shuffleArray(pool);
-    const selected = shuffled.slice(0, Math.min(5, shuffled.length));
+    const shuffled =
+      shuffleArray(pool);
+
+    const selected =
+      shuffled.slice(
+        0,
+        Math.min(5, shuffled.length)
+      );
 
     setMusicQuizDifficulty(difficulty);
     setMusicQuizRound(selected);
@@ -1651,45 +1687,66 @@ function App() {
   };
 
   const playMusicQuizClip = () => {
-    if (!currentMusicQuizQuestion?.youtubeId) {
+    if (
+      !currentMusicQuizQuestion?.youtubeId
+    ) {
       return;
     }
 
-    const player = musicQuizPlayerRef.current;
+    const player =
+      musicQuizPlayerRef.current;
 
-    if (!player || !musicQuizPlayerReady.current) {
+    if (
+      !player ||
+      !musicQuizPlayerReady.current
+    ) {
       return;
     }
 
     try {
-      if (musicQuizStopTimerRef.current) {
-        clearTimeout(musicQuizStopTimerRef.current);
+      if (
+        musicQuizStopTimerRef.current
+      ) {
+        clearTimeout(
+          musicQuizStopTimerRef.current
+        );
       }
 
       player.seekTo(0, true);
       player.playVideo();
       setMusicQuizPlaying(true);
 
-      musicQuizStopTimerRef.current = setTimeout(() => {
-        try {
-          player.pauseVideo();
-          player.seekTo(0, true);
-        } catch {}
+      musicQuizStopTimerRef.current =
+        setTimeout(() => {
+          try {
+            player.pauseVideo();
+            player.seekTo(0, true);
+          } catch {}
 
-        setMusicQuizPlaying(false);
-      }, musicQuizClipLength * 1000);
+          setMusicQuizPlaying(false);
+        }, musicQuizClipLength * 1000);
     } catch {}
   };
 
   const stopMusicQuizClip = () => {
-    if (musicQuizStopTimerRef.current) {
-      clearTimeout(musicQuizStopTimerRef.current);
-      musicQuizStopTimerRef.current = null;
+    if (
+      musicQuizStopTimerRef.current
+    ) {
+      clearTimeout(
+        musicQuizStopTimerRef.current
+      );
+
+      musicQuizStopTimerRef.current =
+        null;
     }
 
-    const player = musicQuizPlayerRef.current;
+    const player =
+      musicQuizPlayerRef.current;
 
-    if (player && musicQuizPlayerReady.current) {
+    if (
+      player &&
+      musicQuizPlayerReady.current
+    ) {
       try {
         player.pauseVideo();
         player.seekTo(0, true);
@@ -1704,19 +1761,31 @@ function App() {
 
     const nextLength = Math.min(
       musicQuizClipLength * 2,
-      musicQuizDifficulties[musicQuizDifficulty]?.maxClip || 16
+      musicQuizDifficulties[
+        musicQuizDifficulty
+      ]?.maxClip || 16
     );
 
-    setMusicQuizClipLength(nextLength);
+    setMusicQuizClipLength(
+      nextLength
+    );
+
     setMusicQuizPlaying(false);
   };
 
-  const submitMusicQuizGuess = (value = musicQuizGuess) => {
+  const submitMusicQuizGuess = (
+    value = musicQuizGuess
+  ) => {
     const questionLocked =
-      musicQuizFeedback?.type === "correct" ||
-      musicQuizFeedback?.type === "wrong";
+      musicQuizFeedback?.type ===
+        "correct" ||
+      musicQuizFeedback?.type ===
+        "wrong";
 
-    if (!currentMusicQuizQuestion || questionLocked) {
+    if (
+      !currentMusicQuizQuestion ||
+      questionLocked
+    ) {
       return;
     }
 
@@ -1724,28 +1793,50 @@ function App() {
       String(text || "")
         .toLowerCase()
         .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/[^a-z0-9]+/g, " ")
+        .replace(
+          /[\u0300-\u036f]/g,
+          ""
+        )
+        .replace(
+          /[^a-z0-9]+/g,
+          " "
+        )
         .trim()
-        .replace(/\s+/g, " ");
+        .replace(
+          /\s+/g,
+          " "
+        );
 
-    const guess = normalizeGuess(value);
+    const guess =
+      normalizeGuess(value);
 
     if (!guess) {
       return;
     }
 
-    const answer = normalizeGuess(currentMusicQuizQuestion.title);
-    const englishTitle = normalizeGuess(
-      currentMusicQuizQuestion.englishTitle || ""
-    );
+    const answer =
+      normalizeGuess(
+        currentMusicQuizQuestion.title
+      );
+
+    const englishTitle =
+      normalizeGuess(
+        currentMusicQuizQuestion
+          .englishTitle || ""
+      );
 
     const correct =
       guess === answer ||
-      (englishTitle && guess === englishTitle);
+      (englishTitle &&
+        guess === englishTitle);
 
-    const nextAttempts = musicQuizAttempts + 1;
-    setMusicQuizAttempts(nextAttempts);
+    const nextAttempts =
+      musicQuizAttempts + 1;
+
+    setMusicQuizAttempts(
+      nextAttempts
+    );
+
     setMusicQuizPlaying(false);
 
     if (correct) {
@@ -1757,11 +1848,29 @@ function App() {
         16: 20,
       };
 
-      const attemptBonus = Math.max(0, 20 - (nextAttempts - 1) * 5);
-      const points = (pointsByClip[musicQuizClipLength] || 20) + attemptBonus;
+      const attemptBonus =
+        Math.max(
+          0,
+          20 -
+            (nextAttempts - 1) * 5
+        );
 
-      setMusicQuizCorrect((previous) => previous + 1);
-      setMusicQuizScore((previous) => previous + points);
+      const points =
+        (pointsByClip[
+          musicQuizClipLength
+        ] || 20) +
+        attemptBonus;
+
+      setMusicQuizCorrect(
+        (previous) =>
+          previous + 1
+      );
+
+      setMusicQuizScore(
+        (previous) =>
+          previous + points
+      );
+
       setMusicQuizFeedback({
         type: "correct",
         points,
@@ -1770,21 +1879,27 @@ function App() {
             ? "Locked it before the radio could breathe."
             : "You found the melody. Nice recovery.",
       });
+
       return;
     }
 
     if (nextAttempts >= 5) {
       setMusicQuizFeedback({
         type: "wrong",
-        message: "Five guesses. The melody wins this round.",
+        message:
+          "Five guesses. The melody wins this round.",
       });
+
       return;
     }
 
     setMusicQuizFeedback({
       type: "retry",
-      message: `Not that one. ${5 - nextAttempts} guesses left.`,
+      message: `Not that one. ${
+        5 - nextAttempts
+      } guesses left.`,
     });
+
     setMusicQuizGuess("");
   };
 
@@ -1793,21 +1908,41 @@ function App() {
       return;
     }
 
-    if (musicQuizIndex >= musicQuizRound.length - 1) {
-      const finalScore = musicQuizScore;
+    if (
+      musicQuizIndex >=
+      musicQuizRound.length - 1
+    ) {
+      const finalScore =
+        musicQuizScore;
 
-      setMusicQuizBestScore((previous) => {
-        const nextBest = Math.max(previous, finalScore);
-        localStorage.setItem("oohaMusicQuizBest", String(nextBest));
-        return nextBest;
-      });
+      setMusicQuizBestScore(
+        (previous) => {
+          const nextBest =
+            Math.max(
+              previous,
+              finalScore
+            );
+
+          localStorage.setItem(
+            "oohaMusicQuizBest",
+            String(nextBest)
+          );
+
+          return nextBest;
+        }
+      );
 
       setMusicQuizFinished(true);
       setMusicQuizPlaying(false);
+
       return;
     }
 
-    setMusicQuizIndex((previous) => previous + 1);
+    setMusicQuizIndex(
+      (previous) =>
+        previous + 1
+    );
+
     setMusicQuizAttempts(0);
     setMusicQuizClipLength(1);
     setMusicQuizGuess("");
@@ -1816,108 +1951,23 @@ function App() {
   };
 
   const getMusicQuizTitle = () => {
-    if (musicQuizScore >= 500) return "RADIO ORACLE";
-    if (musicQuizScore >= 400) return "MELODY MASTER";
-    if (musicQuizScore >= 300) return "ARCHIVE HUNTER";
-    if (musicQuizScore >= 200) return "TUNING PRO";
-    if (musicQuizScore >= 100) return "SONG SCOUT";
+    if (musicQuizScore >= 500)
+      return "RADIO ORACLE";
+
+    if (musicQuizScore >= 400)
+      return "MELODY MASTER";
+
+    if (musicQuizScore >= 300)
+      return "ARCHIVE HUNTER";
+
+    if (musicQuizScore >= 200)
+      return "TUNING PRO";
+
+    if (musicQuizScore >= 100)
+      return "SONG SCOUT";
+
     return "STILL TUNING";
   };
-
-  /* =======================================================
-     PHONE OTP LOGIN
-     ======================================================= */
-
-  if (authChecking) {
-    return (
-      <main className="entrance">
-        <div className="entrance-content">
-          <p className="eyebrow">A TELUGU CINEMA & MUSIC ARCHIVE</p>
-          <h1>ఊహా లోకం</h1>
-          <h2>OOHA LOKAM</h2>
-          <div className="divider"><span>✦</span></div>
-          <p className="tagline">Preparing your archive...</p>
-        </div>
-      </main>
-    );
-  }
-
-  if (!isLoggedIn) {
-    return (
-      <main className="entrance">
-        <div className="entrance-content">
-          <p className="eyebrow">A TELUGU CINEMA & MUSIC ARCHIVE</p>
-          <h1>ఊహా లోకం</h1>
-          <h2>OOHA LOKAM</h2>
-          <div className="divider"><span>✦</span></div>
-          <p className="tagline">
-            Enter with your phone number.
-            <br />
-            We will send you a one-time code.
-          </p>
-
-          <div className="name-box">
-            <label htmlFor="phone-number">PHONE NUMBER</label>
-
-            {!otpSent ? (
-              <>
-                <input
-                  id="phone-number"
-                  type="tel"
-                  inputMode="tel"
-                  autoComplete="tel"
-                  placeholder="+91 98765 43210"
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") sendPhoneOtp();
-                  }}
-                />
-
-                <button onClick={sendPhoneOtp} disabled={otpLoading}>
-                  {otpLoading ? "SENDING OTP..." : "SEND OTP"}
-                </button>
-              </>
-            ) : (
-              <>
-                <input
-                  id="phone-otp"
-                  type="text"
-                  inputMode="numeric"
-                  autoComplete="one-time-code"
-                  maxLength={6}
-                  placeholder="Enter 6-digit OTP"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") verifyPhoneOtp();
-                  }}
-                />
-
-                <button onClick={verifyPhoneOtp} disabled={otpLoading}>
-                  {otpLoading ? "VERIFYING..." : "VERIFY OTP"}
-                </button>
-
-                <button
-                  type="button"
-                  className="secondary-action"
-                  onClick={changePhoneNumber}
-                  disabled={otpLoading}
-                >
-                  CHANGE NUMBER
-                </button>
-              </>
-            )}
-
-            {otpMessage && <p className="auth-message">{otpMessage}</p>}
-            {otpError && <p className="auth-error">{otpError}</p>}
-          </div>
-
-          <p className="footer-text">Songs • Cinema • Memories</p>
-        </div>
-      </main>
-    );
-  }
 
   /* =======================================================
      ENTRANCE
@@ -1926,18 +1976,14 @@ function App() {
   if (!entered) {
     return (
       <main className="entrance">
-
         <div className="entrance-content">
-
           <p className="eyebrow">
             A TELUGU CINEMA & MUSIC ARCHIVE
           </p>
 
           <h1>ఊహా లోకం</h1>
 
-          <h2>
-            OOHA LOKAM
-          </h2>
+          <h2>OOHA LOKAM</h2>
 
           <div className="divider">
             <span>✦</span>
@@ -1949,7 +1995,6 @@ function App() {
           </p>
 
           <div className="name-box">
-
             <label htmlFor="name">
               ENTER YOUR NAME
             </label>
@@ -1969,18 +2014,17 @@ function App() {
               }}
             />
 
-            <button onClick={enterArchive}>
+            <button
+              onClick={enterArchive}
+            >
               ENTER THE ARCHIVE
             </button>
-
           </div>
 
           <p className="footer-text">
             Songs • Cinema • Memories
           </p>
-
         </div>
-
       </main>
     );
   }
@@ -1991,7 +2035,6 @@ function App() {
 
   return (
     <main className="app">
-
       <div className="persistent-youtube-container">
         <div id="persistent-youtube-player"></div>
       </div>
@@ -2002,35 +2045,24 @@ function App() {
 
       {page === "home" && (
         <main className="home-page">
-
           <header className="home-header">
-
             <div>
               <p className="small-title">
                 TELUGU CINEMA & MUSIC ARCHIVE
               </p>
 
-              <h1>
-                ఊహా లోకం
-              </h1>
+              <h1>ఊహా లోకం</h1>
             </div>
 
             <div className="header-user-area">
-
               <div className="user-name">
                 Welcome,{" "}
-                <strong>
-                  {name}
-                </strong>
+                <strong>{name}</strong>
               </div>
-
-
             </div>
-
           </header>
 
           <section className="hero">
-
             <p className="hero-label">
               WELCOME TO THE ARCHIVE
             </p>
@@ -2046,18 +2078,13 @@ function App() {
               discover cinema memories and keep
               your listening streak alive.
             </p>
-
           </section>
 
           <section className="archive-grid">
-
             <div className="archive-card">
-
               <span>📻</span>
 
-              <h3>
-                MUSIC RADIO
-              </h3>
+              <h3>MUSIC RADIO</h3>
 
               <p>
                 Five stations • 1960s to today
@@ -2070,16 +2097,12 @@ function App() {
               >
                 TUNE INTO RADIO
               </button>
-
             </div>
 
             <div className="archive-card">
-
               <span>♫</span>
 
-              <h3>
-                MUSIC MYSTERY
-              </h3>
+              <h3>MUSIC MYSTERY</h3>
 
               <p>
                 Guess songs • Chase melodies • Score points
@@ -2093,16 +2116,12 @@ function App() {
               >
                 PLAY QUIZ
               </button>
-
             </div>
 
             <div className="archive-card">
-
               <span>🏆</span>
 
-              <h3>
-                REWARDS
-              </h3>
+              <h3>REWARDS</h3>
 
               <p>
                 Points • Streaks • Daily Rewards
@@ -2115,23 +2134,16 @@ function App() {
               >
                 VIEW REWARDS
               </button>
-
             </div>
-
           </section>
 
           <footer>
-
-            <p>
-              ఊహా లోకం
-            </p>
+            <p>ఊహా లోకం</p>
 
             <span>
               Songs • Cinema • Memories
             </span>
-
           </footer>
-
         </main>
       )}
 
@@ -2141,7 +2153,6 @@ function App() {
 
       {page === "music" && (
         <main className="radio-page">
-
           <button
             className="back-button"
             onClick={() =>
@@ -2152,10 +2163,7 @@ function App() {
           </button>
 
           <section className="radio-heading">
-
-            <p>
-              OOHA LOKAM BROADCAST
-            </p>
+            <p>OOHA LOKAM BROADCAST</p>
 
             <h1>
               📻 ఊహా లోకం రేడియో
@@ -2165,33 +2173,24 @@ function App() {
               Tune in. Close your eyes.
               Let the memories play.
             </span>
-
           </section>
 
           <section className="vintage-radio">
-
             <div className="radio-brand">
-
-              <div>
-                OOHA LOKAM
-              </div>
+              <div>OOHA LOKAM</div>
 
               <span>
                 TELUGU CINEMA RADIO
               </span>
-
             </div>
 
             <div className="radio-main">
-
               <div className="radio-tuning">
-
                 <div className="dial-label">
                   FM / MEMORY
                 </div>
 
                 <div className="frequency-dial">
-
                   <div className="frequency-numbers">
                     <span>88</span>
                     <span>92</span>
@@ -2201,7 +2200,6 @@ function App() {
                   </div>
 
                   <div className="dial-line">
-
                     <div
                       className="dial-pointer"
                       style={{
@@ -2214,7 +2212,6 @@ function App() {
                           : "50%",
                       }}
                     />
-
                   </div>
 
                   <div className="dial-glow">
@@ -2222,11 +2219,9 @@ function App() {
                       ? currentStation.frequency
                       : "----"}
                   </div>
-
                 </div>
 
                 <div className="station-display">
-
                   <small>
                     {currentStation
                       ? "NOW TUNED"
@@ -2244,11 +2239,9 @@ function App() {
                       ? currentStation.era
                       : "TELUGU CINEMA RADIO"}
                   </span>
-
                 </div>
 
                 <div className="radio-status">
-
                   <span
                     className={
                       playing
@@ -2262,15 +2255,11 @@ function App() {
                     : currentStation
                     ? "STATION READY"
                     : "RADIO READY"}
-
                 </div>
-
               </div>
 
               <div className="speaker-panel">
-
                 <div className="speaker-label">
-
                   <span>
                     {currentSong
                       ? "NOW PLAYING"
@@ -2295,11 +2284,9 @@ function App() {
                         }`
                       : "Five stations • endless memories"}
                   </small>
-
                 </div>
 
                 <div className="speaker-grille">
-
                   {Array.from({
                     length: 11,
                   }).map((_, index) => (
@@ -2308,15 +2295,11 @@ function App() {
                       className="speaker-line"
                     />
                   ))}
-
                 </div>
-
               </div>
-
             </div>
 
             <div className="radio-controls">
-
               <button
                 className="radio-knob-button"
                 onClick={
@@ -2342,6 +2325,7 @@ function App() {
                 }
               >
                 <span>⤨</span>
+
                 <small>
                   {shuffle
                     ? "ON"
@@ -2373,10 +2357,7 @@ function App() {
               </button>
 
               <div className="radio-volume">
-
-                <span>
-                  VOL
-                </span>
+                <span>VOL</span>
 
                 <input
                   type="range"
@@ -2385,14 +2366,11 @@ function App() {
                   value={volume}
                   onChange={changeVolume}
                 />
-
               </div>
-
             </div>
 
             {currentSong && (
               <div className="radio-progress">
-
                 <span>
                   {formatTime(
                     currentTime
@@ -2417,14 +2395,11 @@ function App() {
                 <span>
                   {formatTime(duration)}
                 </span>
-
               </div>
             )}
 
             <div className="station-section">
-
               <div className="station-section-title">
-
                 <span>
                   RADIO PRESETS
                 </span>
@@ -2432,14 +2407,11 @@ function App() {
                 <small>
                   SELECT YOUR ERA
                 </small>
-
               </div>
 
               <div className="station-presets">
-
                 {radioStations.map(
                   (station, index) => {
-
                     const playable =
                       getStationSongs(
                         station
@@ -2460,13 +2432,11 @@ function App() {
                           )
                         }
                       >
-
                         <div className="preset-number">
                           0{index + 1}
                         </div>
 
                         <div className="preset-info">
-
                           <strong>
                             {station.name}
                           </strong>
@@ -2479,22 +2449,26 @@ function App() {
                             {station.era}
                           </small>
 
-                           <small
-                             style={{
-                               display: "block",
-                               marginTop: "4px",
-                               color:
-                                 currentStationId === station.id && playing
-                                   ? "#ffb84d"
-                                   : "#8a6b4d",
-                               fontSize: "9px",
-                               fontWeight: "bold",
-                               letterSpacing: "0.8px",
-                             }}
-                           >
-                             ● LIVE {listenerCounts[station.id] || 0}
-                           </small>
-
+                          <small
+                            style={{
+                              display: "block",
+                              marginTop: "4px",
+                              color:
+                                currentStationId ===
+                                  station.id &&
+                                playing
+                                  ? "#ffb84d"
+                                  : "#8a6b4d",
+                              fontSize: "9px",
+                              fontWeight: "bold",
+                              letterSpacing: "0.8px",
+                            }}
+                          >
+                            ● LIVE{" "}
+                            {listenerCounts[
+                              station.id
+                            ] || 0}
+                          </small>
                         </div>
 
                         <div className="preset-frequency">
@@ -2502,30 +2476,23 @@ function App() {
                         </div>
 
                         <div className="preset-light">
-
                           {currentStationId ===
                           station.id
                             ? "●"
                             : playable
                             ? "○"
                             : "—"}
-
                         </div>
-
                       </button>
                     );
                   }
                 )}
-
               </div>
-
             </div>
 
             {currentStation && (
               <div className="broadcast-info">
-
                 <div>
-
                   <span>
                     CURRENT STATION
                   </span>
@@ -2533,11 +2500,9 @@ function App() {
                   <strong>
                     {currentStation.name}
                   </strong>
-
                 </div>
 
                 <div>
-
                   <span>
                     BROADCAST ERA
                   </span>
@@ -2545,41 +2510,36 @@ function App() {
                   <strong>
                     {currentStation.era}
                   </strong>
-
                 </div>
 
                 <div>
-
-                  <span>
-                    PLAYLIST
-                  </span>
+                  <span>PLAYLIST</span>
 
                   <strong>
                     {stationSongs.length
                       ? `${stationSongs.length} melodies`
                       : "COMING SOON"}
                   </strong>
-
                 </div>
 
                 <div>
                   <span>
                     LIVE LISTENERS
                   </span>
+
                   <strong>
-                    ● {listenerCounts[currentStation.id] || 0}
+                    ●{" "}
+                    {listenerCounts[
+                      currentStation.id
+                    ] || 0}
                   </strong>
                 </div>
-
               </div>
             )}
 
             {!currentStation && (
               <div className="radio-welcome">
-
-                <div>
-                  ✦
-                </div>
+                <div>✦</div>
 
                 <h2>
                   Choose your station
@@ -2589,17 +2549,13 @@ function App() {
                   Five eras. One radio.
                   Countless memories.
                 </p>
-
               </div>
             )}
 
             {currentStation &&
               stationSongs.length === 0 && (
                 <div className="radio-welcome">
-
-                  <div>
-                    ♫
-                  </div>
+                  <div>♫</div>
 
                   <h2>
                     More melodies coming soon
@@ -2609,13 +2565,11 @@ function App() {
                     This station is ready.
                     We're waiting for its songs.
                   </p>
-
                 </div>
               )}
 
             {currentSong && (
               <div className="radio-extra">
-
                 <button
                   className="radio-video-button"
                   onClick={() =>
@@ -2635,14 +2589,12 @@ function App() {
                 >
                   ⏻ POWER OFF
                 </button>
-
               </div>
             )}
 
             {showVideo &&
               currentSong?.youtubeId && (
                 <div className="radio-video">
-
                   <iframe
                     src={`https://www.youtube.com/embed/${currentSong.youtubeId}?rel=0`}
                     title={
@@ -2651,12 +2603,10 @@ function App() {
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                     allowFullScreen
                   />
-
                 </div>
               )}
 
             <div className="radio-bottom">
-
               <span>
                 ◉ ANALOG MEMORY BROADCAST
               </span>
@@ -2664,11 +2614,8 @@ function App() {
               <span>
                 SONG • CINEMA • MEMORY
               </span>
-
             </div>
-
           </section>
-
         </main>
       )}
 
@@ -2678,10 +2625,11 @@ function App() {
 
       {page === "rewards" && (
         <main className="rewards-page">
-
           <button
             className="back-button"
-            onClick={() => setPage("home")}
+            onClick={() =>
+              setPage("home")
+            }
           >
             ← BACK TO ఊహా లోకం
           </button>
@@ -2689,10 +2637,13 @@ function App() {
           <section className="rewards-header">
             <p>OOHA LOKAM HONOURS</p>
 
-            <h1>✦ Your Cinema Rewards ✦</h1>
+            <h1>
+              ✦ Your Cinema Rewards ✦
+            </h1>
 
             <span>
-              For those who listened, guessed, and somehow survived.
+              For those who listened, guessed,
+              and somehow survived.
             </span>
           </section>
 
@@ -2700,7 +2651,11 @@ function App() {
             <div className="reward-stat">
               <span>STREAK</span>
               <strong>{streak}</strong>
-              <small>DAY{streak === 1 ? "" : "S"} ON AIR</small>
+
+              <small>
+                DAY
+                {streak === 1 ? "" : "S"} ON AIR
+              </small>
             </div>
 
             <div className="reward-stat">
@@ -2711,8 +2666,12 @@ function App() {
 
             <div className="reward-stat">
               <span>SCORE</span>
-              <strong>{streak * 10}</strong>
-              <small>ARCHIVE POINTS</small>
+              <strong>
+                {streak * 10}
+              </strong>
+              <small>
+                ARCHIVE POINTS
+              </small>
             </div>
           </section>
 
@@ -2722,7 +2681,9 @@ function App() {
             </div>
 
             <div className="streak-content">
-              <p>DAILY LISTENING STREAK</p>
+              <p>
+                DAILY LISTENING STREAK
+              </p>
 
               <h2>
                 {streak === 0
@@ -2735,11 +2696,20 @@ function App() {
               </h2>
 
               <span>
-                Listen every day, keep the streak alive, and collect your ridiculous little honours.
+                Listen every day, keep the streak alive,
+                and collect your ridiculous little honours.
               </span>
 
               <div className="streak-days">
-                {[1, 2, 3, 4, 5, 6, 7].map((day) => (
+                {[
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7,
+                ].map((day) => (
                   <div
                     key={day}
                     className={
@@ -2748,7 +2718,12 @@ function App() {
                         : "streak-day"
                     }
                   >
-                    <span>{streak >= day ? "✓" : day}</span>
+                    <span>
+                      {streak >= day
+                        ? "✓"
+                        : day}
+                    </span>
+
                     <small>DAY</small>
                   </div>
                 ))}
@@ -2758,10 +2733,17 @@ function App() {
 
           <section className="rewards-list">
             <div className="rewards-section-heading">
-              <p>THE OOHA LOKAM HONOURS</p>
-              <h2>Milestones &amp; Nonsense</h2>
+              <p>
+                THE OOHA LOKAM HONOURS
+              </p>
+
+              <h2>
+                Milestones &amp; Nonsense
+              </h2>
+
               <span>
-                Some achievements are prestigious. Some are just here for the drama.
+                Some achievements are prestigious.
+                Some are just here for the drama.
               </span>
             </div>
 
@@ -2834,22 +2816,32 @@ function App() {
                 >
                   <div className="milestone-top">
                     <span>{item[0]}</span>
+
                     <strong>
-                      {streak >= item[3] ? "UNLOCKED" : "LOCKED"}
+                      {streak >= item[3]
+                        ? "UNLOCKED"
+                        : "LOCKED"}
                     </strong>
                   </div>
 
                   <div className="milestone-seal">
-                    {streak >= item[3] ? "✦" : "○"}
+                    {streak >= item[3]
+                      ? "✦"
+                      : "○"}
                   </div>
 
                   <h3>{item[1]}</h3>
+
                   <p>{item[2]}</p>
 
                   <small>
                     {streak >= item[3]
                       ? item[4]
-                      : `Unlock at ${item[3]} day${item[3] === 1 ? "" : "s"}`}
+                      : `Unlock at ${item[3]} day${
+                          item[3] === 1
+                            ? ""
+                            : "s"
+                        }`}
                   </small>
                 </div>
               ))}
@@ -2858,21 +2850,25 @@ function App() {
 
           <section className="rewards-quote-card">
             <span>“</span>
+
             <p>
               Rewards are imaginary.
               <br />
               The bragging rights are real.
             </p>
-            <small>— OOHA LOKAM ARCHIVE DEPARTMENT</small>
+
+            <small>
+              — OOHA LOKAM ARCHIVE DEPARTMENT
+            </small>
           </section>
 
           <section className="rewards-note">
             <span>✦</span>
+
             <p>
               Your progress is saved on this device automatically.
             </p>
           </section>
-
         </main>
       )}
 
@@ -2914,12 +2910,15 @@ function App() {
                   background:
                     "linear-gradient(145deg, rgba(90,48,25,0.96), rgba(43,22,12,0.98))",
                   padding: "28px",
-                  boxShadow: "0 15px 40px rgba(0,0,0,0.45)",
+                  boxShadow:
+                    "0 15px 40px rgba(0,0,0,0.45)",
                 }}
               >
                 <p
                   className="small-title"
-                  style={{ color: "#c69750" }}
+                  style={{
+                    color: "#c69750",
+                  }}
                 >
                   OOHA LOKAM MUSIC ARCHIVE
                 </p>
@@ -2927,8 +2926,10 @@ function App() {
                 <h1
                   style={{
                     margin: "8px 0 4px",
-                    fontFamily: "Georgia, serif",
-                    fontSize: "clamp(32px, 6vw, 62px)",
+                    fontFamily:
+                      "Georgia, serif",
+                    fontSize:
+                      "clamp(32px, 6vw, 62px)",
                     color: "#f5dfb0",
                   }}
                 >
@@ -2943,61 +2944,106 @@ function App() {
                     lineHeight: 1.7,
                   }}
                 >
-                  Tune into a mystery melody. Listen carefully and identify the song before your chances run out,
-                  trust your ears and lock your guess. Five transmissions. One score.
+                  Tune into a mystery melody.
+                  Listen carefully and identify
+                  the song before your chances run
+                  out, trust your ears and lock your
+                  guess. Five transmissions. One score.
                 </p>
 
                 <div
                   style={{
                     marginTop: "25px",
                     display: "grid",
-                    gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
+                    gridTemplateColumns:
+                      "repeat(auto-fit, minmax(150px, 1fr))",
                     gap: "10px",
                   }}
                 >
-                  {Object.entries(musicQuizDifficulties).map(
-                    ([difficulty, config]) => {
+                  {Object.entries(
+                    musicQuizDifficulties
+                  ).map(
+                    ([
+                      difficulty,
+                      config,
+                    ]) => {
                       const availableSongs =
-                        getMusicQuizPool(difficulty).length > 0;
+                        getMusicQuizPool(
+                          difficulty
+                        ).length > 0;
 
                       return (
-                      <button
-                        key={difficulty}
-                        onClick={() => startMusicQuiz(difficulty)}
-                        disabled={!availableSongs}
-                        style={{
-                          padding: "17px 14px",
-                          border: "1px solid #8a5b2d",
-                          background: availableSongs ? "#281308" : "#1d0d06",
-                          color: availableSongs ? "#f4e6c7" : "#765b3f",
-                          cursor: availableSongs ? "pointer" : "not-allowed",
-                          opacity: availableSongs ? 1 : 0.65,
-                          textAlign: "left",
-                          transition: "transform 0.2s ease, border-color 0.2s ease",
-                        }}
-                      >
-                        <strong
+                        <button
+                          key={difficulty}
+                          onClick={() =>
+                            startMusicQuiz(
+                              difficulty
+                            )
+                          }
+                          disabled={
+                            !availableSongs
+                          }
                           style={{
-                            display: "block",
-                            color: "#ffb84d",
-                            letterSpacing: "1px",
-                            fontSize: "13px",
+                            padding:
+                              "17px 14px",
+                            border:
+                              "1px solid #8a5b2d",
+                            background:
+                              availableSongs
+                                ? "#281308"
+                                : "#1d0d06",
+                            color:
+                              availableSongs
+                                ? "#f4e6c7"
+                                : "#765b3f",
+                            cursor:
+                              availableSongs
+                                ? "pointer"
+                                : "not-allowed",
+                            opacity:
+                              availableSongs
+                                ? 1
+                                : 0.65,
+                            textAlign:
+                              "left",
+                            transition:
+                              "transform 0.2s ease, border-color 0.2s ease",
                           }}
                         >
-                          {difficulty.toUpperCase()}
-                        </strong>
-                        <span
-                          style={{
-                            display: "block",
-                            marginTop: "7px",
-                            color: "#d8c29d",
-                            fontSize: "11px",
-                            lineHeight: 1.4,
-                          }}
-                        >
-                          {config.description}
-                        </span>
-                      </button>
+                          <strong
+                            style={{
+                              display:
+                                "block",
+                              color:
+                                "#ffb84d",
+                              letterSpacing:
+                                "1px",
+                              fontSize:
+                                "13px",
+                            }}
+                          >
+                            {difficulty.toUpperCase()}
+                          </strong>
+
+                          <span
+                            style={{
+                              display:
+                                "block",
+                              marginTop:
+                                "7px",
+                              color:
+                                "#d8c29d",
+                              fontSize:
+                                "11px",
+                              lineHeight:
+                                1.4,
+                            }}
+                          >
+                            {
+                              config.description
+                            }
+                          </span>
+                        </button>
                       );
                     }
                   )}
@@ -3011,13 +3057,26 @@ function App() {
                     gap: "16px",
                     color: "#a88d69",
                     fontSize: "12px",
-                    letterSpacing: "0.5px",
+                    letterSpacing:
+                      "0.5px",
                   }}
                 >
-                  <span>5 TRANSMISSIONS</span>
-                  <span>5 GUESSES MAX</span>
-                  <span>1s → 2s → 4s → 8s → 16s</span>
-                  <span>BEST: {musicQuizBestScore}</span>
+                  <span>
+                    5 TRANSMISSIONS
+                  </span>
+
+                  <span>
+                    5 GUESSES MAX
+                  </span>
+
+                  <span>
+                    1s → 2s → 4s → 8s → 16s
+                  </span>
+
+                  <span>
+                    BEST:{" "}
+                    {musicQuizBestScore}
+                  </span>
                 </div>
               </div>
             </section>
@@ -3035,41 +3094,71 @@ function App() {
                 <div
                   style={{
                     display: "flex",
-                    justifyContent: "space-between",
+                    justifyContent:
+                      "space-between",
                     alignItems: "end",
                     gap: "15px",
                     flexWrap: "wrap",
-                    marginBottom: "14px",
+                    marginBottom:
+                      "14px",
                   }}
                 >
                   <div>
                     <p
                       className="small-title"
-                      style={{ color: "#b8893c" }}
-                    >
-                      {musicQuizDifficulties[musicQuizDifficulty].label}
-                    </p>
-                    <h2
                       style={{
-                        margin: "4px 0",
-                        fontFamily: "Georgia, serif",
-                        fontSize: "clamp(28px, 5vw, 46px)",
-                        color: "#f4e6c7",
+                        color: "#b8893c",
                       }}
                     >
-                      TRANSMISSION {String(musicQuizIndex + 1).padStart(2, "0")}
+                      {
+                        musicQuizDifficulties[
+                          musicQuizDifficulty
+                        ].label
+                      }
+                    </p>
+
+                    <h2
+                      style={{
+                        margin:
+                          "4px 0",
+                        fontFamily:
+                          "Georgia, serif",
+                        fontSize:
+                          "clamp(28px, 5vw, 46px)",
+                        color:
+                          "#f4e6c7",
+                      }}
+                    >
+                      TRANSMISSION{" "}
+                      {String(
+                        musicQuizIndex +
+                          1
+                      ).padStart(
+                        2,
+                        "0"
+                      )}
                     </h2>
                   </div>
 
                   <div
                     style={{
-                      textAlign: "right",
-                      color: "#b99d78",
-                      fontSize: "12px",
+                      textAlign:
+                        "right",
+                      color:
+                        "#b99d78",
+                      fontSize:
+                        "12px",
                     }}
                   >
-                    <div>DIFFICULTY: {musicQuizDifficulty.toUpperCase()}</div>
-                    <div>POINTS: {musicQuizScore}</div>
+                    <div>
+                      DIFFICULTY:{" "}
+                      {musicQuizDifficulty.toUpperCase()}
+                    </div>
+
+                    <div>
+                      POINTS:{" "}
+                      {musicQuizScore}
+                    </div>
                   </div>
                 </div>
 
@@ -3077,104 +3166,153 @@ function App() {
                   style={{
                     display: "flex",
                     gap: "5px",
-                    marginBottom: "18px",
+                    marginBottom:
+                      "18px",
                   }}
                 >
-                  {musicQuizRound.map((_, index) => (
-                    <div
-                      key={index}
-                      style={{
-                        flex: 1,
-                        height: "7px",
-                        background:
-                          index < musicQuizIndex
-                            ? "#b8893c"
-                            : index === musicQuizIndex
-                            ? "#ffb84d"
-                            : "#382417",
-                      }}
-                    />
-                  ))}
+                  {musicQuizRound.map(
+                    (_, index) => (
+                      <div
+                        key={index}
+                        style={{
+                          flex: 1,
+                          height: "7px",
+                          background:
+                            index <
+                            musicQuizIndex
+                              ? "#b8893c"
+                              : index ===
+                                musicQuizIndex
+                              ? "#ffb84d"
+                              : "#382417",
+                        }}
+                      />
+                    )
+                  )}
                 </div>
 
                 <div
                   style={{
-                    border: "2px solid #68402a",
-                    background: "#160d08",
+                    border:
+                      "2px solid #68402a",
+                    background:
+                      "#160d08",
                     padding: "18px",
-                    boxShadow: "0 18px 40px rgba(0,0,0,0.35)",
+                    boxShadow:
+                      "0 18px 40px rgba(0,0,0,0.35)",
                   }}
                 >
                   <div
                     style={{
-                      minHeight: "250px",
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-                      alignItems: "center",
-                      textAlign: "center",
-                      border: "1px solid #3c2819",
+                      minHeight:
+                        "250px",
+                      display:
+                        "flex",
+                      flexDirection:
+                        "column",
+                      justifyContent:
+                        "center",
+                      alignItems:
+                        "center",
+                      textAlign:
+                        "center",
+                      border:
+                        "1px solid #3c2819",
                       background:
                         "radial-gradient(circle, rgba(255,184,77,0.08), transparent 52%), #211209",
-                      position: "relative",
-                      overflow: "hidden",
+                      position:
+                        "relative",
+                      overflow:
+                        "hidden",
                     }}
                   >
                     <div
                       style={{
-                        fontSize: "70px",
-                        color: musicQuizPlaying ? "#ffb84d" : "#765b3f",
-                        textShadow: musicQuizPlaying
-                          ? "0 0 24px rgba(255,184,77,0.55)"
-                          : "none",
-                        transition: "all 0.2s ease",
+                        fontSize:
+                          "70px",
+                        color:
+                          musicQuizPlaying
+                            ? "#ffb84d"
+                            : "#765b3f",
+                        textShadow:
+                          musicQuizPlaying
+                            ? "0 0 24px rgba(255,184,77,0.55)"
+                            : "none",
+                        transition:
+                          "all 0.2s ease",
                       }}
                     >
-                      {musicQuizPlaying ? "◖)))" : "♫"}
+                      {musicQuizPlaying
+                        ? "◖)))"
+                        : "♫"}
                     </div>
 
                     <strong
                       style={{
-                        marginTop: "8px",
-                        letterSpacing: "2px",
-                        color: "#d8c29d",
-                        fontSize: "12px",
+                        marginTop:
+                          "8px",
+                        letterSpacing:
+                          "2px",
+                        color:
+                          "#d8c29d",
+                        fontSize:
+                          "12px",
                       }}
                     >
-                      {musicQuizPlaying ? "ON AIR" : "MYSTERY MELODY"}
+                      {musicQuizPlaying
+                        ? "ON AIR"
+                        : "MYSTERY MELODY"}
                     </strong>
 
                     <span
                       style={{
-                        marginTop: "8px",
-                        color: "#8f7558",
-                        fontSize: "11px",
+                        marginTop:
+                          "8px",
+                        color:
+                          "#8f7558",
+                        fontSize:
+                          "11px",
                       }}
                     >
-                      Clip window: {musicQuizClipLength}s
+                      Clip window:{" "}
+                      {
+                        musicQuizClipLength
+                      }
+                      s
                     </span>
 
                     <div
                       id="music-quiz-youtube-player"
-                      ref={musicQuizFrameRef}
+                      ref={
+                        musicQuizFrameRef
+                      }
                       style={{
-                        position: "absolute",
-                        width: "1px",
-                        height: "1px",
+                        position:
+                          "absolute",
+                        width:
+                          "1px",
+                        height:
+                          "1px",
                         opacity: 0,
-                        pointerEvents: "none",
+                        pointerEvents:
+                          "none",
                       }}
                     />
                   </div>
 
                   <div
                     style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
+                      display:
+                        "flex",
+                      justifyContent:
+                        "center",
+                      alignItems:
+                        "center",
                       gap: "18px",
-                      padding: "22px 0 18px",
-                      flexWrap: "wrap",
+                      padding:
+                        "22px 0 18px",
+                      flexWrap:
+                        "wrap",
                     }}
                   >
                     <button
@@ -3184,43 +3322,67 @@ function App() {
                           : playMusicQuizClip
                       }
                       disabled={
-                        musicQuizFeedback?.type === "correct" ||
-                        musicQuizFeedback?.type === "wrong"
+                        musicQuizFeedback?.type ===
+                          "correct" ||
+                        musicQuizFeedback?.type ===
+                          "wrong"
                       }
                       style={{
-                        width: "82px",
-                        height: "82px",
-                        borderRadius: "50%",
-                        border: "3px solid #d49a45",
-                        background: "#6f431f",
-                        color: "#ffe5ac",
-                        fontSize: "30px",
-                        cursor: "pointer",
-                        boxShadow: "0 0 24px rgba(255,184,77,0.18)",
+                        width:
+                          "82px",
+                        height:
+                          "82px",
+                        borderRadius:
+                          "50%",
+                        border:
+                          "3px solid #d49a45",
+                        background:
+                          "#6f431f",
+                        color:
+                          "#ffe5ac",
+                        fontSize:
+                          "30px",
+                        cursor:
+                          "pointer",
+                        boxShadow:
+                          "0 0 24px rgba(255,184,77,0.18)",
                       }}
                     >
-                      {musicQuizPlaying ? "Ⅱ" : "▶"}
+                      {musicQuizPlaying
+                        ? "Ⅱ"
+                        : "▶"}
                     </button>
 
                     <div
                       style={{
-                        minWidth: "150px",
-                        textAlign: "center",
+                        minWidth:
+                          "150px",
+                        textAlign:
+                          "center",
                       }}
                     >
                       <strong
                         style={{
-                          display: "block",
-                          color: "#ffb84d",
-                          fontSize: "25px",
+                          display:
+                            "block",
+                          color:
+                            "#ffb84d",
+                          fontSize:
+                            "25px",
                         }}
                       >
-                        {musicQuizClipLength}s
+                        {
+                          musicQuizClipLength
+                        }
+                        s
                       </strong>
+
                       <small
                         style={{
-                          color: "#967b5c",
-                          letterSpacing: "1px",
+                          color:
+                            "#967b5c",
+                          letterSpacing:
+                            "1px",
                         }}
                       >
                         AUDIO WINDOW
@@ -3228,21 +3390,34 @@ function App() {
                     </div>
 
                     <button
-                      onClick={skipMusicQuizClip}
+                      onClick={
+                        skipMusicQuizClip
+                      }
                       disabled={
-                        Boolean(musicQuizFeedback) ||
+                        Boolean(
+                          musicQuizFeedback
+                        ) ||
                         musicQuizClipLength >=
-                        musicQuizDifficulties[musicQuizDifficulty].maxClip
+                          musicQuizDifficulties[
+                            musicQuizDifficulty
+                          ].maxClip
                       }
                       style={{
-                        padding: "13px 18px",
-                        border: "1px solid #8a5b2d",
-                        background: "#241208",
-                        color: "#d9bd8c",
-                        cursor: "pointer",
+                        padding:
+                          "13px 18px",
+                        border:
+                          "1px solid #8a5b2d",
+                        background:
+                          "#241208",
+                        color:
+                          "#d9bd8c",
+                        cursor:
+                          "pointer",
                         opacity:
                           musicQuizClipLength >=
-                          musicQuizDifficulties[musicQuizDifficulty].maxClip
+                          musicQuizDifficulties[
+                            musicQuizDifficulty
+                          ].maxClip
                             ? 0.45
                             : 1,
                       }}
@@ -3253,90 +3428,149 @@ function App() {
 
                   <div
                     style={{
-                      display: "grid",
-                      gridTemplateColumns: "repeat(5, 1fr)",
+                      display:
+                        "grid",
+                      gridTemplateColumns:
+                        "repeat(5, 1fr)",
                       gap: "5px",
-                      marginBottom: "20px",
+                      marginBottom:
+                        "20px",
                     }}
                   >
-                    {[1, 2, 4, 8, 16].map((second) => (
-                      <div
-                        key={second}
-                        style={{
-                          height: "5px",
-                          background:
-                            second <= musicQuizClipLength
-                              ? "#b8893c"
-                              : "#302015",
-                        }}
-                      />
-                    ))}
+                    {[1, 2, 4, 8, 16].map(
+                      (second) => (
+                        <div
+                          key={second}
+                          style={{
+                            height:
+                              "5px",
+                            background:
+                              second <=
+                              musicQuizClipLength
+                                ? "#b8893c"
+                                : "#302015",
+                          }}
+                        />
+                      )
+                    )}
                   </div>
 
                   <div
                     style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      marginBottom: "8px",
-                      color: "#9a7a56",
-                      fontSize: "11px",
-                      letterSpacing: "1px",
+                      display:
+                        "flex",
+                      justifyContent:
+                        "space-between",
+                      marginBottom:
+                        "8px",
+                      color:
+                        "#9a7a56",
+                      fontSize:
+                        "11px",
+                      letterSpacing:
+                        "1px",
                     }}
                   >
-                    <span>GUESSES</span>
-                    <strong style={{ color: "#ffb84d" }}>
-                      {musicQuizAttempts} / 5
+                    <span>
+                      GUESSES
+                    </span>
+
+                    <strong
+                      style={{
+                        color:
+                          "#ffb84d",
+                      }}
+                    >
+                      {
+                        musicQuizAttempts
+                      }{" "}
+                      / 5
                     </strong>
                   </div>
 
                   <div
                     style={{
-                      display: "flex",
+                      display:
+                        "flex",
                       gap: "9px",
-                      flexWrap: "wrap",
+                      flexWrap:
+                        "wrap",
                     }}
                   >
                     <input
-                      value={musicQuizGuess}
-                      onChange={(event) =>
-                        setMusicQuizGuess(event.target.value)
+                      value={
+                        musicQuizGuess
                       }
-                      onKeyDown={(event) => {
-                        if (event.key === "Enter") {
+                      onChange={(
+                        event
+                      ) =>
+                        setMusicQuizGuess(
+                          event.target
+                            .value
+                        )
+                      }
+                      onKeyDown={(
+                        event
+                      ) => {
+                        if (
+                          event.key ===
+                          "Enter"
+                        ) {
                           submitMusicQuizGuess();
                         }
                       }}
                       placeholder="Type your melody guess..."
                       disabled={
-                        musicQuizFeedback?.type === "correct" ||
-                        musicQuizFeedback?.type === "wrong"
+                        musicQuizFeedback?.type ===
+                          "correct" ||
+                        musicQuizFeedback?.type ===
+                          "wrong"
                       }
                       style={{
-                        flex: "1 1 300px",
-                        padding: "16px",
-                        border: "1px solid #5a3a25",
-                        background: "#100905",
-                        color: "#f4e6c7",
-                        outline: "none",
-                        fontFamily: "Georgia, serif",
-                        fontSize: "15px",
+                        flex:
+                          "1 1 300px",
+                        padding:
+                          "16px",
+                        border:
+                          "1px solid #5a3a25",
+                        background:
+                          "#100905",
+                        color:
+                          "#f4e6c7",
+                        outline:
+                          "none",
+                        fontFamily:
+                          "Georgia, serif",
+                        fontSize:
+                          "15px",
                       }}
                     />
 
                     <button
-                      onClick={() => submitMusicQuizGuess()}
+                      onClick={() =>
+                        submitMusicQuizGuess()
+                      }
                       disabled={
-                        musicQuizFeedback?.type === "correct" ||
-                        musicQuizFeedback?.type === "wrong"
+                        musicQuizFeedback?.type ===
+                          "correct" ||
+                        musicQuizFeedback?.type ===
+                          "wrong"
                       }
                       style={{
-                        padding: "14px 22px",
-                        border: "2px solid #b8893c",
-                        background: "#5a3019",
-                        color: "#ffe5ac",
-                        fontWeight: "bold",
-                        letterSpacing: "1px",
-                        cursor: "pointer",
+                        padding:
+                          "14px 22px",
+                        border:
+                          "2px solid #b8893c",
+                        background:
+                          "#5a3019",
+                        color:
+                          "#ffe5ac",
+                        fontWeight:
+                          "bold",
+                        letterSpacing:
+                          "1px",
+                        cursor:
+                          "pointer",
                       }}
                     >
                       LOCK GUESS
@@ -3346,63 +3580,92 @@ function App() {
                   {musicQuizFeedback && (
                     <div
                       style={{
-                        marginTop: "18px",
-                        padding: "17px",
+                        marginTop:
+                          "18px",
+                        padding:
+                          "17px",
                         border:
-                          musicQuizFeedback.type === "correct"
+                          musicQuizFeedback.type ===
+                          "correct"
                             ? "1px solid #a97832"
                             : "1px solid #6b4930",
-                        background: "#1d1109",
+                        background:
+                          "#1d1109",
                       }}
                     >
                       <strong
                         style={{
-                          display: "block",
+                          display:
+                            "block",
                           color:
-                            musicQuizFeedback.type === "correct"
+                            musicQuizFeedback.type ===
+                            "correct"
                               ? "#ffb84d"
                               : "#d5a56b",
-                          fontSize: "15px",
+                          fontSize:
+                            "15px",
                         }}
                       >
-                        {musicQuizFeedback.type === "correct"
+                        {musicQuizFeedback.type ===
+                        "correct"
                           ? "✓ SIGNAL FOUND"
-                          : musicQuizFeedback.type === "retry"
+                          : musicQuizFeedback.type ===
+                            "retry"
                           ? "◌ SIGNAL UNCLEAR"
                           : "✕ TRANSMISSION LOST"}
                       </strong>
 
                       <p
                         style={{
-                          margin: "7px 0 0",
-                          color: "#c7ae88",
-                          lineHeight: 1.5,
+                          margin:
+                            "7px 0 0",
+                          color:
+                            "#c7ae88",
+                          lineHeight:
+                            1.5,
                         }}
                       >
-                        {musicQuizFeedback.message}
+                        {
+                          musicQuizFeedback.message
+                        }
                       </p>
 
-                      {musicQuizFeedback.type === "correct" && (
+                      {musicQuizFeedback.type ===
+                        "correct" && (
                         <strong
                           style={{
-                            display: "block",
-                            marginTop: "8px",
-                            color: "#ffcf7a",
+                            display:
+                              "block",
+                            marginTop:
+                              "8px",
+                            color:
+                              "#ffcf7a",
                           }}
                         >
-                          +{musicQuizFeedback.points} POINTS
+                          +
+                          {
+                            musicQuizFeedback.points
+                          }{" "}
+                          POINTS
                         </strong>
                       )}
 
-                      {(musicQuizFeedback.type === "wrong" ||
-                        musicQuizFeedback.type === "correct") && (
+                      {(musicQuizFeedback.type ===
+                        "wrong" ||
+                        musicQuizFeedback.type ===
+                          "correct") && (
                         <p
                           style={{
-                            margin: "10px 0 0",
-                            color: "#ead7b0",
+                            margin:
+                              "10px 0 0",
+                            color:
+                              "#ead7b0",
                           }}
                         >
-                          SONG: {currentMusicQuizQuestion.title}
+                          SONG:{" "}
+                          {
+                            currentMusicQuizQuestion.title
+                          }
                         </p>
                       )}
                     </div>
@@ -3411,36 +3674,57 @@ function App() {
 
                 {musicQuizFeedback && (
                   <button
-                    onClick={nextMusicQuizQuestion}
+                    onClick={
+                      nextMusicQuizQuestion
+                    }
                     style={{
-                      width: "100%",
-                      marginTop: "14px",
-                      padding: "15px",
-                      border: "2px solid #8a5b2d",
-                      background: "#2d180b",
-                      color: "#f5dfb0",
-                      cursor: "pointer",
-                      fontWeight: "bold",
-                      letterSpacing: "1px",
+                      width:
+                        "100%",
+                      marginTop:
+                        "14px",
+                      padding:
+                        "15px",
+                      border:
+                        "2px solid #8a5b2d",
+                      background:
+                        "#2d180b",
+                      color:
+                        "#f5dfb0",
+                      cursor:
+                        "pointer",
+                      fontWeight:
+                        "bold",
+                      letterSpacing:
+                        "1px",
                     }}
                   >
-                    {musicQuizIndex >= musicQuizRound.length - 1
+                    {musicQuizIndex >=
+                    musicQuizRound.length - 1
                       ? "SEE YOUR TRANSMISSION REPORT →"
                       : "NEXT MYSTERY →"}
                   </button>
                 )}
 
                 <button
-                  onClick={() => resetMusicQuiz()}
+                  onClick={() =>
+                    resetMusicQuiz()
+                  }
                   style={{
-                    display: "block",
-                    margin: "14px auto 0",
+                    display:
+                      "block",
+                    margin:
+                      "14px auto 0",
                     border: 0,
-                    background: "transparent",
-                    color: "#8d7355",
-                    cursor: "pointer",
-                    fontSize: "11px",
-                    letterSpacing: "1px",
+                    background:
+                      "transparent",
+                    color:
+                      "#8d7355",
+                    cursor:
+                      "pointer",
+                    fontSize:
+                      "11px",
+                    letterSpacing:
+                      "1px",
                   }}
                 >
                   CHANGE DIFFICULTY
@@ -3448,156 +3732,276 @@ function App() {
               </section>
             )}
 
-          {musicQuizDifficulty && musicQuizFinished && (
-            <section
-              style={{
-                maxWidth: "850px",
-                margin: "40px auto 0",
-                textAlign: "center",
-              }}
-            >
-              <p className="small-title" style={{ color: "#b8893c" }}>
-                TRANSMISSION COMPLETE
-              </p>
-
-              <h2
+          {musicQuizDifficulty &&
+            musicQuizFinished && (
+              <section
                 style={{
-                  margin: "7px 0",
-                  fontFamily: "Georgia, serif",
-                  fontSize: "clamp(35px, 7vw, 65px)",
-                  color: "#f4e6c7",
+                  maxWidth: "850px",
+                  margin: "40px auto 0",
+                  textAlign: "center",
                 }}
               >
-                {getMusicQuizTitle()}
-              </h2>
-
-              <div
-                style={{
-                  border: "2px solid #8a5b2d",
-                  background: "#1b0f08",
-                  padding: "30px 20px",
-                  marginTop: "22px",
-                }}
-              >
-                <span
+                <p
+                  className="small-title"
                   style={{
-                    display: "block",
-                    color: "#9c805f",
-                    letterSpacing: "2px",
-                    fontSize: "11px",
+                    color: "#b8893c",
                   }}
                 >
-                  FINAL SCORE
-                </span>
+                  TRANSMISSION COMPLETE
+                </p>
 
-                <strong
+                <h2
                   style={{
-                    display: "block",
-                    margin: "5px 0",
-                    fontSize: "70px",
-                    color: "#ffb84d",
-                    fontFamily: "Georgia, serif",
+                    margin:
+                      "7px 0",
+                    fontFamily:
+                      "Georgia, serif",
+                    fontSize:
+                      "clamp(35px, 7vw, 65px)",
+                    color:
+                      "#f4e6c7",
                   }}
                 >
-                  {musicQuizScore}
-                </strong>
+                  {getMusicQuizTitle()}
+                </h2>
 
                 <div
                   style={{
-                    display: "grid",
-                    gridTemplateColumns: "repeat(3, 1fr)",
-                    gap: "10px",
-                    marginTop: "18px",
+                    border:
+                      "2px solid #8a5b2d",
+                    background:
+                      "#1b0f08",
+                    padding:
+                      "30px 20px",
+                    marginTop:
+                      "22px",
                   }}
                 >
-                  <div>
-                    <strong style={{ display: "block", fontSize: "24px" }}>
-                      {musicQuizCorrect}
-                    </strong>
-                    <small style={{ color: "#8f7558" }}>FOUND</small>
+                  <span
+                    style={{
+                      display:
+                        "block",
+                      color:
+                        "#9c805f",
+                      letterSpacing:
+                        "2px",
+                      fontSize:
+                        "11px",
+                    }}
+                  >
+                    FINAL SCORE
+                  </span>
+
+                  <strong
+                    style={{
+                      display:
+                        "block",
+                      margin:
+                        "5px 0",
+                      fontSize:
+                        "70px",
+                      color:
+                        "#ffb84d",
+                      fontFamily:
+                        "Georgia, serif",
+                    }}
+                  >
+                    {musicQuizScore}
+                  </strong>
+
+                  <div
+                    style={{
+                      display:
+                        "grid",
+                      gridTemplateColumns:
+                        "repeat(3, 1fr)",
+                      gap: "10px",
+                      marginTop:
+                        "18px",
+                    }}
+                  >
+                    <div>
+                      <strong
+                        style={{
+                          display:
+                            "block",
+                          fontSize:
+                            "24px",
+                        }}
+                      >
+                        {
+                          musicQuizCorrect
+                        }
+                      </strong>
+
+                      <small
+                        style={{
+                          color:
+                            "#8f7558",
+                        }}
+                      >
+                        FOUND
+                      </small>
+                    </div>
+
+                    <div>
+                      <strong
+                        style={{
+                          display:
+                            "block",
+                          fontSize:
+                            "24px",
+                        }}
+                      >
+                        {
+                          musicQuizRound.length -
+                          musicQuizCorrect
+                        }
+                      </strong>
+
+                      <small
+                        style={{
+                          color:
+                            "#8f7558",
+                        }}
+                      >
+                        MISSED
+                      </small>
+                    </div>
+
+                    <div>
+                      <strong
+                        style={{
+                          display:
+                            "block",
+                          fontSize:
+                            "24px",
+                        }}
+                      >
+                        {
+                          musicQuizBestScore
+                        }
+                      </strong>
+
+                      <small
+                        style={{
+                          color:
+                            "#8f7558",
+                        }}
+                      >
+                        BEST
+                      </small>
+                    </div>
                   </div>
-                  <div>
-                    <strong style={{ display: "block", fontSize: "24px" }}>
-                      {musicQuizRound.length - musicQuizCorrect}
-                    </strong>
-                    <small style={{ color: "#8f7558" }}>MISSED</small>
-                  </div>
-                  <div>
-                    <strong style={{ display: "block", fontSize: "24px" }}>
-                      {musicQuizBestScore}
-                    </strong>
-                    <small style={{ color: "#8f7558" }}>BEST</small>
-                  </div>
+
+                  <p
+                    style={{
+                      margin:
+                        "25px auto 0",
+                      maxWidth:
+                        "560px",
+                      color:
+                        "#c2a982",
+                      lineHeight:
+                        1.7,
+                    }}
+                  >
+                    {
+                      musicQuizRound.length
+                    }{" "}
+                    melodies entered the
+                    archive. You caught{" "}
+                    {
+                      musicQuizCorrect
+                    }
+                    . The radio department
+                    has filed your performance
+                    under “
+                    {getMusicQuizTitle()}
+                    ”.
+                  </p>
                 </div>
 
-                <p
+                <div
                   style={{
-                    margin: "25px auto 0",
-                    maxWidth: "560px",
-                    color: "#c2a982",
-                    lineHeight: 1.7,
+                    display:
+                      "flex",
+                    justifyContent:
+                      "center",
+                    gap: "10px",
+                    flexWrap:
+                      "wrap",
+                    marginTop:
+                      "18px",
                   }}
                 >
-                  {musicQuizRound.length} melodies entered the archive. You caught {musicQuizCorrect}.
-                  The radio department has filed your performance under
-                  “{getMusicQuizTitle()}”.
-                </p>
-              </div>
+                  <button
+                    onClick={() =>
+                      startMusicQuiz(
+                        musicQuizDifficulty
+                      )
+                    }
+                    style={{
+                      padding:
+                        "14px 20px",
+                      border:
+                        "2px solid #b8893c",
+                      background:
+                        "#5a3019",
+                      color:
+                        "#ffe5ac",
+                      cursor:
+                        "pointer",
+                      fontWeight:
+                        "bold",
+                    }}
+                  >
+                    PLAY AGAIN
+                  </button>
 
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  gap: "10px",
-                  flexWrap: "wrap",
-                  marginTop: "18px",
-                }}
-              >
-                <button
-                  onClick={() => startMusicQuiz(musicQuizDifficulty)}
-                  style={{
-                    padding: "14px 20px",
-                    border: "2px solid #b8893c",
-                    background: "#5a3019",
-                    color: "#ffe5ac",
-                    cursor: "pointer",
-                    fontWeight: "bold",
-                  }}
-                >
-                  PLAY AGAIN
-                </button>
+                  <button
+                    onClick={() =>
+                      resetMusicQuiz()
+                    }
+                    style={{
+                      padding:
+                        "14px 20px",
+                      border:
+                        "1px solid #68402a",
+                      background:
+                        "#211209",
+                      color:
+                        "#cbb18a",
+                      cursor:
+                        "pointer",
+                    }}
+                  >
+                    CHANGE DIFFICULTY
+                  </button>
 
-                <button
-                  onClick={() => resetMusicQuiz()}
-                  style={{
-                    padding: "14px 20px",
-                    border: "1px solid #68402a",
-                    background: "#211209",
-                    color: "#cbb18a",
-                    cursor: "pointer",
-                  }}
-                >
-                  CHANGE DIFFICULTY
-                </button>
-
-                <button
-                  onClick={() => {
-                    resetMusicQuiz();
-                    setPage("home");
-                  }}
-                  style={{
-                    padding: "14px 20px",
-                    border: "1px solid #68402a",
-                    background: "#211209",
-                    color: "#cbb18a",
-                    cursor: "pointer",
-                  }}
-                >
-                  BACK TO ARCHIVE
-                </button>
-              </div>
-            </section>
-          )}
+                  <button
+                    onClick={() => {
+                      resetMusicQuiz();
+                      setPage("home");
+                    }}
+                    style={{
+                      padding:
+                        "14px 20px",
+                      border:
+                        "1px solid #68402a",
+                      background:
+                        "#211209",
+                      color:
+                        "#cbb18a",
+                      cursor:
+                        "pointer",
+                    }}
+                  >
+                    BACK TO ARCHIVE
+                  </button>
+                </div>
+              </section>
+            )}
         </main>
       )}
 
@@ -3608,15 +4012,12 @@ function App() {
       {currentSong &&
         page !== "music" && (
           <section className="mini-player">
-
             <div className="mini-song-info">
-
               <div className="mini-icon">
                 📻
               </div>
 
               <div>
-
                 <strong>
                   {currentSong.title}
                 </strong>
@@ -3625,13 +4026,10 @@ function App() {
                   {currentStation?.name ||
                     "OOHA LOKAM RADIO"}
                 </span>
-
               </div>
-
             </div>
 
             <div className="mini-controls">
-
               <button
                 onClick={
                   playPreviousInStation
@@ -3655,7 +4053,6 @@ function App() {
               >
                 ▶
               </button>
-
             </div>
 
             <button
@@ -3673,10 +4070,8 @@ function App() {
             >
               ✕
             </button>
-
           </section>
         )}
-
     </main>
   );
 }
